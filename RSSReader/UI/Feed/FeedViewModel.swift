@@ -12,13 +12,19 @@ class FeedViewModel: FMTablePageViewModel {
 
     private var sections: [FMSectionViewModel]
 
-    init(sections: [FMSectionViewModel], dataSource: FMDataManager) {
-        self.sections = sections
-        super.init(dataSource: dataSource)
+    convenience override init(dataSource: FMDataManager) {
+        self.init(
+            sections: dataSource.sectionViewModels,
+            dataSource: dataSource
+        )
     }
 
-    private func configureSectionViewModels() {
-        dataSource.merge(with: sections)
+    init(
+        sections: [FMSectionViewModel],
+        dataSource: FMDataManager
+    ) {
+        self.sections = sections
+        super.init(dataSource: dataSource)
     }
 
 }

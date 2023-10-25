@@ -12,17 +12,14 @@ class FeedViewController: FMTablePageViewController {
 
     // MARK: Initialization
 
-    override init() {
+    init(sectionViewModels: [FeedsSourcesListSection] = []) {
         super.init()
 
         let dataSource = FMTableViewDataSource(
-            viewModels: [FeedsSourcesListSection()],
+            viewModels: sectionViewModels,
             tableView: tableView
         )
-        viewModel = FeedViewModel(
-            sections: dataSource.sectionViewModels,
-            dataSource: dataSource
-        )
+        viewModel = FeedViewModel(dataSource: dataSource)
 
         self.dataSource = dataSource
 

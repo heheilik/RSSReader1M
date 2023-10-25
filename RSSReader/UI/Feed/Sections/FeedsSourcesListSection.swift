@@ -32,13 +32,11 @@ class FeedsSourcesListSection: FMSectionViewModel {
 
     private func configureCellViewModels() {
         let cellViewModels: [FeedSourceCellViewModel] = FeedsSourcesListSection.data.map {
-            (name: String, url: URL) in
+            (name: String, _) in
             FeedSourceCellViewModel(name: name)
         }
 
         refresh(cellModels: cellViewModels)
     }
-
-
 
 }
