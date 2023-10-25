@@ -14,11 +14,23 @@ class FeedViewController: FMTablePageViewController {
 
     override init() {
         super.init()
-        viewModel = FMTablePageViewModel(
-            dataSource: FMTableViewDataSource(
-                tableView: tableView
-            )
+
+        let dataSource = FMTableViewDataSource(
+            viewModels: [FeedsSourcesListSection()],
+            tableView: tableView
         )
+        viewModel = FeedViewModel(
+            sections: dataSource.sectionViewModels,
+            dataSource: dataSource
+        )
+
+        self.dataSource = dataSource
+
+        view.backgroundColor = .blue
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
 
     // MARK: Lifecycle
