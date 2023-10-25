@@ -11,6 +11,9 @@
 		5DFD964E2AE8FC9C00DEBF9A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD964D2AE8FC9C00DEBF9A /* ViewController.swift */; };
 		5DFD96532AE8FC9D00DEBF9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DFD96522AE8FC9D00DEBF9A /* Assets.xcassets */; };
 		5DFD96562AE8FC9D00DEBF9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5DFD96542AE8FC9D00DEBF9A /* LaunchScreen.storyboard */; };
+		5DFD965F2AE8FE1400DEBF9A /* FMArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD965E2AE8FE1400DEBF9A /* FMArchitecture */; };
+		5DFD96622AE8FE2400DEBF9A /* ALNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD96612AE8FE2400DEBF9A /* ALNavigation */; };
+		5DFD96652AE8FE3000DEBF9A /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD96642AE8FE3000DEBF9A /* FeedKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +30,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DFD96652AE8FE3000DEBF9A /* FeedKit in Frameworks */,
+				5DFD965F2AE8FE1400DEBF9A /* FMArchitecture in Frameworks */,
+				5DFD96622AE8FE2400DEBF9A /* ALNavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +83,11 @@
 			dependencies = (
 			);
 			name = RSSReader;
+			packageProductDependencies = (
+				5DFD965E2AE8FE1400DEBF9A /* FMArchitecture */,
+				5DFD96612AE8FE2400DEBF9A /* ALNavigation */,
+				5DFD96642AE8FE3000DEBF9A /* FeedKit */,
+			);
 			productName = RSSReader;
 			productReference = 5DFD96462AE8FC9C00DEBF9A /* RSSReader.app */;
 			productType = "com.apple.product-type.application";
@@ -105,6 +116,11 @@
 				Base,
 			);
 			mainGroup = 5DFD963D2AE8FC9C00DEBF9A;
+			packageReferences = (
+				5DFD965D2AE8FE1400DEBF9A /* XCRemoteSwiftPackageReference "architecture" */,
+				5DFD96602AE8FE2400DEBF9A /* XCRemoteSwiftPackageReference "navigation" */,
+				5DFD96632AE8FE3000DEBF9A /* XCRemoteSwiftPackageReference "FeedKit" */,
+			);
 			productRefGroup = 5DFD96472AE8FC9C00DEBF9A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -345,6 +361,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5DFD965D2AE8FE1400DEBF9A /* XCRemoteSwiftPackageReference "architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@gitlab.byvmz.online:ios/frameworks/architecture.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.2;
+			};
+		};
+		5DFD96602AE8FE2400DEBF9A /* XCRemoteSwiftPackageReference "navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@gitlab.byvmz.online:ios/frameworks/navigation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+		5DFD96632AE8FE3000DEBF9A /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nmdias/FeedKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5DFD965E2AE8FE1400DEBF9A /* FMArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DFD965D2AE8FE1400DEBF9A /* XCRemoteSwiftPackageReference "architecture" */;
+			productName = FMArchitecture;
+		};
+		5DFD96612AE8FE2400DEBF9A /* ALNavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DFD96602AE8FE2400DEBF9A /* XCRemoteSwiftPackageReference "navigation" */;
+			productName = ALNavigation;
+		};
+		5DFD96642AE8FE3000DEBF9A /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DFD96632AE8FE3000DEBF9A /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5DFD963E2AE8FC9C00DEBF9A /* Project object */;
 }
