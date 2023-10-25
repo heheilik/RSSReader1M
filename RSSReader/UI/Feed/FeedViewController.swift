@@ -20,10 +20,7 @@ class FeedViewController: FMTablePageViewController {
             tableView: tableView
         )
         viewModel = FeedViewModel(dataSource: dataSource)
-
         self.dataSource = dataSource
-
-        view.backgroundColor = .blue
     }
 
     required init?(coder: NSCoder) {

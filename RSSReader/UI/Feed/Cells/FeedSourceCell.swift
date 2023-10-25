@@ -15,7 +15,7 @@ class FeedSourceCell: FMTableViewCell {
 
     private let nameLabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 17)
         return label
     }()
 
@@ -33,7 +33,7 @@ class FeedSourceCell: FMTableViewCell {
 
     override func setupConstraints() {
         nameLabel.snp.makeConstraints { make in
-            make.left.equalTo(contentView).offset(8)
+            make.left.equalTo(contentView).offset(16)
             make.centerY.equalTo(contentView)
         }
     }
