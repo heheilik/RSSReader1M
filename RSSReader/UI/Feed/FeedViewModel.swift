@@ -10,7 +10,11 @@ import Foundation
 
 class FeedViewModel: FMTablePageViewModel {
 
+    // MARK: Private properties
+
     private var sections: [FMSectionViewModel]
+
+    // MARK: Initialization
 
     convenience override init(dataSource: FMDataManager) {
         self.init(
