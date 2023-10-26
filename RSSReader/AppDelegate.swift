@@ -16,10 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        let window = UIWindow()
-        window.rootViewController = ViewController()
-        self.window = window
-        window.makeKeyAndVisible()
+        window = UIWindow()
+        window?.rootViewController = FeedViewController(
+            sectionViewModels: [FeedsSourcesListSection()]
+        )
+        window?.makeKeyAndVisible()
 
         return true
     }
