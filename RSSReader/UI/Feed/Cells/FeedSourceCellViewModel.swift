@@ -25,3 +25,11 @@ class FeedSourceCellViewModel: FMCellViewModel {
     }
 
 }
+
+extension FeedSourceCellViewModel: FMSelectableCellModel {
+
+    func didSelect() {
+        print("Selected (\(name)).")
+    }
+
+}

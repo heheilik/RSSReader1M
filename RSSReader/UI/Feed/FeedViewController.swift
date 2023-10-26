@@ -21,6 +21,7 @@ class FeedViewController: FMTablePageViewController {
         )
         viewModel = FeedViewModel(dataSource: dataSource)
         self.dataSource = dataSource
+        self.delegate = FMTableViewDelegate()
     }
 
     required init?(coder: NSCoder) {

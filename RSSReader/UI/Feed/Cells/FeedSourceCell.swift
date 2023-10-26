@@ -31,6 +31,10 @@ class FeedSourceCell: FMTableViewCell {
         contentView.addSubview(nameLabel)
     }
 
+    override func configureViews() {
+        selectionStyle = .default
+    }
+
     override func setupConstraints() {
         nameLabel.snp.makeConstraints { make in
             make.left.equalTo(contentView).offset(16)
