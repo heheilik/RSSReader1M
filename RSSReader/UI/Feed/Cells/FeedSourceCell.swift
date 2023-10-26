@@ -34,7 +34,8 @@ class FeedSourceCell: FMTableViewCell {
     override func setupConstraints() {
         nameLabel.snp.makeConstraints { make in
             make.left.equalTo(contentView).offset(16)
-            make.centerY.equalTo(contentView)
+            make.top.equalTo(contentView).offset(16)
+            make.bottom.equalTo(contentView).offset(-16)
         }
     }
 
