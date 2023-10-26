@@ -14,6 +14,8 @@ class FeedViewModel: FMTablePageViewModel {
 
     private var sections: [FMSectionViewModel]
 
+    private var feedService: FeedService
+
     // MARK: Initialization
 
     convenience override init(dataSource: FMDataManager) {
@@ -25,9 +27,11 @@ class FeedViewModel: FMTablePageViewModel {
 
     init(
         sections: [FMSectionViewModel],
-        dataSource: FMDataManager
+        dataSource: FMDataManager,
+        feedService: FeedService = FeedService()
     ) {
         self.sections = sections
+        self.feedService = feedService
         super.init(dataSource: dataSource)
     }
 
