@@ -26,7 +26,7 @@ class FeedViewController: FMTablePageViewController {
 
     // MARK: Initialization
 
-    init(sectionViewModels: [FeedsSourcesListSection] = []) {
+    init(sectionViewModels: [FeedSourcesSectionViewModel] = []) {
         super.init()
 
         let dataSource = FMTableViewDataSource(

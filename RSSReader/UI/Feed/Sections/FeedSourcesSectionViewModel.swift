@@ -1,5 +1,5 @@
 //
-//  FeedsListSection.swift
+//  FeedSourcesSectionViewModel.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 25.10.23.
@@ -8,11 +8,11 @@
 import FMArchitecture
 import Foundation
 
-protocol FeedsSourcesListSectionDelegate {
+protocol FeedSourcesSectionViewModelDelegate {
     func didSelect(cellWithUrl url: URL)
 }
 
-class FeedsSourcesListSection: FMSectionViewModel {
+class FeedSourcesSectionViewModel: FMSectionViewModel {
 
     private static let data: [(name: String, url: URL)] = [
         ( name: "Рамблер. В мире", url: URL(string: "https://news.rambler.ru/rss/world")! ),
@@ -25,8 +25,8 @@ class FeedsSourcesListSection: FMSectionViewModel {
         ]
     }
 
-    var currentDelegate: FeedsSourcesListSectionDelegate? {
-        delegate as? FeedsSourcesListSectionDelegate
+    var currentDelegate: FeedSourcesSectionViewModelDelegate? {
+        delegate as? FeedSourcesSectionViewModelDelegate
     }
 
     // MARK: Initialization
@@ -39,7 +39,7 @@ class FeedsSourcesListSection: FMSectionViewModel {
     // MARK: Private methods
 
     private func configureCellViewModels() {
-        let cellViewModels: [FeedSourceCellViewModel] = FeedsSourcesListSection.data.map {
+        let cellViewModels: [FeedSourceCellViewModel] = FeedSourcesSectionViewModel.data.map {
             (name: String, _) in
             FeedSourceCellViewModel(name: name, delegate: self)
         }
@@ -49,7 +49,7 @@ class FeedsSourcesListSection: FMSectionViewModel {
 
 }
 
-extension FeedsSourcesListSection: FeedSourceCellViewModelDelegate {
+extension FeedSourcesSectionViewModel: FeedSourceCellViewModelDelegate {
     
     func didSelect(cellWithUrl url: URL) {
         currentDelegate?.didSelect(cellWithUrl: url)

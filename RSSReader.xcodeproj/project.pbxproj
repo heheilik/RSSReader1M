@@ -18,7 +18,7 @@
 		5DFD96622AE8FE2400DEBF9A /* ALNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD96612AE8FE2400DEBF9A /* ALNavigation */; };
 		5DFD96652AE8FE3000DEBF9A /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD96642AE8FE3000DEBF9A /* FeedKit */; };
 		5DFD966A2AE9001900DEBF9A /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD96692AE9001900DEBF9A /* FeedViewModel.swift */; };
-		5DFD966F2AE9126F00DEBF9A /* FeedsSourcesListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD966E2AE9126F00DEBF9A /* FeedsSourcesListSection.swift */; };
+		5DFD966F2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD966E2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift */; };
 		5DFD96722AE914B900DEBF9A /* FeedSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD96712AE914B900DEBF9A /* FeedSourceCell.swift */; };
 		5DFD96742AE914D300DEBF9A /* FeedSourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD96732AE914D300DEBF9A /* FeedSourceCellViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -34,7 +34,7 @@
 		5DFD96552AE8FC9D00DEBF9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5DFD96572AE8FC9D00DEBF9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5DFD96692AE9001900DEBF9A /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
-		5DFD966E2AE9126F00DEBF9A /* FeedsSourcesListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedsSourcesListSection.swift; path = ../../../../../../../FMobile/code/RSSReader/RSSReader/UI/Feed/Sections/FeedsSourcesListSection.swift; sourceTree = "<group>"; };
+		5DFD966E2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSourcesSectionViewModel.swift; sourceTree = "<group>"; };
 		5DFD96712AE914B900DEBF9A /* FeedSourceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedSourceCell.swift; path = ../../../../../../../FMobile/code/RSSReader/RSSReader/UI/Feed/Cells/FeedSourceCell.swift; sourceTree = "<group>"; };
 		5DFD96732AE914D300DEBF9A /* FeedSourceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedSourceCellViewModel.swift; path = ../../../../../../../FMobile/code/RSSReader/RSSReader/UI/Feed/Cells/FeedSourceCellViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,7 +122,7 @@
 		5DFD966D2AE9126100DEBF9A /* Sections */ = {
 			isa = PBXGroup;
 			children = (
-				5DFD966E2AE9126F00DEBF9A /* FeedsSourcesListSection.swift */,
+				5DFD966E2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift */,
 			);
 			path = Sections;
 			sourceTree = "<group>";
@@ -219,7 +219,7 @@
 				5DE81F352AEBB265003159C0 /* FeedDownloadDelegate.swift in Sources */,
 				5DE81F332AEBB0E9003159C0 /* FeedTableViewDelegate.swift in Sources */,
 				5DFD964E2AE8FC9C00DEBF9A /* FeedViewController.swift in Sources */,
-				5DFD966F2AE9126F00DEBF9A /* FeedsSourcesListSection.swift in Sources */,
+				5DFD966F2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift in Sources */,
 				5DFD964A2AE8FC9C00DEBF9A /* AppDelegate.swift in Sources */,
 				5DFD96722AE914B900DEBF9A /* FeedSourceCell.swift in Sources */,
 				5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */,

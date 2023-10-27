@@ -50,7 +50,7 @@ class FeedViewModel: FMTablePageViewModel {
 
 }
 
-extension FeedViewModel: FeedsSourcesListSectionDelegate {
+extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
 
     func didSelect(cellWithUrl url: URL) {
         downloadDelegate?.downloadStarted()
