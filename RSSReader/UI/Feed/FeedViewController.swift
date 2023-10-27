@@ -18,6 +18,19 @@ class FeedViewController: FMTablePageViewController {
         return indicator
     }()
 
+    private let failureAlert = {
+        let alert = UIAlertController(
+            title: "Download Failed.",
+            message: nil,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(
+            title: "OK",
+            style: .default
+        ))
+        return alert
+    }()
+
     // MARK: Private properties
 
     private var currentViewModel: FeedViewModel? {
@@ -85,24 +98,10 @@ extension FeedViewController: FeedDownloadDelegate {
 
         switch didSucceed {
         case true:  // TODO: add routing
-            present(
-                UIAlertController(
-                    title: "Download Succeded.",
-                    message: nil,
-                    preferredStyle: .alert
-                ),
-                animated: true
-            )
+            print("Not implemented yet.", #file, #line)
 
         case false:
-            present(
-                UIAlertController(
-                    title: "Download Failed.",
-                    message: nil,
-                    preferredStyle: .alert
-                ),
-                animated: true
-            )
+            present(failureAlert, animated: true)
         }
     }
 
