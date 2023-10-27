@@ -8,19 +8,26 @@
 import FMArchitecture
 import Foundation
 
-class FeedSourceCellViewModel: FMCellViewModel {
+protocol FeedSourceCellViewModelDelegate: AnyObject {
+    func didSelect(cellWithUrl url: URL)
+}
 
+class FeedSourceCellViewModel: FMCellViewModel {
     // MARK: Public properties
 
     let name: String
 
+    private weak var currentDelegate: FeedSourceCellViewModelDelegate? {
+        delegate as? FeedSourceCellViewModelDelegate
+    }
+
     // MARK: Initialization
 
-    init(name: String) {
+    init(name: String, delegate: FMCellViewModelDelegate) {
         self.name = name
         super.init(
             cellIdentifier: FeedSourceCell.cellIdentifier,
-            delegate: nil
+            delegate: delegate
         )
     }
 
@@ -29,7 +36,7 @@ class FeedSourceCellViewModel: FMCellViewModel {
 extension FeedSourceCellViewModel: FMSelectableCellModel {
 
     func didSelect() {
-        print("Selected (\(name)).")
+        currentDelegate?.didSelect(cellWithUrl: URL(string: "https://www.swift.org/atom.xml")!)
     }
 
 }

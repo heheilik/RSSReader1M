@@ -33,7 +33,10 @@ class FeedViewController: FMTablePageViewController {
             viewModels: sectionViewModels,
             tableView: tableView
         )
-        viewModel = FeedViewModel(dataSource: dataSource)
+        viewModel = FeedViewModel(
+            dataSource: dataSource,
+            downloadDelegate: self
+        )
         self.dataSource = dataSource
         self.delegate = FeedTableViewDelegate()
     }
@@ -47,11 +50,6 @@ class FeedViewController: FMTablePageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
-//        activityIndicator.startAnimating()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: DispatchWorkItem(block: {
-//            self.activityIndicator.stopAnimating()
-//        }))
     }
 
     // MARK: Internal methods

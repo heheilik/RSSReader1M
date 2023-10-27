@@ -22,21 +22,41 @@ class FeedViewModel: FMTablePageViewModel {
 
     // MARK: Initialization
 
-    convenience override init(dataSource: FMDataManager) {
+    convenience init(
+        dataSource: FMDataManager,
+        downloadDelegate: FeedDownloadDelegate? = nil
+    ) {
         self.init(
             sections: dataSource.sectionViewModels,
-            dataSource: dataSource
+            dataSource: dataSource,
+            downloadDelegate: downloadDelegate
         )
+        for section in sections {
+            section.delegate = self
+        }
     }
 
     init(
         sections: [FMSectionViewModel],
         dataSource: FMDataManager,
+        downloadDelegate: FeedDownloadDelegate? = nil,
         feedService: FeedService = FeedService()
     ) {
         self.sections = sections
         self.feedService = feedService
+        self.downloadDelegate = downloadDelegate
         super.init(dataSource: dataSource)
+    }
+
+}
+
+extension FeedViewModel: FeedsSourcesListSectionDelegate {
+
+    func didSelect(cellWithUrl url: URL) {
+        downloadDelegate?.downloadStarted()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: DispatchWorkItem(block: {
+            self.downloadDelegate?.downloadCompleted(didSucceed: false)
+        }))
     }
 
 }

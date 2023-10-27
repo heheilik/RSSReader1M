@@ -8,6 +8,10 @@
 import FMArchitecture
 import Foundation
 
+protocol FeedsSourcesListSectionDelegate {
+    func didSelect(cellWithUrl url: URL)
+}
+
 class FeedsSourcesListSection: FMSectionViewModel {
 
     private static let data: [(name: String, url: URL)] = [
@@ -19,6 +23,10 @@ class FeedsSourcesListSection: FMSectionViewModel {
         return [
             FeedSourceCell.self
         ]
+    }
+
+    var currentDelegate: FeedsSourcesListSectionDelegate? {
+        delegate as? FeedsSourcesListSectionDelegate
     }
 
     // MARK: Initialization
@@ -33,10 +41,18 @@ class FeedsSourcesListSection: FMSectionViewModel {
     private func configureCellViewModels() {
         let cellViewModels: [FeedSourceCellViewModel] = FeedsSourcesListSection.data.map {
             (name: String, _) in
-            FeedSourceCellViewModel(name: name)
+            FeedSourceCellViewModel(name: name, delegate: self)
         }
 
         refresh(cellModels: cellViewModels)
+    }
+
+}
+
+extension FeedsSourcesListSection: FeedSourceCellViewModelDelegate {
+    
+    func didSelect(cellWithUrl url: URL) {
+        currentDelegate?.didSelect(cellWithUrl: url)
     }
 
 }

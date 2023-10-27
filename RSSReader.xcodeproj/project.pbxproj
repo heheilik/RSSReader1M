@@ -61,6 +61,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		5DE81F362AEBB98F003159C0 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				5DE81F342AEBB265003159C0 /* FeedDownloadDelegate.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		5DFD963D2AE8FC9C00DEBF9A = {
 			isa = PBXGroup;
 			children = (
@@ -101,12 +109,12 @@
 		5DFD966C2AE9125600DEBF9A /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				5DE81F362AEBB98F003159C0 /* Protocols */,
 				5DFD96702AE914AA00DEBF9A /* Cells */,
 				5DFD966D2AE9126100DEBF9A /* Sections */,
 				5DFD964D2AE8FC9C00DEBF9A /* FeedViewController.swift */,
 				5DFD96692AE9001900DEBF9A /* FeedViewModel.swift */,
 				5DE81F322AEBB0E9003159C0 /* FeedTableViewDelegate.swift */,
-				5DE81F342AEBB265003159C0 /* FeedDownloadDelegate.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
