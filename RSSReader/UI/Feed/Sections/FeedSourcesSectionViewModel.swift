@@ -42,8 +42,12 @@ class FeedSourcesSectionViewModel: FMSectionViewModel {
 
     private func configureCellViewModels() {
         let cellViewModels: [FeedSourceCellViewModel] = FeedSourcesSectionViewModel.data.map {
-            (name: String, _) in
-            FeedSourceCellViewModel(name: name, delegate: self)
+            (name: String, url: URL) in
+            FeedSourceCellViewModel(
+                name: name,
+                url: url,
+                delegate: self
+            )
         }
 
         refresh(cellModels: cellViewModels)

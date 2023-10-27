@@ -16,9 +16,10 @@ protocol FeedSourceCellViewModelDelegate: AnyObject {
 
 class FeedSourceCellViewModel: FMCellViewModel {
 
-    // MARK: Public properties
+    // MARK: Internal properties
 
     let name: String
+    let url: URL
 
     private weak var currentDelegate: FeedSourceCellViewModelDelegate? {
         delegate as? FeedSourceCellViewModelDelegate
@@ -26,8 +27,13 @@ class FeedSourceCellViewModel: FMCellViewModel {
 
     // MARK: Initialization
 
-    init(name: String, delegate: FMCellViewModelDelegate) {
+    init(
+        name: String,
+        url: URL,
+        delegate: FMCellViewModelDelegate
+    ) {
         self.name = name
+        self.url = url
         super.init(
             cellIdentifier: FeedSourceCell.cellIdentifier,
             delegate: delegate
@@ -41,7 +47,7 @@ class FeedSourceCellViewModel: FMCellViewModel {
 extension FeedSourceCellViewModel: FMSelectableCellModel {
 
     func didSelect() {
-        currentDelegate?.didSelect(cellWithUrl: URL(string: "https://www.swift.org/atom.xml")!)
+        currentDelegate?.didSelect(cellWithUrl: url)
     }
 
 }
