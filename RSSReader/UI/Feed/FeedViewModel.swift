@@ -10,6 +10,10 @@ import Foundation
 
 class FeedViewModel: FMTablePageViewModel {
 
+    // MARK: Internal properties
+
+    var downloadDelegate: FeedDownloadDelegate?
+
     // MARK: Private properties
 
     private var sections: [FMSectionViewModel]
