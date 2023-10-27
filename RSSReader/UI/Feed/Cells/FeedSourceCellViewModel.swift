@@ -9,10 +9,13 @@ import FMArchitecture
 import Foundation
 
 protocol FeedSourceCellViewModelDelegate: AnyObject {
+
     func didSelect(cellWithUrl url: URL)
+
 }
 
 class FeedSourceCellViewModel: FMCellViewModel {
+
     // MARK: Public properties
 
     let name: String
@@ -32,6 +35,8 @@ class FeedSourceCellViewModel: FMCellViewModel {
     }
 
 }
+
+// MARK: - FMSelectableCellModel
 
 extension FeedSourceCellViewModel: FMSelectableCellModel {
 

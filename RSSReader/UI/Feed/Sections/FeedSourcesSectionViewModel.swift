@@ -25,7 +25,9 @@ class FeedSourcesSectionViewModel: FMSectionViewModel {
         ]
     }
 
-    var currentDelegate: FeedSourcesSectionViewModelDelegate? {
+    // MARK: Private properties
+
+    private var currentDelegate: FeedSourcesSectionViewModelDelegate? {
         delegate as? FeedSourcesSectionViewModelDelegate
     }
 
@@ -48,6 +50,8 @@ class FeedSourcesSectionViewModel: FMSectionViewModel {
     }
 
 }
+
+// MARK: - FeedSourceCellViewModelDelegate
 
 extension FeedSourcesSectionViewModel: FeedSourceCellViewModelDelegate {
     

@@ -10,7 +10,11 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
+    // MARK: Private Properties
+
+    private var window: UIWindow?
+
+    // MARK: Internal Methods
 
     func application(
         _ application: UIApplication,

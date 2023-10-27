@@ -81,6 +81,8 @@ class FeedViewController: FMTablePageViewController {
 
 }
 
+// MARK: - FeedDownloadDelegate
+
 extension FeedViewController: FeedDownloadDelegate {
 
     func downloadStarted() {

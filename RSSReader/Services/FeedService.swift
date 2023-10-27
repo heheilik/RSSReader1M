@@ -10,6 +10,8 @@ import Foundation
 
 class FeedService {
 
+    // MARK: Internal Methods
+
     func prepareFeed(at url: URL, completion: @escaping (Feed?) -> Void) {
         let parser = FeedParser(URL: url)
         parser.parseAsync { result in

@@ -50,6 +50,8 @@ class FeedViewModel: FMTablePageViewModel {
 
 }
 
+// MARK: - FeedSourcesSectionViewModelDelegate
+
 extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
 
     func didSelect(cellWithUrl url: URL) {

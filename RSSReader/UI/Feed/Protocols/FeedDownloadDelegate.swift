@@ -10,6 +10,7 @@ import Foundation
 protocol FeedDownloadDelegate: AnyObject {
 
     func downloadStarted()
+
     func downloadCompleted(didSucceed: Bool)
 
 }
