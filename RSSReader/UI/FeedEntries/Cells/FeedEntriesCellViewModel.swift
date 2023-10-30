@@ -10,11 +10,11 @@ import FMArchitecture
 
 class FeedEntriesCellViewModel: FMCellViewModel {
 
-    // MARK: Private properties
+    // MARK: Internal properties
 
-    private let title: String?
-    private let description: String?
-    private let date: Date?
+    let title: String?
+    let description: String?
+    let date: Date?
 
     // TODO: add image
     // TODO: add read status
