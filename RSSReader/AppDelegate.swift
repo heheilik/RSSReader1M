@@ -5,10 +5,11 @@
 //  Created by Heorhi Heilik on 25.10.23.
 //
 
+import ALNavigation
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
 
     // MARK: Internal Properties
 
@@ -26,7 +27,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         window?.makeKeyAndVisible()
 
+        registerFactory()
+
         return true
+    }
+
+    // MARK: Private methods
+
+    private func registerFactory() {
     }
 
 }

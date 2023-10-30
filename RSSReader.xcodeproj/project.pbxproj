@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
+		5DE6B40F2AEF9B0700F22F84 /* FeedPageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B40E2AEF9B0700F22F84 /* FeedPageFactory.swift */; };
+		5DE6B4112AEF9B5800F22F84 /* FeedEntryContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B4102AEF9B5800F22F84 /* FeedEntryContext.swift */; };
 		5DE81F332AEBB0E9003159C0 /* FeedTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE81F322AEBB0E9003159C0 /* FeedTableViewDelegate.swift */; };
 		5DE81F352AEBB265003159C0 /* FeedDownloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE81F342AEBB265003159C0 /* FeedDownloadDelegate.swift */; };
 		5DFD964A2AE8FC9C00DEBF9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD96492AE8FC9C00DEBF9A /* AppDelegate.swift */; };
@@ -25,6 +27,8 @@
 
 /* Begin PBXFileReference section */
 		5DAEF75D2AEA679D0091436C /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
+		5DE6B40E2AEF9B0700F22F84 /* FeedPageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPageFactory.swift; sourceTree = "<group>"; };
+		5DE6B4102AEF9B5800F22F84 /* FeedEntryContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEntryContext.swift; sourceTree = "<group>"; };
 		5DE81F322AEBB0E9003159C0 /* FeedTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewDelegate.swift; sourceTree = "<group>"; };
 		5DE81F342AEBB265003159C0 /* FeedDownloadDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDownloadDelegate.swift; sourceTree = "<group>"; };
 		5DFD96462AE8FC9C00DEBF9A /* RSSReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RSSReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +63,15 @@
 				5DAEF75D2AEA679D0091436C /* FeedService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		5DE6B4122AEF9B6000F22F84 /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				5DE6B40E2AEF9B0700F22F84 /* FeedPageFactory.swift */,
+				5DE6B4102AEF9B5800F22F84 /* FeedEntryContext.swift */,
+			);
+			path = Routing;
 			sourceTree = "<group>";
 		};
 		5DE81F362AEBB98F003159C0 /* Protocols */ = {
@@ -109,6 +122,7 @@
 		5DFD966C2AE9125600DEBF9A /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				5DE6B4122AEF9B6000F22F84 /* Routing */,
 				5DE81F362AEBB98F003159C0 /* Protocols */,
 				5DFD96702AE914AA00DEBF9A /* Cells */,
 				5DFD966D2AE9126100DEBF9A /* Sections */,
@@ -225,6 +239,8 @@
 				5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */,
 				5DFD966A2AE9001900DEBF9A /* FeedViewModel.swift in Sources */,
 				5DFD96742AE914D300DEBF9A /* FeedSourceCellViewModel.swift in Sources */,
+				5DE6B4112AEF9B5800F22F84 /* FeedEntryContext.swift in Sources */,
+				5DE6B40F2AEF9B0700F22F84 /* FeedPageFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

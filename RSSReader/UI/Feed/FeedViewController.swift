@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 25.10.23.
 //
 
+import ALNavigation
 import FMArchitecture
 import UIKit
 
