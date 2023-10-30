@@ -54,11 +54,37 @@ class FeedViewModel: FMTablePageViewModel {
 
 extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
 
+
     func didSelect(cellWithUrl url: URL) {
         downloadDelegate?.downloadStarted()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: DispatchWorkItem(block: {
-            self.downloadDelegate?.downloadCompleted(didSucceed: false)
-        }))
+
+        feedService.prepareFeed(at: url) { feed in
+            var error: DownloadError? = nil
+            defer {
+                DispatchQueue.main.async {
+                    self.downloadDelegate?.downloadCompleted(withError: error)
+                }
+            }
+
+            guard let feed else {
+                error = .feedNotDownloaded
+                return
+            }
+
+            switch feed {
+            case let .rss(feed):
+                print("RSS Feed downloaded.")
+                print("Title: \(feed.title ?? "No title.")")
+                return
+
+            case .atom(_):
+                error = .atomFeedDownloaded
+                return
+            case .json(_):
+                error = .jsonFeedDownloaded
+                return
+            }
+        }
     }
 
 }

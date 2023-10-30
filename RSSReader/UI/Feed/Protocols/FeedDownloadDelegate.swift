@@ -7,10 +7,16 @@
 
 import Foundation
 
+enum DownloadError: Error {
+    case atomFeedDownloaded
+    case jsonFeedDownloaded
+    case feedNotDownloaded
+}
+
 protocol FeedDownloadDelegate: AnyObject {
 
     func downloadStarted()
 
-    func downloadCompleted(didSucceed: Bool)
+    func downloadCompleted(withError error: DownloadError?)
 
 }

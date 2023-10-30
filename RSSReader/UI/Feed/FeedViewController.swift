@@ -18,19 +18,6 @@ class FeedViewController: FMTablePageViewController {
         return indicator
     }()
 
-    private let failureAlert = {
-        let alert = UIAlertController(
-            title: "Download Failed.",
-            message: nil,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(
-            title: "OK",
-            style: .default
-        ))
-        return alert
-    }()
-
     // MARK: Private properties
 
     private var currentViewModel: FeedViewModel? {
@@ -79,6 +66,30 @@ class FeedViewController: FMTablePageViewController {
         }
     }
 
+    // MARK: Private methods
+
+    private func alertFor(error: DownloadError) -> UIAlertController {
+        let alert = {
+            let alert = UIAlertController(
+                title: "",
+                message: nil,
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(
+                title: "OK",
+                style: .default
+            ))
+            return alert
+        }()
+
+        let representation = error.alertRepresentation()
+
+        alert.title = representation.title
+        alert.message = representation.message
+
+        return alert
+    }
+
 }
 
 // MARK: - FeedDownloadDelegate
@@ -92,18 +103,34 @@ extension FeedViewController: FeedDownloadDelegate {
         }
     }
 
-    func downloadCompleted(didSucceed: Bool) {
+    func downloadCompleted(withError error: DownloadError?) {
         activityIndicator.stopAnimating()
         if let delegate = delegate as? FeedTableViewDelegate {
             delegate.cellsAreSelectable = true
         }
 
-        switch didSucceed {
-        case true:  // TODO: add routing
-            print("Not implemented yet.", #file, #line)
+        guard error == nil else {
+            present(alertFor(error: error!), animated: true)
+            return
+        }
 
-        case false:
-            present(failureAlert, animated: true)
+        print("Not implemented yet.", #file, #line)
+    }
+
+}
+
+// MARK: - DownloadError User-Friendly Representation
+
+private extension DownloadError {
+
+    func alertRepresentation() -> (title: String, message: String) {
+        switch self {
+        case .atomFeedDownloaded:
+            return (title: "Atom feed is downloaded.", message: "This app can't parse Atom feeds.")
+        case .jsonFeedDownloaded:
+            return (title: "JSON feed is downloaded.", message: "This app can't parse JSON feeds.")
+        case .feedNotDownloaded:
+            return (title: "Could not download feed.", message: "Check connection and try again.")
         }
     }
 
