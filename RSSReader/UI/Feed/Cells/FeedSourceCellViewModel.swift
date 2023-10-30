@@ -8,20 +8,46 @@
 import FMArchitecture
 import Foundation
 
+protocol FeedSourceCellViewModelDelegate: AnyObject {
+
+    func didSelect(cellWithUrl url: URL)
+
+}
+
 class FeedSourceCellViewModel: FMCellViewModel {
 
-    // MARK: Public properties
+    // MARK: Internal properties
 
     let name: String
+    let url: URL
+
+    private weak var currentDelegate: FeedSourceCellViewModelDelegate? {
+        delegate as? FeedSourceCellViewModelDelegate
+    }
 
     // MARK: Initialization
 
-    init(name: String) {
+    init(
+        name: String,
+        url: URL,
+        delegate: FMCellViewModelDelegate
+    ) {
         self.name = name
+        self.url = url
         super.init(
             cellIdentifier: FeedSourceCell.cellIdentifier,
-            delegate: nil
+            delegate: delegate
         )
+    }
+
+}
+
+// MARK: - FMSelectableCellModel
+
+extension FeedSourceCellViewModel: FMSelectableCellModel {
+
+    func didSelect() {
+        currentDelegate?.didSelect(cellWithUrl: url)
     }
 
 }
