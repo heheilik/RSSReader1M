@@ -16,14 +16,14 @@ protocol FeedSourceCellViewModelDelegate: AnyObject {
 
 class FeedSourceCellViewModel: FMCellViewModel {
 
+    private weak var currentDelegate: FeedSourceCellViewModelDelegate? {
+        delegate as? FeedSourceCellViewModelDelegate
+    }
+
     // MARK: Internal properties
 
     let name: String
     let url: URL
-
-    private weak var currentDelegate: FeedSourceCellViewModelDelegate? {
-        delegate as? FeedSourceCellViewModelDelegate
-    }
 
     // MARK: Initialization
 

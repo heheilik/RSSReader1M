@@ -11,6 +11,10 @@ import UIKit
 
 class FeedViewController: FMTablePageViewController {
 
+    private var currentViewModel: FeedViewModel? {
+        viewModel as? FeedViewModel
+    }
+
     // MARK: UI
 
     private let activityIndicator = {
@@ -18,12 +22,6 @@ class FeedViewController: FMTablePageViewController {
         indicator.hidesWhenStopped = true
         return indicator
     }()
-
-    // MARK: Private properties
-
-    private var currentViewModel: FeedViewModel? {
-        viewModel as? FeedViewModel
-    }
 
     // MARK: Initialization
 

@@ -11,7 +11,7 @@ import UIKit
 
 class FeedEntriesCell: FMTableViewCell {
 
-    private var currentViewModel: FeedEntriesCellViewModel? {
+    private weak var currentViewModel: FeedEntriesCellViewModel? {
         return viewModel as? FeedEntriesCellViewModel
     }
 

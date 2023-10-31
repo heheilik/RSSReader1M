@@ -8,13 +8,17 @@
 import FMArchitecture
 import Foundation
 
-protocol FeedSourcesSectionViewModelDelegate {
+protocol FeedSourcesSectionViewModelDelegate: AnyObject {
 
     func didSelect(cellWithUrl url: URL)
 
 }
 
 class FeedSourcesSectionViewModel: FMSectionViewModel {
+
+    private weak var currentDelegate: FeedSourcesSectionViewModelDelegate? {
+        delegate as? FeedSourcesSectionViewModelDelegate
+    }
 
     private static let data: [(name: String, url: URL)] = [
         ( name: "Рамблер. В мире", url: URL(string: "https://news.rambler.ru/rss/world")! ),
@@ -25,12 +29,6 @@ class FeedSourcesSectionViewModel: FMSectionViewModel {
         return [
             FeedSourceCell.self
         ]
-    }
-
-    // MARK: Private properties
-
-    private var currentDelegate: FeedSourcesSectionViewModelDelegate? {
-        delegate as? FeedSourcesSectionViewModelDelegate
     }
 
     // MARK: Initialization

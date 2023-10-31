@@ -11,8 +11,6 @@ import FeedKit
 
 class FeedEntriesViewController: FMTablePageViewController {
 
-    // MARK: Private properties
-
     private var currentViewModel: FeedEntriesViewModel? {
         return viewModel as? FeedEntriesViewModel
     }

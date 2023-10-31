@@ -11,6 +11,10 @@ import UIKit
 
 class FeedSourceCell: FMTableViewCell {
 
+    private weak var currentViewModel: FeedSourceCellViewModel? {
+        return viewModel as? FeedSourceCellViewModel
+    }
+
     // MARK: UI
 
     private let nameLabel = {
@@ -18,12 +22,6 @@ class FeedSourceCell: FMTableViewCell {
         label.font = UIFont.systemFont(ofSize: 17)
         return label
     }()
-
-    // MARK: Private properties
-
-    private weak var currentViewModel: FeedSourceCellViewModel? {
-        return viewModel as? FeedSourceCellViewModel
-    }
 
     // MARK: Internal methods
 
