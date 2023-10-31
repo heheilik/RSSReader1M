@@ -20,6 +20,7 @@ class FeedEntriesCell: FMTableViewCell {
     private let titleLabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17)
+        label.numberOfLines = 0
         return label
     }()
 
