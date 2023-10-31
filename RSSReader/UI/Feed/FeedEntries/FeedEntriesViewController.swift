@@ -7,8 +7,12 @@
 
 import FMArchitecture
 import Foundation
-import FeedKit
+import UIKit
 
 class FeedEntriesViewController: FMTablePageViewController {
+
+    override var tableViewStyle: UITableView.Style {
+        .plain
+    }
 
 }
