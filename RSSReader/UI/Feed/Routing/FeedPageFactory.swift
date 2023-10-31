@@ -6,6 +6,7 @@
 //
 
 import ALNavigation
+import FMArchitecture
 import Foundation
 import UIKit
 
@@ -26,8 +27,25 @@ struct FeedPageFactory: PageFactoryProtocol {
             guard let context = context as? FeedEntriesContext else {
                 fatalError("Context must be supplied for FeedEntriesViewController.")
             }
-            return FeedEntriesViewController(context: context)
+            return newFeedEntriesViewController(context: context)
         }
+    }
+
+    private func newFeedEntriesViewController(context: FeedEntriesContext) -> FeedEntriesViewController {
+        let viewController = FeedEntriesViewController()
+
+        let dataSource = FMTableViewDataSource(
+            tableView: viewController.tableView
+        )
+        viewController.dataSource = dataSource
+
+        let viewModel = FeedEntriesViewModel(
+            dataSource: dataSource,
+            context: context
+        )
+        viewController.viewModel = viewModel
+
+        return viewController
     }
 
 }
