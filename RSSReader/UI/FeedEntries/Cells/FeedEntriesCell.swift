@@ -46,17 +46,19 @@ class FeedEntriesCell: FMTableViewCell {
     override func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
         }
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.equalTo(titleLabel.snp.leading)
+            make.trailing.equalTo(titleLabel.snp.trailing)
         }
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(8)
             make.leading.equalTo(titleLabel.snp.leading)
+            make.trailing.equalTo(titleLabel.snp.trailing)
             make.bottom.equalToSuperview().offset(-16)
         }
-        // FIXME: text goes over the right edge
     }
 
     override func fill(viewModel: FMCellViewModel) {
