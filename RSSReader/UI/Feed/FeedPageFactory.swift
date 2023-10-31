@@ -25,7 +25,10 @@ struct FeedPageFactory: PageFactoryProtocol {
         }
         switch typedPath {
         case .feedSources:
-            fatalError("Not implemented.", file: #file, line: #line)
+            guard let context = context as? FeedSourcesContext else {
+                fatalError("Context must be supplied for FeedEntriesViewController.")
+            }
+            return newFeedSourcesViewController(context: context)
 
         case .feedEntries:
             guard let context = context as? FeedEntriesContext else {
@@ -36,7 +39,22 @@ struct FeedPageFactory: PageFactoryProtocol {
     }
 
     private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedSourcesViewController {
-        fatalError("Not implemented.", file: #file, line: #line)
+        let viewController = FeedSourcesViewController()
+        viewController.delegate = FeedSourcesTableViewDelegate()
+
+        let dataSource = FMTableViewDataSource(
+            tableView: viewController.tableView
+        )
+        viewController.dataSource = dataSource
+
+        let viewModel = FeedSourcesViewModel(
+            context: context,
+            dataSource: dataSource,
+            downloadDelegate: viewController
+        )
+        viewController.viewModel = viewModel
+
+        return viewController
     }
 
     private func newFeedEntriesViewController(context: FeedEntriesContext) -> FeedEntriesViewController {

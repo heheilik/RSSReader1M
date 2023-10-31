@@ -23,27 +23,6 @@ class FeedSourcesViewController: FMTablePageViewController {
         return indicator
     }()
 
-    // MARK: Initialization
-
-    init(sectionViewModels: [FeedSourcesSectionViewModel] = []) {
-        super.init()
-
-        let dataSource = FMTableViewDataSource(
-            viewModels: sectionViewModels,
-            tableView: tableView
-        )
-        viewModel = FeedSourcesViewModel(
-            dataSource: dataSource,
-            downloadDelegate: self
-        )
-        self.dataSource = dataSource
-        self.delegate = FeedSourcesTableViewDelegate()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
     // MARK: Lifecycle
 
     override func viewDidLoad() {

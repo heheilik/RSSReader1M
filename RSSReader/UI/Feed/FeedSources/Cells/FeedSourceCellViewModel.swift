@@ -8,12 +8,6 @@
 import FMArchitecture
 import Foundation
 
-protocol FeedSourceCellViewModelDelegate: AnyObject {
-
-    func didSelect(cellWithUrl url: URL)
-
-}
-
 class FeedSourceCellViewModel: FMCellViewModel {
 
     private weak var currentDelegate: FeedSourceCellViewModelDelegate? {

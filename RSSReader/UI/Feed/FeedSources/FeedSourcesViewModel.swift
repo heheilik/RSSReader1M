@@ -11,42 +11,37 @@ import FeedKit
 
 class FeedSourcesViewModel: FMTablePageViewModel {
 
-    // MARK: Internal properties
-
-    var downloadDelegate: FeedDownloadDelegate?
-
     // MARK: Private properties
 
-    private var sectionViewModels: [FMSectionViewModel]
+    private var sectionViewModels: [FMSectionViewModel] = []
 
     private var feedService: FeedService
+    private weak var downloadDelegate: FeedDownloadDelegate?
 
     // MARK: Initialization
 
-    convenience init(
-        dataSource: FMDataManager,
-        downloadDelegate: FeedDownloadDelegate? = nil
-    ) {
-        self.init(
-            sectionViewModels: dataSource.sectionViewModels,
-            dataSource: dataSource,
-            downloadDelegate: downloadDelegate
-        )
-        for section in sectionViewModels {
-            section.delegate = self
-        }
-    }
-
     init(
-        sectionViewModels: [FMSectionViewModel],
+        context: FeedSourcesContext,
         dataSource: FMDataManager,
-        downloadDelegate: FeedDownloadDelegate? = nil,
+        downloadDelegate: FeedDownloadDelegate,
         feedService: FeedService = FeedService()
     ) {
-        self.sectionViewModels = sectionViewModels
-        self.feedService = feedService
         self.downloadDelegate = downloadDelegate
+        self.feedService = feedService
         super.init(dataSource: dataSource)
+        updateSectionViewModels(with: context)
+        dataSource.update(with: sectionViewModels)
+    }
+
+    // MARK: Private methods
+
+    private func updateSectionViewModels(with context: FeedSourcesContext) {
+        sectionViewModels = [
+            FeedSourcesSectionViewModel(
+                context: context,
+                delegate: self
+            )
+        ]
     }
 
 }
