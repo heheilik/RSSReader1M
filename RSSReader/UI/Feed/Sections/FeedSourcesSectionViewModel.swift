@@ -9,7 +9,9 @@ import FMArchitecture
 import Foundation
 
 protocol FeedSourcesSectionViewModelDelegate {
+
     func didSelect(cellWithUrl url: URL)
+
 }
 
 class FeedSourcesSectionViewModel: FMSectionViewModel {
