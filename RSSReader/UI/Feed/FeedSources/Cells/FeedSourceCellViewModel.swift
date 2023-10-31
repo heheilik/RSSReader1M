@@ -16,18 +16,15 @@ class FeedSourceCellViewModel: FMCellViewModel {
 
     // MARK: Internal properties
 
-    let name: String
-    let url: URL
+    let feedSource: FeedSource
 
     // MARK: Initialization
 
     init(
-        name: String,
-        url: URL,
+        feedSource: FeedSource,
         delegate: FMCellViewModelDelegate
     ) {
-        self.name = name
-        self.url = url
+        self.feedSource = feedSource
         super.init(
             cellIdentifier: FeedSourceCell.cellIdentifier,
             delegate: delegate
@@ -41,7 +38,7 @@ class FeedSourceCellViewModel: FMCellViewModel {
 extension FeedSourceCellViewModel: FMSelectableCellModel {
 
     func didSelect() {
-        currentDelegate?.didSelect(cellWithUrl: url)
+        currentDelegate?.didSelect(cellWithData: feedSource)
     }
 
 }
