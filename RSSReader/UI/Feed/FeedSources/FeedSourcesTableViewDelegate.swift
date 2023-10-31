@@ -1,5 +1,5 @@
 //
-//  FeedTableViewDelegate.swift
+//  FeedSourcesTableViewDelegate.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 27.10.23.
@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class FeedTableViewDelegate: FMTableViewDelegate {
+class FeedSourcesTableViewDelegate: FMTableViewDelegate {
 
     // MARK: Internal Properties
 
