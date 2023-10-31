@@ -10,9 +10,15 @@ import Foundation
 
 struct FeedSourcesContext: PageContext {
 
-    let data = [
+    let data: [FeedSource]
+
+}
+
+extension FeedSourcesContext {
+
+    static let moc = FeedSourcesContext(data: [
         FeedSource(name: "Рамблер. В мире", url: URL(string: "https://news.rambler.ru/rss/world")!),
         FeedSource(name: "Swift", url: URL(string: "https://www.swift.org/atom.xml")!)
-    ]
+    ])
 
 }
