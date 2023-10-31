@@ -1,5 +1,5 @@
 //
-//  FeedViewModel.swift
+//  FeedSourcesViewModel.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 25.10.23.
@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import FeedKit
 
-class FeedViewModel: FMTablePageViewModel {
+class FeedSourcesViewModel: FMTablePageViewModel {
 
     // MARK: Internal properties
 
@@ -17,7 +17,7 @@ class FeedViewModel: FMTablePageViewModel {
 
     // MARK: Private properties
 
-    private var sections: [FMSectionViewModel]
+    private var sectionViewModels: [FMSectionViewModel]
 
     private var feedService: FeedService
 
@@ -28,22 +28,22 @@ class FeedViewModel: FMTablePageViewModel {
         downloadDelegate: FeedDownloadDelegate? = nil
     ) {
         self.init(
-            sections: dataSource.sectionViewModels,
+            sectionViewModels: dataSource.sectionViewModels,
             dataSource: dataSource,
             downloadDelegate: downloadDelegate
         )
-        for section in sections {
+        for section in sectionViewModels {
             section.delegate = self
         }
     }
 
     init(
-        sections: [FMSectionViewModel],
+        sectionViewModels: [FMSectionViewModel],
         dataSource: FMDataManager,
         downloadDelegate: FeedDownloadDelegate? = nil,
         feedService: FeedService = FeedService()
     ) {
-        self.sections = sections
+        self.sectionViewModels = sectionViewModels
         self.feedService = feedService
         self.downloadDelegate = downloadDelegate
         super.init(dataSource: dataSource)
@@ -53,7 +53,7 @@ class FeedViewModel: FMTablePageViewModel {
 
 // MARK: - FeedSourcesSectionViewModelDelegate
 
-extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
+extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
     func didSelect(cellWithUrl url: URL) {
         downloadDelegate?.downloadStarted()

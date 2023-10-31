@@ -35,8 +35,8 @@ struct FeedPageFactory: PageFactoryProtocol {
         }
     }
 
-    private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedsourcesViewController {
-
+    private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedSourcesViewController {
+        fatalError("Not implemented.", file: #file, line: #line)
     }
 
     private func newFeedEntriesViewController(context: FeedEntriesContext) -> FeedEntriesViewController {

@@ -22,10 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow()
-//        window?.rootViewController = FeedViewController(
-//            sectionViewModels: [FeedSourcesSectionViewModel()]
-//        )
-        window?.rootViewController = UINavigationController(rootViewController: )
+        window?.rootViewController = FeedSourcesViewController(
+            sectionViewModels: [FeedSourcesSectionViewModel()]
+        )
+//        window?.rootViewController = UINavigationController(rootViewController: )
         window?.makeKeyAndVisible()
 
         registerFactory()
