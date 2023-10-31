@@ -11,18 +11,4 @@ import FeedKit
 
 class FeedEntriesViewController: FMTablePageViewController {
 
-    private var currentViewModel: FeedEntriesViewModel? {
-        return viewModel as? FeedEntriesViewModel
-    }
-
-    // MARK: Initialization
-
-    override init() {
-        super.init()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
 }
