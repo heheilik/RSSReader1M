@@ -7,6 +7,7 @@
 
 import FMArchitecture
 import Foundation
+import FeedKit
 
 class FeedViewModel: FMTablePageViewModel {
 
@@ -59,15 +60,18 @@ extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
         downloadDelegate?.downloadStarted()
 
         feedService.prepareFeed(at: url) { feed in
-            var error: DownloadError? = nil
+            var result: Result<RSSFeed, DownloadError>?
             defer {
+                guard let result else {
+                    fatalError("Result must be set before returning.")
+                }
                 DispatchQueue.main.async {
-                    self.downloadDelegate?.downloadCompleted(withError: error)
+                    self.downloadDelegate?.downloadCompleted(result)
                 }
             }
 
             guard let feed else {
-                error = .feedNotDownloaded
+                result = .failure(.feedNotDownloaded)
                 return
             }
 
@@ -75,13 +79,14 @@ extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
             case let .rss(feed):
                 print("RSS Feed downloaded.")
                 print("Title: \(feed.title ?? "No title.")")
+                result = .success(feed)
                 return
 
             case .atom(_):
-                error = .atomFeedDownloaded
+                result = .failure(.atomFeedDownloaded)
                 return
             case .json(_):
-                error = .jsonFeedDownloaded
+                result = .failure(.jsonFeedDownloaded)
                 return
             }
         }

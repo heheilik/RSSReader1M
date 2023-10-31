@@ -104,18 +104,23 @@ extension FeedViewController: FeedDownloadDelegate {
         }
     }
 
-    func downloadCompleted(withError error: DownloadError?) {
+    func downloadCompleted(_ result: DownloadResult) {
         activityIndicator.stopAnimating()
         if let delegate = delegate as? FeedTableViewDelegate {
             delegate.cellsAreSelectable = true
         }
 
-        guard error == nil else {
-            present(alertFor(error: error!), animated: true)
+        switch result {
+        case let .success(feed):
+            Router.shared.present(
+                FeedPageFactory.NavigationPath.feedEntries.rawValue,
+                animated: true,
+                with: FeedEntriesContext(rssFeed: feed)
+            )
+        case let .failure(error):
+            present(alertFor(error: error), animated: true)
             return
         }
-
-        print("Not implemented yet.", #file, #line)
     }
 
 }

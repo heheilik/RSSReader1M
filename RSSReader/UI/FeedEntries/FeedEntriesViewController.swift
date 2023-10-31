@@ -22,16 +22,25 @@ class FeedEntriesViewController: FMTablePageViewController {
     init(context: FeedEntriesContext) {
         super.init()
         viewModel = FeedEntriesViewModel(context: context)
-
-        guard let dataSource = currentViewModel?.dataSource as? FMTableViewDataSource else {
-            fatalError("Data Source is not initialized.")
-        }
-        dataSource.tableView = tableView
-        self.dataSource = dataSource
+        connectDataSourceToTableView()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
+    // MARK: Private methods
+
+    private func connectDataSourceToTableView() {
+        guard
+            let viewModel = currentViewModel,
+            let dataSource = viewModel.dataSource as? FMTableViewDataSource
+        else {
+            fatalError("ViewModel or DataSource type is not correct.")
+        }
+        dataSource.tableView = tableView
+        self.dataSource = dataSource
+        viewModel.updateDataSource()
+    }
+
 }

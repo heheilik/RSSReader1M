@@ -23,7 +23,10 @@ struct FeedPageFactory: PageFactoryProtocol {
         }
         switch typedPath {
         case .feedEntries:
-            fatalError("Not implemented.", file: #file, line: #line)
+            guard let context = context as? FeedEntriesContext else {
+                fatalError("Context must be supplied for FeedEntriesViewController.")
+            }
+            return FeedEntriesViewController(context: context)
         }
     }
 

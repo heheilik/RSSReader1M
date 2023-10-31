@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
     // MARK: Private methods
 
     private func registerFactory() {
+        pageFactory.register(FeedPageFactory.self)
     }
 
 }

@@ -25,7 +25,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         self.title = title
         self.description = description
         self.date = date
-        super.init(cellIdentifier: FeedSourceCell.cellIdentifier, delegate: nil)
+        super.init(cellIdentifier: FeedEntriesCell.cellIdentifier, delegate: nil)
     }
 
 }

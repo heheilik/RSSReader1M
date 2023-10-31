@@ -56,9 +56,11 @@ class FeedEntriesCell: FMTableViewCell {
             make.leading.equalTo(titleLabel.snp.leading)
             make.bottom.equalToSuperview().offset(-16)
         }
+        // FIXME: text goes over the right edge
     }
 
     override func fill(viewModel: FMCellViewModel) {
+        super.fill(viewModel: viewModel)
         guard let viewModel = currentViewModel else {
             return
         }

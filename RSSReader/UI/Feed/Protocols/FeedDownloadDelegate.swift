@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FeedKit
 
 enum DownloadError: Error {
     case atomFeedDownloaded
@@ -13,10 +14,12 @@ enum DownloadError: Error {
     case feedNotDownloaded
 }
 
+typealias DownloadResult = Result<RSSFeed, DownloadError>
+
 protocol FeedDownloadDelegate: AnyObject {
 
     func downloadStarted()
 
-    func downloadCompleted(withError error: DownloadError?)
+    func downloadCompleted(_ result: DownloadResult)
 
 }
