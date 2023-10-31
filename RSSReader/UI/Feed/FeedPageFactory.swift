@@ -13,6 +13,7 @@ import UIKit
 struct FeedPageFactory: PageFactoryProtocol {
 
     enum NavigationPath: String, CaseIterable {
+        case feedSources = "/feedSources"
         case feedEntries = "/feedEntries"
     }
 
@@ -23,12 +24,37 @@ struct FeedPageFactory: PageFactoryProtocol {
             throw PageFactoryErrorType.NavigationPathNotHandled
         }
         switch typedPath {
+        case .feedSources:
+            guard let context = context as? FeedSourcesContext else {
+                fatalError("Context must be supplied for FeedEntriesViewController.")
+            }
+            return newFeedSourcesViewController(context: context)
+
         case .feedEntries:
             guard let context = context as? FeedEntriesContext else {
                 fatalError("Context must be supplied for FeedEntriesViewController.")
             }
             return newFeedEntriesViewController(context: context)
         }
+    }
+
+    private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedSourcesViewController {
+        let viewController = FeedSourcesViewController()
+        viewController.delegate = FeedSourcesTableViewDelegate()
+
+        let dataSource = FMTableViewDataSource(
+            tableView: viewController.tableView
+        )
+        viewController.dataSource = dataSource
+
+        let viewModel = FeedSourcesViewModel(
+            context: context,
+            dataSource: dataSource,
+            downloadDelegate: viewController
+        )
+        viewController.viewModel = viewModel
+
+        return viewController
     }
 
     private func newFeedEntriesViewController(context: FeedEntriesContext) -> FeedEntriesViewController {

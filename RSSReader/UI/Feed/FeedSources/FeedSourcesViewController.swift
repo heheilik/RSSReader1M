@@ -1,5 +1,5 @@
 //
-//  FeedViewController.swift
+//  FeedSourcesViewController.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 25.10.23.
@@ -9,10 +9,10 @@ import ALNavigation
 import FMArchitecture
 import UIKit
 
-class FeedViewController: FMTablePageViewController {
+class FeedSourcesViewController: FMTablePageViewController {
 
-    private var currentViewModel: FeedViewModel? {
-        viewModel as? FeedViewModel
+    private var currentViewModel: FeedSourcesViewModel? {
+        viewModel as? FeedSourcesViewModel
     }
 
     // MARK: UI
@@ -22,27 +22,6 @@ class FeedViewController: FMTablePageViewController {
         indicator.hidesWhenStopped = true
         return indicator
     }()
-
-    // MARK: Initialization
-
-    init(sectionViewModels: [FeedSourcesSectionViewModel] = []) {
-        super.init()
-
-        let dataSource = FMTableViewDataSource(
-            viewModels: sectionViewModels,
-            tableView: tableView
-        )
-        viewModel = FeedViewModel(
-            dataSource: dataSource,
-            downloadDelegate: self
-        )
-        self.dataSource = dataSource
-        self.delegate = FeedTableViewDelegate()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
 
     // MARK: Lifecycle
 
@@ -93,18 +72,18 @@ class FeedViewController: FMTablePageViewController {
 
 // MARK: - FeedDownloadDelegate
 
-extension FeedViewController: FeedDownloadDelegate {
+extension FeedSourcesViewController: FeedDownloadDelegate {
 
     func downloadStarted() {
         activityIndicator.startAnimating()
-        if let delegate = delegate as? FeedTableViewDelegate {
+        if let delegate = delegate as? FeedSourcesTableViewDelegate {
             delegate.cellsAreSelectable = false
         }
     }
 
     func downloadCompleted(_ result: DownloadResult) {
         activityIndicator.stopAnimating()
-        if let delegate = delegate as? FeedTableViewDelegate {
+        if let delegate = delegate as? FeedSourcesTableViewDelegate {
             delegate.cellsAreSelectable = true
         }
 

@@ -21,13 +21,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        registerFactory()
+
         window = UIWindow()
-        window?.rootViewController = FeedViewController(
-            sectionViewModels: [FeedSourcesSectionViewModel()]
+        window?.rootViewController = UINavigationController(
+            rootViewController: newRootViewController()
         )
         window?.makeKeyAndVisible()
-
-        registerFactory()
 
         return true
     }
@@ -36,6 +36,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
 
     private func registerFactory() {
         pageFactory.register(FeedPageFactory.self)
+    }
+
+    private func newRootViewController() -> FeedSourcesViewController {
+        guard let viewController = try? FeedPageFactory().controller(
+            for: FeedPageFactory.NavigationPath.feedSources.rawValue,
+            with: FeedSourcesContext()
+        ) else {
+            fatalError("Could not instantiate root view controller.")
+        }
+        guard let viewController = viewController as? FeedSourcesViewController else {
+            fatalError("Wrong view controller instantiated.")
+        }
+        return viewController
     }
 
 }

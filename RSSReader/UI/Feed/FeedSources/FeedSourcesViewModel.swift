@@ -1,5 +1,5 @@
 //
-//  FeedViewModel.swift
+//  FeedSourcesViewModel.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 25.10.23.
@@ -9,51 +9,46 @@ import FMArchitecture
 import Foundation
 import FeedKit
 
-class FeedViewModel: FMTablePageViewModel {
-
-    // MARK: Internal properties
-
-    var downloadDelegate: FeedDownloadDelegate?
+class FeedSourcesViewModel: FMTablePageViewModel {
 
     // MARK: Private properties
 
-    private var sections: [FMSectionViewModel]
+    private var sectionViewModels: [FMSectionViewModel] = []
 
     private var feedService: FeedService
+    private weak var downloadDelegate: FeedDownloadDelegate?
 
     // MARK: Initialization
 
-    convenience init(
-        dataSource: FMDataManager,
-        downloadDelegate: FeedDownloadDelegate? = nil
-    ) {
-        self.init(
-            sections: dataSource.sectionViewModels,
-            dataSource: dataSource,
-            downloadDelegate: downloadDelegate
-        )
-        for section in sections {
-            section.delegate = self
-        }
-    }
-
     init(
-        sections: [FMSectionViewModel],
+        context: FeedSourcesContext,
         dataSource: FMDataManager,
-        downloadDelegate: FeedDownloadDelegate? = nil,
+        downloadDelegate: FeedDownloadDelegate,
         feedService: FeedService = FeedService()
     ) {
-        self.sections = sections
-        self.feedService = feedService
         self.downloadDelegate = downloadDelegate
+        self.feedService = feedService
         super.init(dataSource: dataSource)
+        updateSectionViewModels(with: context)
+        dataSource.update(with: sectionViewModels)
+    }
+
+    // MARK: Private methods
+
+    private func updateSectionViewModels(with context: FeedSourcesContext) {
+        sectionViewModels = [
+            FeedSourcesSectionViewModel(
+                context: context,
+                delegate: self
+            )
+        ]
     }
 
 }
 
 // MARK: - FeedSourcesSectionViewModelDelegate
 
-extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
+extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
     func didSelect(cellWithUrl url: URL) {
         downloadDelegate?.downloadStarted()
