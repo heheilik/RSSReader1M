@@ -89,10 +89,10 @@ extension FeedSourcesViewController: FeedDownloadDelegate {
 
         switch result {
         case let .success(feed):
-            Router.shared.present(
+            Router.shared.push(
                 FeedPageFactory.NavigationPath.feedEntries.rawValue,
                 animated: true,
-                with: FeedEntriesContext(rssFeed: feed)
+                context: FeedEntriesContext(rssFeed: feed)
             )
         case let .failure(error):
             present(alertFor(error: error), animated: true)
