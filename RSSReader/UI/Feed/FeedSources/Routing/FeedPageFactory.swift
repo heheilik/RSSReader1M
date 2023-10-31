@@ -13,6 +13,7 @@ import UIKit
 struct FeedPageFactory: PageFactoryProtocol {
 
     enum NavigationPath: String, CaseIterable {
+        case feedSources = "/feedSources"
         case feedEntries = "/feedEntries"
     }
 
@@ -23,12 +24,19 @@ struct FeedPageFactory: PageFactoryProtocol {
             throw PageFactoryErrorType.NavigationPathNotHandled
         }
         switch typedPath {
+        case .feedSources:
+            fatalError("Not implemented.", file: #file, line: #line)
+
         case .feedEntries:
             guard let context = context as? FeedEntriesContext else {
                 fatalError("Context must be supplied for FeedEntriesViewController.")
             }
             return newFeedEntriesViewController(context: context)
         }
+    }
+
+    private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedsourcesViewController {
+
     }
 
     private func newFeedEntriesViewController(context: FeedEntriesContext) -> FeedEntriesViewController {
