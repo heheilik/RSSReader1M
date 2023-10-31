@@ -77,8 +77,6 @@ extension FeedViewModel: FeedSourcesSectionViewModelDelegate {
 
             switch feed {
             case let .rss(feed):
-                print("RSS Feed downloaded.")
-                print("Title: \(feed.title ?? "No title.")")
                 result = .success(feed)
                 return
 
