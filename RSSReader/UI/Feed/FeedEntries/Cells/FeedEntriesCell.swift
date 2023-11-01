@@ -42,8 +42,8 @@ class FeedEntriesCell: FMTableViewCell {
         return button
     }()
 
-    private static let chevronUpImage = UIImage(systemName: "chevron.up")
-    private static let chevronDownImage = UIImage(systemName: "chevron.down")
+    private static let chevronUpImage = UIImage(systemName: "chevron.up")!
+    private static let chevronDownImage = UIImage(systemName: "chevron.down")!
 
     private let feedImage = {
         let image = UIImageView()
@@ -60,22 +60,8 @@ class FeedEntriesCell: FMTableViewCell {
             else {
                 return
             }
-            if descriptionLabel.numberOfLines == 1 {
-                descriptionLabel.numberOfLines = 3
-                descriptionSizeToggleButton.setImage(
-                    FeedEntriesCell.chevronUpImage,
-                    for: .normal
-                )
-                currentViewModel?.descriptionShownFull = true
-            } else {
-                descriptionLabel.numberOfLines = 1
-                descriptionSizeToggleButton.setImage(
-                    FeedEntriesCell.chevronDownImage,
-                    for: .normal
-                )
-                currentViewModel?.descriptionShownFull = false
-            }
-            viewModel.delegate?.didUpdate(cellViewModel: viewModel)
+            viewModel.descriptionShownFull = !viewModel.descriptionShownFull
+            self.resizeDescription(showFull: viewModel.descriptionShownFull, updateTable: true)
         }, for: .touchUpInside)
     }
 
@@ -143,6 +129,47 @@ class FeedEntriesCell: FMTableViewCell {
         descriptionLabel.text = viewModel.description
 
         dateLabel.text = "[show date]"  // TODO: implement showing date
+
+        resizeDescriptionIfNeeded()
+    }
+
+    // MARK: Private methods
+
+    private func resizeDescription(showFull: Bool, updateTable: Bool) {
+        guard let viewModel = currentViewModel else {
+            return
+        }
+
+        let numberOfLines = showFull ? 3 : 1
+
+        descriptionLabel.numberOfLines = numberOfLines
+        descriptionSizeToggleButton.setImage(
+            arrowImageFor(numberOfLines: numberOfLines),
+            for: .normal
+        )
+        viewModel.descriptionShownFull = showFull
+
+        if updateTable {
+            viewModel.delegate?.didUpdate(cellViewModel: viewModel)
+        }
+    }
+
+    private func resizeDescriptionIfNeeded() {
+        guard let viewModel = currentViewModel else {
+            return
+        }
+        let numberOfLines = viewModel.descriptionShownFull ? 3 : 1
+        if descriptionLabel.numberOfLines != numberOfLines {
+            resizeDescription(showFull: viewModel.descriptionShownFull, updateTable: false)
+        }
+    }
+
+    private func arrowImageFor(numberOfLines: Int) -> UIImage {
+        if numberOfLines == 1 {
+            return FeedEntriesCell.chevronDownImage
+        } else {
+            return FeedEntriesCell.chevronUpImage
+        }
     }
 
 }
