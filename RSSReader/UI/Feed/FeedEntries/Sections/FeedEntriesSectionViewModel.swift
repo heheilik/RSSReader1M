@@ -14,6 +14,14 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         FeedEntriesCell.self
     ]}
 
+    // MARK: Private properties
+
+    let dateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
+    }()
+
     // MARK: Initialization
 
     init(context: FeedEntriesContext) {
@@ -29,10 +37,16 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             return
         }
         cellViewModels = feedItems.map({ item in
-            FeedEntriesCellViewModel(
+            let date: String?
+            if let typedDate = item.pubDate {
+                date = dateFormatter.string(from: typedDate)
+            } else {
+                date = nil
+            }
+            return FeedEntriesCellViewModel(
                 title: item.title,
                 description: item.description,
-                date: item.pubDate,
+                date: date,
                 delegate: self
             )
         })

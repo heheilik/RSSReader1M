@@ -127,8 +127,7 @@ class FeedEntriesCell: FMTableViewCell {
 
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
-
-        dateLabel.text = "[show date]"  // TODO: implement showing date
+        dateLabel.text = viewModel.date
 
         resizeDescriptionIfNeeded()
     }

@@ -14,7 +14,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     let title: String?
     let description: String?
-    let date: Date?
+    let date: String?
 
     var descriptionShownFull = false
 
@@ -26,7 +26,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     init(
         title: String?,
         description: String?,
-        date: Date?,
+        date: String?,
         delegate: FMCellViewModelDelegate
     ) {
         self.title = title
