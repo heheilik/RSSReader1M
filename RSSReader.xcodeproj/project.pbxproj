@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB4D2AF28C470069672B /* FeedImageService.swift */; };
 		5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
 		5DC03A762AF1020B00EA2965 /* FeedSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */; };
 		5DC03A772AF1020B00EA2965 /* FeedSourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5D93DB4D2AF28C470069672B /* FeedImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageService.swift; sourceTree = "<group>"; };
 		5DAEF75D2AEA679D0091436C /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCell.swift; sourceTree = "<group>"; };
 		5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCellViewModel.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				5DAEF75D2AEA679D0091436C /* FeedService.swift */,
+				5D93DB4D2AF28C470069672B /* FeedImageService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				5DE81F352AEBB265003159C0 /* FeedDownloadDelegate.swift in Sources */,
 				5DE81F332AEBB0E9003159C0 /* FeedSourcesTableViewDelegate.swift in Sources */,
 				5DFD964E2AE8FC9C00DEBF9A /* FeedSourcesViewController.swift in Sources */,
+				5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */,
 				5DE6B4192AEF9FD600F22F84 /* FeedEntriesSectionViewModel.swift in Sources */,
 				5DFD966F2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift in Sources */,
 				5DE6B4152AEF9E9800F22F84 /* FeedEntriesViewController.swift in Sources */,

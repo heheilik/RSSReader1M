@@ -7,6 +7,7 @@
 
 import Foundation
 import FMArchitecture
+import UIKit
 
 class FeedEntriesSectionViewModel: FMSectionViewModel {
 
@@ -14,9 +15,13 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         FeedEntriesCell.self
     ]}
 
+    // MARK: Internal properties
+
+    private(set) var image: UIImage?
+
     // MARK: Private properties
 
-    let dateFormatter = {
+    private let dateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter
@@ -26,6 +31,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     init(context: FeedEntriesContext) {
         super.init()
+        downloadImageIfPossible(urlString: context.rssFeed.image?.url)
         configureCellViewModels(context: context)
     }
 
@@ -50,6 +56,25 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
                 delegate: self
             )
         })
+    }
+
+    private func downloadImageIfPossible(urlString: String?) {
+        guard
+            let urlString,
+            let url = URL(string: urlString)
+        else {
+            print(urlString)
+            return
+        }
+        print(urlString)  // TODO: Connect urls
+
+        let service = FeedImageService()
+        service.prepareImage(at: url) { image in
+            guard let image else {
+                return
+            }
+            self.image = image
+        }
     }
 
 }
