@@ -11,6 +11,7 @@ import FeedKit
 
 struct FeedEntriesContext: PageContext {
 
+    let feedName: String
     let rssFeed: RSSFeed
 
 }

@@ -9,6 +9,6 @@ import Foundation
 
 protocol FeedSourceCellViewModelDelegate: AnyObject {
 
-    func didSelect(cellWithUrl url: URL)
+    func didSelect(cellWithData feedSource: FeedSource)
 
 }

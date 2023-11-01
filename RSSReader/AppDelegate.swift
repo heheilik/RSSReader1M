@@ -24,9 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
         registerFactory()
 
         window = UIWindow()
-        window?.rootViewController = UINavigationController(
-            rootViewController: newRootViewController()
-        )
+        window?.rootViewController = newNavigationController()
         window?.makeKeyAndVisible()
 
         return true
@@ -36,6 +34,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
 
     private func registerFactory() {
         pageFactory.register(FeedPageFactory.self)
+    }
+
+    private func newNavigationController() -> UINavigationController {
+        UINavigationController(
+            rootViewController: newRootViewController()
+        )
     }
 
     private func newRootViewController() -> FeedSourcesViewController {
