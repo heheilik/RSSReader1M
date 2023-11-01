@@ -52,6 +52,33 @@ class FeedEntriesCell: FMTableViewCell {
 
     // MARK: Internal methods
 
+    override func configureViews() {
+        descriptionSizeToggleButton.addAction(UIAction { [weak self] _ in
+            guard
+                let self = self,
+                let viewModel = self.currentViewModel
+            else {
+                return
+            }
+            if descriptionLabel.numberOfLines == 1 {
+                descriptionLabel.numberOfLines = 3
+                descriptionSizeToggleButton.setImage(
+                    FeedEntriesCell.chevronUpImage,
+                    for: .normal
+                )
+                currentViewModel?.descriptionShownFull = true
+            } else {
+                descriptionLabel.numberOfLines = 1
+                descriptionSizeToggleButton.setImage(
+                    FeedEntriesCell.chevronDownImage,
+                    for: .normal
+                )
+                currentViewModel?.descriptionShownFull = false
+            }
+            viewModel.delegate?.didUpdate(cellViewModel: viewModel)
+        }, for: .touchUpInside)
+    }
+
     override func addSubviews() {
         contentView.addSubview(feedImage)
         contentView.addSubview(titleLabel)
@@ -69,7 +96,8 @@ class FeedEntriesCell: FMTableViewCell {
 
         descriptionLabel.setContentHuggingPriority(.defaultLow + 1, for: .horizontal)
         descriptionLabel.setContentHuggingPriority(.defaultLow + 1, for: .vertical)
-        
+        descriptionLabel.setContentCompressionResistancePriority(.defaultHigh + 1, for: .vertical)
+
         descriptionSizeToggleButton.setContentHuggingPriority(.defaultLow + 2, for: .horizontal)
         descriptionSizeToggleButton.setContentHuggingPriority(.defaultLow, for: .vertical)
 
@@ -92,7 +120,7 @@ class FeedEntriesCell: FMTableViewCell {
             $0.leading.equalTo(titleLabel)
         }
         descriptionSizeToggleButton.snp.makeConstraints {
-            $0.top.bottom.equalTo(descriptionLabel)
+            $0.centerY.equalTo(descriptionLabel)
             $0.leading.equalTo(descriptionLabel.snp.trailing).offset(8)
             $0.trailing.equalTo(titleLabel)
             $0.width.equalTo(32)

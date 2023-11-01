@@ -32,7 +32,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             FeedEntriesCellViewModel(
                 title: item.title,
                 description: item.description,
-                date: item.pubDate
+                date: item.pubDate,
+                delegate: self
             )
         })
     }
