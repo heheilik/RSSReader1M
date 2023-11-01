@@ -47,6 +47,7 @@ class FeedEntriesCell: FMTableViewCell {
 
     private let feedImage = {
         let image = UIImageView()
+        image.contentMode = .scaleAspectFit
         return image
     }()
 
@@ -128,6 +129,7 @@ class FeedEntriesCell: FMTableViewCell {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         dateLabel.text = viewModel.date
+        feedImage.image = viewModel.image
 
         resizeDescriptionIfNeeded()
     }

@@ -17,7 +17,16 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     // MARK: Internal properties
 
-    private(set) var image: UIImage?
+    private(set) var image: UIImage? {
+        didSet {
+            for cellViewModel in self.cellViewModels {
+                guard let viewModel = cellViewModel as? FeedEntriesCellViewModel else {
+                    continue
+                }
+                viewModel.image = image
+            }
+        }
+    }
 
     // MARK: Private properties
 
@@ -31,7 +40,10 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     init(context: FeedEntriesContext) {
         super.init()
-        downloadImageIfPossible(urlString: context.rssFeed.image?.url)
+        downloadImageIfPossible(
+            feedURLString: context.rssFeed.link,
+            imageURLString: context.rssFeed.image?.url
+        )
         configureCellViewModels(context: context)
     }
 
@@ -58,19 +70,20 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         })
     }
 
-    private func downloadImageIfPossible(urlString: String?) {
+    private func downloadImageIfPossible(feedURLString: String?, imageURLString: String?) {
         guard
-            let urlString,
-            let url = URL(string: urlString)
+            let feedURLString,
+            let imageURLString,
+            let url = URL(string: feedURLString + imageURLString)
         else {
-            print(urlString)
+            image = nil
             return
         }
-        print(urlString)  // TODO: Connect urls
 
         let service = FeedImageService()
         service.prepareImage(at: url) { image in
             guard let image else {
+                self.image = nil
                 return
             }
             self.image = image

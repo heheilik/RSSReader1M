@@ -7,6 +7,7 @@
 
 import Foundation
 import FMArchitecture
+import UIKit
 
 class FeedEntriesCellViewModel: FMCellViewModel {
 
@@ -16,9 +17,16 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     let description: String?
     let date: String?
 
+    weak var image: UIImage? {
+        didSet {
+            DispatchQueue.main.async {
+                self.delegate?.didUpdate(cellViewModel: self)
+            }
+        }
+    }
+
     var descriptionShownFull = false
 
-    // TODO: add image
     // TODO: add read status
 
     // MARK: Initialization
