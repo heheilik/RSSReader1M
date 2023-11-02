@@ -79,13 +79,27 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     }
 
     private func downloadImageIfPossible(feedURLString: String?, imageURLString: String?) {
-        guard
-            let feedURLString,
-            let imageURLString,
-            let url = URL(string: feedURLString + imageURLString)
-        else {
+        guard let imageURLString else {
             downloadedImage = nil
             return
+        }
+
+        let url: URL
+        if imageURLString.starts(with: "http") {
+            guard let tempURL = URL(string: imageURLString) else {
+                downloadedImage = nil
+                return
+            }
+            url = tempURL
+        } else {
+            guard
+                let feedURLString,
+                let tempURL = URL(string: feedURLString + imageURLString)
+            else {
+                downloadedImage = nil
+                return
+            }
+            url = tempURL
         }
 
         let service = FeedImageService()
