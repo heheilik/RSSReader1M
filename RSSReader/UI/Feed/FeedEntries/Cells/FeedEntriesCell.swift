@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
+import Combine
 import Foundation
 import FMArchitecture
 import UIKit
@@ -58,6 +59,10 @@ class FeedEntriesCell: FMTableViewCell {
         image.contentMode = .scaleAspectFit
         return image
     }()
+
+    // MARK: Private properties
+
+    private var readStatusObserver: AnyCancellable?
 
     // MARK: Internal methods
 
@@ -150,6 +155,15 @@ class FeedEntriesCell: FMTableViewCell {
         dateLabel.text = viewModel.date
         feedImage.image = viewModel.image
 
+        changeReadStatus(isRead: viewModel.isRead)
+
+        readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main).sink { [weak self] isRead in
+            guard let self = self else {
+                return
+            }
+            self.changeReadStatus(isRead: isRead)
+        }
+
         resizeDescriptionIfNeeded()
     }
 
@@ -193,12 +207,7 @@ class FeedEntriesCell: FMTableViewCell {
     }
 
     private func changeReadStatus(isRead: Bool) {
-        guard let viewModel = currentViewModel else {
-            return
-        }
-
-        viewModel.isRead = isRead
-
+        readStatusView.backgroundColor = isRead ? .white : .systemBlue
     }
 
 }
