@@ -28,7 +28,7 @@ class FeedSourcesViewController: FMTablePageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.title = "Feed Sources"
+        navigationItem.title = "Источники"
     }
 
     // MARK: Internal methods
