@@ -15,6 +15,7 @@ struct FeedPageFactory: PageFactoryProtocol {
     enum NavigationPath: String, CaseIterable {
         case feedSources = "/feedSources"
         case feedEntries = "/feedEntries"
+        case feedDetails = "/feedDetails"
     }
 
     // MARK: Internal methods
@@ -35,6 +36,12 @@ struct FeedPageFactory: PageFactoryProtocol {
                 fatalError("Context must be supplied for FeedEntriesViewController.")
             }
             return newFeedEntriesViewController(context: context)
+
+        case .feedDetails:
+            guard let context = context as? FeedDetailsContext else {
+                fatalError("Context must be supplied for FeedEntriesViewController.")
+            }
+            return newFeedDetailsViewController(context: context)
         }
     }
 
@@ -59,6 +66,7 @@ struct FeedPageFactory: PageFactoryProtocol {
 
     private func newFeedEntriesViewController(context: FeedEntriesContext) -> FeedEntriesViewController {
         let viewController = FeedEntriesViewController()
+        viewController.delegate = FMTableViewDelegate()
 
         let dataSource = FMTableViewDataSource(
             tableView: viewController.tableView
@@ -72,6 +80,14 @@ struct FeedPageFactory: PageFactoryProtocol {
         viewController.viewModel = viewModel
 
         viewController.navigationItem.title = context.feedName
+        return viewController
+    }
+
+    private func newFeedDetailsViewController(context: FeedDetailsContext) -> FeedDetailsViewController {
+        let viewController = FeedDetailsViewController()
+        let viewModel = FeedDetailsViewModel(context: context)
+
+        viewController.viewModel = viewModel
         return viewController
     }
 
