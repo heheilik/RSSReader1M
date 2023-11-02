@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
+import ALNavigation
 import Foundation
 import FMArchitecture
 import UIKit
@@ -53,3 +54,21 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     }
 
 }
+
+extension FeedEntriesCellViewModel: FMSelectableCellModel {
+
+    func didSelect() {
+        Router.shared.push(
+            FeedPageFactory.NavigationPath.feedDetails.rawValue,
+            animated: true,
+            context: FeedDetailsContext(
+                title: title,
+                description: description,
+                date: date,
+                image: image
+            )
+        )
+    }
+
+}
+
