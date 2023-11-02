@@ -6,6 +6,7 @@
 //
 
 import ALNavigation
+import Combine
 import Foundation
 import FMArchitecture
 import UIKit
@@ -27,8 +28,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     }
 
     var descriptionShownFull = false
-
-    // TODO: add read status
+    @Published var isRead = false
 
     // MARK: Initialization
 
@@ -51,6 +51,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 extension FeedEntriesCellViewModel: FMSelectableCellModel {
 
     func didSelect() {
+        isRead = true
         Router.shared.push(
             FeedPageFactory.NavigationPath.feedDetails.rawValue,
             animated: true,

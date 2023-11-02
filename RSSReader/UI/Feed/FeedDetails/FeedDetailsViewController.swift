@@ -89,6 +89,9 @@ class FeedDetailsViewController: FMPageViewController {
         titleLabel.text = viewModel.context.title ?? ""
         descriptionLabel.text = viewModel.context.description ?? ""
         dateLabel.text = viewModel.context.date ?? ""
+
+        view.layoutIfNeeded()
+
     }
 
 }

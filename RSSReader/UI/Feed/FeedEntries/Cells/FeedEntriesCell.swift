@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
+import Combine
 import Foundation
 import FMArchitecture
 import UIKit
@@ -42,6 +43,14 @@ class FeedEntriesCell: FMTableViewCell {
         return button
     }()
 
+    private let readStatusView = {
+        let view = UIView()
+        view.layer.cornerRadius = 4
+        view.clipsToBounds = true
+        view.backgroundColor = .systemBlue
+        return view
+    }()
+
     private static let chevronUpImage = UIImage(systemName: "chevron.up")!
     private static let chevronDownImage = UIImage(systemName: "chevron.down")!
 
@@ -50,6 +59,10 @@ class FeedEntriesCell: FMTableViewCell {
         image.contentMode = .scaleAspectFit
         return image
     }()
+
+    // MARK: Private properties
+
+    private var readStatusObserver: AnyCancellable?
 
     // MARK: Internal methods
 
@@ -69,6 +82,7 @@ class FeedEntriesCell: FMTableViewCell {
     override func addSubviews() {
         contentView.addSubview(feedImage)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(readStatusView)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(descriptionSizeToggleButton)
         contentView.addSubview(dateLabel)
@@ -80,6 +94,9 @@ class FeedEntriesCell: FMTableViewCell {
 
         titleLabel.setContentHuggingPriority(.defaultLow + 1, for: .horizontal)
         titleLabel.setContentHuggingPriority(.defaultLow + 2, for: .vertical)
+
+        readStatusView.setContentHuggingPriority(.required, for: .horizontal)
+        readStatusView.setContentHuggingPriority(.required, for: .vertical)
 
         descriptionLabel.setContentHuggingPriority(.defaultLow + 1, for: .horizontal)
         descriptionLabel.setContentHuggingPriority(.defaultLow + 1, for: .vertical)
@@ -100,7 +117,13 @@ class FeedEntriesCell: FMTableViewCell {
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalTo(feedImage.snp.trailing).offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+        }
+        readStatusView.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel)
+            $0.centerX.equalTo(descriptionSizeToggleButton)
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
+            $0.width.equalTo(8)
+            $0.height.equalTo(readStatusView.snp.width)
         }
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
@@ -109,13 +132,14 @@ class FeedEntriesCell: FMTableViewCell {
         descriptionSizeToggleButton.snp.makeConstraints {
             $0.centerY.equalTo(descriptionLabel)
             $0.leading.equalTo(descriptionLabel.snp.trailing).offset(8)
-            $0.trailing.equalTo(titleLabel)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(32)
             $0.height.equalTo(descriptionSizeToggleButton.snp.width)
         }
         dateLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalTo(titleLabel)
+            $0.leading.equalTo(titleLabel)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.bottom.equalToSuperview().offset(-16)
         }
     }
@@ -130,6 +154,15 @@ class FeedEntriesCell: FMTableViewCell {
         descriptionLabel.text = viewModel.description
         dateLabel.text = viewModel.date
         feedImage.image = viewModel.image
+
+        changeReadStatus(isRead: viewModel.isRead)
+
+        readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main).sink { [weak self] isRead in
+            guard let self = self else {
+                return
+            }
+            self.changeReadStatus(isRead: isRead)
+        }
 
         resizeDescriptionIfNeeded()
     }
@@ -171,6 +204,10 @@ class FeedEntriesCell: FMTableViewCell {
         } else {
             return FeedEntriesCell.chevronUpImage
         }
+    }
+
+    private func changeReadStatus(isRead: Bool) {
+        readStatusView.backgroundColor = isRead ? .white : .systemBlue
     }
 
 }
