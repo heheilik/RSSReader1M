@@ -27,8 +27,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     }
 
     var descriptionShownFull = false
-
-    // TODO: add read status
+    var isRead = false
 
     // MARK: Initialization
 
