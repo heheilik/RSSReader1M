@@ -48,10 +48,14 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         super.init()
         print(context.rssFeed.image?.url)
         configureCellViewModels(context: context)
-        downloadImageIfPossible(
-            feedURLString: context.rssFeed.link,
-            imageURLString: context.rssFeed.image?.url
-        )
+        
+        // FIXME: cells are not updated while shown
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: DispatchWorkItem(block: {
+            self.downloadImageIfPossible(
+                feedURLString: context.rssFeed.link,
+                imageURLString: context.rssFeed.image?.url
+            )
+        }))
     }
 
     // MARK: Private methods
