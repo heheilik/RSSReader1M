@@ -11,6 +11,10 @@ import FeedKit
 
 class FeedSourcesViewModel: FMTablePageViewModel {
 
+    // MARK: Internal properties
+
+    private(set) var lastClickedFeedName: String = ""
+
     // MARK: Private properties
 
     private var sectionViewModels: [FMSectionViewModel] = []
@@ -50,10 +54,11 @@ class FeedSourcesViewModel: FMTablePageViewModel {
 
 extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
-    func didSelect(cellWithUrl url: URL) {
-        downloadDelegate?.downloadStarted()
+    func didSelect(cellWithData feedSource: FeedSource) {
+        lastClickedFeedName = feedSource.name
 
-        feedService.prepareFeed(at: url) { feed in
+        downloadDelegate?.downloadStarted()
+        feedService.prepareFeed(at: feedSource.url) { feed in
             var result: Result<RSSFeed, DownloadError>?
             defer {
                 guard let result else {

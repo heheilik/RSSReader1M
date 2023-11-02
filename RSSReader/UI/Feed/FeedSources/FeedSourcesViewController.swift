@@ -28,6 +28,7 @@ class FeedSourcesViewController: FMTablePageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        navigationItem.title = "Feed Sources"
     }
 
     // MARK: Internal methods
@@ -89,10 +90,14 @@ extension FeedSourcesViewController: FeedDownloadDelegate {
 
         switch result {
         case let .success(feed):
+            let feedName = currentViewModel?.lastClickedFeedName ?? "No name provided."
             Router.shared.push(
                 FeedPageFactory.NavigationPath.feedEntries.rawValue,
                 animated: true,
-                context: FeedEntriesContext(rssFeed: feed)
+                context: FeedEntriesContext(
+                    feedName: feedName,
+                    rssFeed: feed
+                )
             )
         case let .failure(error):
             present(alertFor(error: error), animated: true)

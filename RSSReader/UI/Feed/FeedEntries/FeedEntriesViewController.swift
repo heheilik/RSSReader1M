@@ -7,7 +7,7 @@
 
 import FMArchitecture
 import Foundation
-import FeedKit
+import UIKit
 
 class FeedEntriesViewController: FMTablePageViewController {
 

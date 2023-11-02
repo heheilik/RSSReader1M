@@ -43,7 +43,7 @@ class FeedSourceCell: FMTableViewCell {
 
     override func fill(viewModel: FMCellViewModel) {
         super.fill(viewModel: viewModel)
-        nameLabel.text = currentViewModel?.name
+        nameLabel.text = currentViewModel?.feedSource.name
     }
 
 }

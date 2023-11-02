@@ -33,8 +33,7 @@ class FeedSourcesSectionViewModel: FMSectionViewModel {
     private func configureCellViewModels(with context: FeedSourcesContext) {
         cellViewModels = context.data.map { feedSource in
             FeedSourceCellViewModel(
-                name: feedSource.name,
-                url: feedSource.url,
+                feedSource: feedSource,
                 delegate: self
             )
         }
@@ -46,8 +45,8 @@ class FeedSourcesSectionViewModel: FMSectionViewModel {
 
 extension FeedSourcesSectionViewModel: FeedSourceCellViewModelDelegate {
     
-    func didSelect(cellWithUrl url: URL) {
-        currentDelegate?.didSelect(cellWithUrl: url)
+    func didSelect(cellWithData feedSource: FeedSource) {
+        currentDelegate?.didSelect(cellWithData: feedSource)
     }
 
 }
