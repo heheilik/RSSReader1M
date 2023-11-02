@@ -20,6 +20,7 @@ class FeedDetailsViewController: FMPageViewController {
     private let feedImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -39,7 +40,7 @@ class FeedDetailsViewController: FMPageViewController {
 
     private let dateLabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.italicSystemFont(ofSize: 14)
         return label
     }()
 
@@ -55,20 +56,21 @@ class FeedDetailsViewController: FMPageViewController {
     override func setupConstraints() {
         feedImage.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalToSuperview().inset(view.safeAreaInsets)
-            $0.height.equalTo(100)
+            $0.top.equalToSuperview()
+            $0.height.equalTo(200)
         }
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(feedImage.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(view.safeAreaInsets)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalToSuperview().inset(view.safeAreaInsets)
+            $0.leading.trailing.equalTo(titleLabel)
         }
         dateLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalToSuperview().inset(view.safeAreaInsets)
+            $0.leading.trailing.equalTo(titleLabel)
         }
     }
 
