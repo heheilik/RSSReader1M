@@ -44,6 +44,13 @@ class FeedDetailsViewController: FMPageViewController {
         return label
     }()
 
+    // MARK: Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Подробности"
+    }
+
     // MARK: Internal methods
 
     override func addSubviews() {
@@ -56,7 +63,7 @@ class FeedDetailsViewController: FMPageViewController {
     override func setupConstraints() {
         feedImage.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(200)
         }
         titleLabel.snp.makeConstraints {
