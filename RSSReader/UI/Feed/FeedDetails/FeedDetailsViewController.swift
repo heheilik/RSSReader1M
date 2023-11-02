@@ -19,7 +19,7 @@ class FeedDetailsViewController: FMPageViewController {
 
     private let feedImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -89,6 +89,9 @@ class FeedDetailsViewController: FMPageViewController {
         titleLabel.text = viewModel.context.title ?? ""
         descriptionLabel.text = viewModel.context.description ?? ""
         dateLabel.text = viewModel.context.date ?? ""
+
+        view.layoutIfNeeded()
+
     }
 
 }
