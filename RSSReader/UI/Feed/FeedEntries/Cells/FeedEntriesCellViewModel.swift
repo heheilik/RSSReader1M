@@ -21,7 +21,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     weak var image: UIImage? {
         didSet {
             DispatchQueue.main.async {
-                self.delegate?.didUpdate(cellViewModel: self)
+                self.fillableCell?.fill(viewModel: self)
             }
         }
     }
@@ -36,21 +36,14 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         title: String?,
         description: String?,
         date: String?,
+        image: UIImage,
         delegate: FMCellViewModelDelegate
     ) {
         self.title = title
         self.description = description
         self.date = date
+        self.image = image
         super.init(cellIdentifier: FeedEntriesCell.cellIdentifier, delegate: delegate)
-    }
-
-    // MARK: Internal methods
-
-    override func significantlyDifferent(from model: FMCellViewModel) -> Bool {
-        guard let viewModel = model as? Self else {
-            fatalError("Wrong viewModel.")
-        }
-        return descriptionShownFull != viewModel.descriptionShownFull
     }
 
 }
