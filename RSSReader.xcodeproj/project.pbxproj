@@ -7,7 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D14F0CF2B0E1E0E00F57B14 /* RSSReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0CE2B0E1E0E00F57B14 /* RSSReaderTests.swift */; };
+		5D14F0D62B0E1F0000F57B14 /* FeedSourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */; };
+		5D14F0D72B0E299400F57B14 /* FeedSourcesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD96692AE9001900DEBF9A /* FeedSourcesViewModel.swift */; };
+		5D14F0D82B0E29F700F57B14 /* FeedSourcesContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A782AF1038C00EA2965 /* FeedSourcesContext.swift */; };
+		5D14F0DA2B0E2A2E00F57B14 /* MOCDownloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0D92B0E2A2E00F57B14 /* MOCDownloadDelegate.swift */; };
+		5D14F0DB2B0E2A3F00F57B14 /* FeedDownloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE81F342AEBB265003159C0 /* FeedDownloadDelegate.swift */; };
+		5D14F0DD2B0E2A8C00F57B14 /* MOCFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0DC2B0E2A8C00F57B14 /* MOCFeedService.swift */; };
+		5D14F0DE2B0E2A9D00F57B14 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
+		5D14F0E12B0E2E0D00F57B14 /* FeedSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A802AF10AA100EA2965 /* FeedSource.swift */; };
+		5D14F0E22B0E2F7F00F57B14 /* FeedSourcesSectionViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A7C2AF1088C00EA2965 /* FeedSourcesSectionViewModelDelegate.swift */; };
+		5D14F0E32B0E2F7F00F57B14 /* FeedSourcesSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD966E2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift */; };
+		5D14F0E42B0E2F8A00F57B14 /* FeedSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */; };
+		5D14F0E52B0E2F8A00F57B14 /* FeedSourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */; };
+		5D14F0E62B0E2F9000F57B14 /* FeedSourceCellViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A7A2AF1087300EA2965 /* FeedSourceCellViewModelDelegate.swift */; };
 		5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB4D2AF28C470069672B /* FeedImageService.swift */; };
 		5D93DB532AF29A2A0069672B /* FeedDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */; };
 		5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
@@ -51,7 +63,9 @@
 
 /* Begin PBXFileReference section */
 		5D14F0CC2B0E1E0E00F57B14 /* RSSReaderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RSSReaderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5D14F0CE2B0E1E0E00F57B14 /* RSSReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSReaderTests.swift; sourceTree = "<group>"; };
+		5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSourcesTests.swift; sourceTree = "<group>"; };
+		5D14F0D92B0E2A2E00F57B14 /* MOCDownloadDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MOCDownloadDelegate.swift; sourceTree = "<group>"; };
+		5D14F0DC2B0E2A8C00F57B14 /* MOCFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MOCFeedService.swift; sourceTree = "<group>"; };
 		5D93DB4D2AF28C470069672B /* FeedImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageService.swift; sourceTree = "<group>"; };
 		5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewController.swift; sourceTree = "<group>"; };
 		5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -106,9 +120,27 @@
 		5D14F0CD2B0E1E0E00F57B14 /* RSSReaderTests */ = {
 			isa = PBXGroup;
 			children = (
-				5D14F0CE2B0E1E0E00F57B14 /* RSSReaderTests.swift */,
+				5D14F0DF2B0E2B6600F57B14 /* FeedSources */,
 			);
 			path = RSSReaderTests;
+			sourceTree = "<group>";
+		};
+		5D14F0DF2B0E2B6600F57B14 /* FeedSources */ = {
+			isa = PBXGroup;
+			children = (
+				5D14F0E02B0E2B6E00F57B14 /* MOC */,
+				5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */,
+			);
+			path = FeedSources;
+			sourceTree = "<group>";
+		};
+		5D14F0E02B0E2B6E00F57B14 /* MOC */ = {
+			isa = PBXGroup;
+			children = (
+				5D14F0D92B0E2A2E00F57B14 /* MOCDownloadDelegate.swift */,
+				5D14F0DC2B0E2A8C00F57B14 /* MOCFeedService.swift */,
+			);
+			path = MOC;
 			sourceTree = "<group>";
 		};
 		5D8841862AF1018A00A3951E /* Feed */ = {
@@ -369,7 +401,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D14F0CF2B0E1E0E00F57B14 /* RSSReaderTests.swift in Sources */,
+				5D14F0E12B0E2E0D00F57B14 /* FeedSource.swift in Sources */,
+				5D14F0D62B0E1F0000F57B14 /* FeedSourcesTests.swift in Sources */,
+				5D14F0E22B0E2F7F00F57B14 /* FeedSourcesSectionViewModelDelegate.swift in Sources */,
+				5D14F0E62B0E2F9000F57B14 /* FeedSourceCellViewModelDelegate.swift in Sources */,
+				5D14F0E42B0E2F8A00F57B14 /* FeedSourceCell.swift in Sources */,
+				5D14F0D82B0E29F700F57B14 /* FeedSourcesContext.swift in Sources */,
+				5D14F0E52B0E2F8A00F57B14 /* FeedSourceCellViewModel.swift in Sources */,
+				5D14F0DE2B0E2A9D00F57B14 /* FeedService.swift in Sources */,
+				5D14F0DB2B0E2A3F00F57B14 /* FeedDownloadDelegate.swift in Sources */,
+				5D14F0DD2B0E2A8C00F57B14 /* MOCFeedService.swift in Sources */,
+				5D14F0E32B0E2F7F00F57B14 /* FeedSourcesSectionViewModel.swift in Sources */,
+				5D14F0DA2B0E2A2E00F57B14 /* MOCDownloadDelegate.swift in Sources */,
+				5D14F0D72B0E299400F57B14 /* FeedSourcesViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
