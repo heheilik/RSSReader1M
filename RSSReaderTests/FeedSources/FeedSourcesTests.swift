@@ -115,7 +115,7 @@ final class FeedSourcesTests: XCTestCase {
     // MARK: Private methods
 
     private func testViewModelWithFeed(
-        ofType type: RSSFeed.FeedsList,
+        ofType type: MockFeeds,
         mustGetError downloadError: DownloadError?
     ) {
         let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")

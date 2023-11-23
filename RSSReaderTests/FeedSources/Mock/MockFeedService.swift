@@ -15,7 +15,7 @@ class MockFeedService: FeedService {
     override func prepareFeed(at url: URL, completion: @escaping (Feed?) -> Void) {
         prepareFeedCalled = true
         completion(
-            RSSFeed.FeedsList(fromURL: url)?.feed
+            MockFeeds(fromURL: url)?.feed
         )
     }
 

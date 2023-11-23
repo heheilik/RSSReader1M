@@ -21,7 +21,7 @@
 		5D14F0E52B0E2F8A00F57B14 /* FeedSourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */; };
 		5D14F0E62B0E2F9000F57B14 /* FeedSourceCellViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A7A2AF1087300EA2965 /* FeedSourceCellViewModelDelegate.swift */; };
 		5D14F0E82B0F7DB900F57B14 /* FeedEntriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */; };
-		5D14F0EA2B0F884600F57B14 /* MockRSSFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0E92B0F884600F57B14 /* MockRSSFeed.swift */; };
+		5D14F0EA2B0F884600F57B14 /* MockFeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0E92B0F884600F57B14 /* MockFeeds.swift */; };
 		5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB4D2AF28C470069672B /* FeedImageService.swift */; };
 		5D93DB532AF29A2A0069672B /* FeedDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */; };
 		5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
@@ -69,7 +69,7 @@
 		5D14F0D92B0E2A2E00F57B14 /* MockDownloadDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDownloadDelegate.swift; sourceTree = "<group>"; };
 		5D14F0DC2B0E2A8C00F57B14 /* MockFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedService.swift; sourceTree = "<group>"; };
 		5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEntriesTests.swift; sourceTree = "<group>"; };
-		5D14F0E92B0F884600F57B14 /* MockRSSFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRSSFeed.swift; sourceTree = "<group>"; };
+		5D14F0E92B0F884600F57B14 /* MockFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeeds.swift; sourceTree = "<group>"; };
 		5D93DB4D2AF28C470069672B /* FeedImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageService.swift; sourceTree = "<group>"; };
 		5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewController.swift; sourceTree = "<group>"; };
 		5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 			children = (
 				5D14F0D92B0E2A2E00F57B14 /* MockDownloadDelegate.swift */,
 				5D14F0DC2B0E2A8C00F57B14 /* MockFeedService.swift */,
-				5D14F0E92B0F884600F57B14 /* MockRSSFeed.swift */,
+				5D14F0E92B0F884600F57B14 /* MockFeeds.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -416,7 +416,7 @@
 				5D14F0E82B0F7DB900F57B14 /* FeedEntriesTests.swift in Sources */,
 				5D14F0E52B0E2F8A00F57B14 /* FeedSourceCellViewModel.swift in Sources */,
 				5D14F0DE2B0E2A9D00F57B14 /* FeedService.swift in Sources */,
-				5D14F0EA2B0F884600F57B14 /* MockRSSFeed.swift in Sources */,
+				5D14F0EA2B0F884600F57B14 /* MockFeeds.swift in Sources */,
 				5D14F0DB2B0E2A3F00F57B14 /* FeedDownloadDelegate.swift in Sources */,
 				5D14F0DD2B0E2A8C00F57B14 /* MockFeedService.swift in Sources */,
 				5D14F0E32B0E2F7F00F57B14 /* FeedSourcesSectionViewModel.swift in Sources */,
