@@ -11,11 +11,14 @@ class MOCDownloadDelegate: FeedDownloadDelegate {
 
     var didDownloadStart = false
 
+    var downloadCompletedCallback: ((DownloadResult) -> Void)?
+
     func downloadStarted() {
         didDownloadStart = true
     }
 
     func downloadCompleted(_ result: DownloadResult) {
+        downloadCompletedCallback?(result)
     }
 
 }

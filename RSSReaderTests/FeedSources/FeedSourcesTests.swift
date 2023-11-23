@@ -19,10 +19,6 @@ final class FeedSourcesTests: XCTestCase {
     let feedService = MOCFeedService()
 
     override func setUp() {
-        // reseting variables
-        downloadDelegate.didDownloadStart = false
-        feedService.prepareFeedCalled = false
-
         viewModel = FeedSourcesViewModel(
             context: FeedSourcesContext.moc,
             dataSource: FMTableViewDataSource(tableView: nil),
@@ -33,6 +29,11 @@ final class FeedSourcesTests: XCTestCase {
 
     override func tearDown() {
         viewModel = nil
+
+        downloadDelegate.didDownloadStart = false
+        downloadDelegate.downloadCompletedCallback = nil
+
+        feedService.prepareFeedCalled = false
     }
 
     func testViewModel() {
@@ -47,6 +48,53 @@ final class FeedSourcesTests: XCTestCase {
 
         XCTAssert(feedService.prepareFeedCalled)
         XCTAssert(downloadDelegate.didDownloadStart)
+    }
+
+    func testViewModelWithRSSFeed() {
+        let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
+        downloadDelegate.downloadCompletedCallback = { result in
+            guard case .success = result else {
+                XCTAssert(false)
+                return
+            }
+
+            expectation.fulfill()
+        }
+
+        guard let viewModel = viewModel else {
+            fatalError("viewModel must be instantiated in setUp() method.")
+        }
+
+        viewModel.didSelect(cellWithData: FeedSource(
+            name: "RSS",
+            url: MOCFeedService.FeedsList.rss.url
+        ))
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func testViewModelWithAtomFeed() {
+        let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
+        downloadDelegate.downloadCompletedCallback = { result in
+            guard case let .failure(error) = result else {
+                XCTAssert(false)
+                return
+            }
+
+            XCTAssert(error == .atomFeedDownloaded)
+            expectation.fulfill()
+        }
+
+        guard let viewModel = viewModel else {
+            fatalError("viewModel must be instantiated in setUp() method.")
+        }
+
+        viewModel.didSelect(cellWithData: FeedSource(
+            name: "Atom",
+            url: MOCFeedService.FeedsList.atom.url
+        ))
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
 }
