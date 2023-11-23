@@ -79,7 +79,7 @@ final class FeedSourcesTests: XCTestCase {
 
         for (index, cellViewModel) in sectionViewModel.cellViewModels.enumerated() {
             guard let cellViewModel = cellViewModel as? FeedSourceCellViewModel else {
-                XCTAssert(false)
+                XCTFail("CellViewModel type must be FeedSourceCellViewModel.")
                 return
             }
             XCTAssert(cellViewModel.feedSource.name == FeedSourcesContext.moc.data[index].name)
@@ -97,14 +97,14 @@ final class FeedSourcesTests: XCTestCase {
         downloadDelegate.downloadCompletedCallback = { result in
             if let downloadError {
                 guard case let .failure(error) = result else {
-                    XCTAssert(false)
+                    XCTFail("Must get failure.")
                     return
                 }
                 XCTAssert(error == downloadError)
                 expectation.fulfill()
             } else {
                 guard case .success = result else {
-                    XCTAssert(false)
+                    XCTFail("Must succeed.")
                     return
                 }
                 expectation.fulfill()
