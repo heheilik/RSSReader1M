@@ -68,6 +68,25 @@ final class FeedSourcesTests: XCTestCase {
         )
     }
 
+    func testSectionViewModel() {
+        let sectionViewModel = FeedSourcesSectionViewModel(
+            context: FeedSourcesContext.moc,
+            delegate: viewModel!
+        )
+        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedSourceCell.self }))
+
+        XCTAssert(sectionViewModel.cellViewModels.count == FeedSourcesContext.moc.data.count)
+
+        for (index, cellViewModel) in sectionViewModel.cellViewModels.enumerated() {
+            guard let cellViewModel = cellViewModel as? FeedSourceCellViewModel else {
+                XCTAssert(false)
+                return
+            }
+            XCTAssert(cellViewModel.feedSource.name == FeedSourcesContext.moc.data[index].name)
+            XCTAssert(cellViewModel.feedSource.url == FeedSourcesContext.moc.data[index].url)
+        }
+    }
+
     // MARK: Private methods
 
     private func testViewModelWithFeed(
