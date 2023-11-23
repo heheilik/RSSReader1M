@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 22.11.23.
 //
 
+import FeedKit
 import FMArchitecture
 import XCTest
 
@@ -114,7 +115,7 @@ final class FeedSourcesTests: XCTestCase {
     // MARK: Private methods
 
     private func testViewModelWithFeed(
-        ofType type: MockFeedService.FeedsList,
+        ofType type: RSSFeed.FeedsList,
         mustGetError downloadError: DownloadError?
     ) {
         let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
