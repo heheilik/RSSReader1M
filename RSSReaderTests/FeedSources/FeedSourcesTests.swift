@@ -5,9 +5,6 @@
 //  Created by Heorhi Heilik on 22.11.23.
 //
 
-// TODO: Cover FeedSourceCellViewModel
-// TODO: Cover FeedSourcesSectionViewModel
-
 import FMArchitecture
 import XCTest
 
@@ -87,6 +84,29 @@ final class FeedSourcesTests: XCTestCase {
         }
 
         sectionViewModel.didSelect(cellWithData: FeedSourcesContext.moc.data[0])
+        XCTAssert(feedService.prepareFeedCalled)
+        XCTAssert(downloadDelegate.didDownloadStart)
+    }
+
+    func testCellViewModel() {
+        let sectionViewModel = FeedSourcesSectionViewModel(
+            context: FeedSourcesContext.moc,
+            delegate: viewModel!
+        )
+        let cellViewModels = sectionViewModel.cellViewModels
+
+        for cellViewModel in cellViewModels {
+            guard let cellViewModel = cellViewModel as? FeedSourceCellViewModel else {
+                XCTFail("CellViewModel must be of type FeedSourceCellViewModel.")
+                return
+            }
+        }
+
+        guard let cellViewModel = cellViewModels[0] as? FeedSourceCellViewModel else {
+            fatalError("This must have been checked earlier.")
+        }
+
+        cellViewModel.didSelect()
         XCTAssert(feedService.prepareFeedCalled)
         XCTAssert(downloadDelegate.didDownloadStart)
     }
