@@ -40,20 +40,6 @@ final class FeedSourcesTests: XCTestCase {
 
     // MARK: Tests
 
-    func testViewModel() {
-        guard let viewModel = viewModel else {
-            fatalError("viewModel must be instantiated in setUp() method.")
-        }
-
-        // lastClickedFeedName must be empty at the beginning
-        XCTAssert(viewModel.lastClickedFeedName.isEmpty)
-
-        viewModel.didSelect(cellWithData: FeedSourcesContext.moc.data[0])
-
-        XCTAssert(feedService.prepareFeedCalled)
-        XCTAssert(downloadDelegate.didDownloadStart)
-    }
-
     func testViewModelWithRSSFeed() {
         testViewModelWithFeed(
             ofType: .rss,
@@ -72,6 +58,13 @@ final class FeedSourcesTests: XCTestCase {
         testViewModelWithFeed(
             ofType: .json,
             mustGetError: .jsonFeedDownloaded
+        )
+    }
+
+    func testViewModelWithNoFeed() {
+        testViewModelWithFeed(
+            ofType: .noFeed,
+            mustGetError: .feedNotDownloaded
         )
     }
 
@@ -107,7 +100,10 @@ final class FeedSourcesTests: XCTestCase {
             name: "Test",
             url: type.url
         ))
-        
+
+        XCTAssert(feedService.prepareFeedCalled)
+        XCTAssert(downloadDelegate.didDownloadStart)
+
         wait(for: [expectation], timeout: 1.0)
     }
 

@@ -29,6 +29,7 @@ extension MOCFeedService {
         case rss
         case atom
         case json
+        case noFeed
 
         static let emptyRSSFeed = RSSFeed()
         static let emptyAtomFeed = AtomFeed()
@@ -61,10 +62,12 @@ extension MOCFeedService {
                 return URL(string: "https://atomFeed.url")!
             case .json:
                 return URL(string: "https://jsonFeed.url")!
+            case .noFeed:
+                return URL(string: "https://noFeed.url")!
             }
         }
 
-        var feed: Feed {
+        var feed: Feed? {
             switch self {
             case .rss:
                 return Feed.rss(MOCFeedService.FeedsList.emptyRSSFeed)
@@ -72,6 +75,8 @@ extension MOCFeedService {
                 return Feed.atom(MOCFeedService.FeedsList.emptyAtomFeed)
             case .json:
                 return Feed.json(MOCFeedService.FeedsList.emptyJSONFeed)
+            case .noFeed:
+                return nil
             }
         }
 
@@ -83,6 +88,8 @@ extension MOCFeedService {
                 self = .atom
             case "https://jsonFeed.url":
                 self = .json
+            case "https://noFeed.url":
+                self = .noFeed
             default:
                 return nil
             }
