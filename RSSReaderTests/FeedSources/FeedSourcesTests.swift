@@ -85,6 +85,10 @@ final class FeedSourcesTests: XCTestCase {
             XCTAssert(cellViewModel.feedSource.name == FeedSourcesContext.moc.data[index].name)
             XCTAssert(cellViewModel.feedSource.url == FeedSourcesContext.moc.data[index].url)
         }
+
+        sectionViewModel.didSelect(cellWithData: FeedSourcesContext.moc.data[0])
+        XCTAssert(feedService.prepareFeedCalled)
+        XCTAssert(downloadDelegate.didDownloadStart)
     }
 
     // MARK: Private methods
