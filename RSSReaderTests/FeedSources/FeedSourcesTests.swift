@@ -18,6 +18,8 @@ final class FeedSourcesTests: XCTestCase {
     let downloadDelegate = MOCDownloadDelegate()
     let feedService = MOCFeedService()
 
+    // MARK: Lifecycle
+
     override func setUp() {
         viewModel = FeedSourcesViewModel(
             context: FeedSourcesContext.moc,
@@ -36,6 +38,8 @@ final class FeedSourcesTests: XCTestCase {
         feedService.prepareFeedCalled = false
     }
 
+    // MARK: Tests
+
     func testViewModel() {
         guard let viewModel = viewModel else {
             fatalError("viewModel must be instantiated in setUp() method.")
@@ -51,62 +55,48 @@ final class FeedSourcesTests: XCTestCase {
     }
 
     func testViewModelWithRSSFeed() {
-        let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
-        downloadDelegate.downloadCompletedCallback = { result in
-            guard case .success = result else {
-                XCTAssert(false)
-                return
-            }
-
-            expectation.fulfill()
-        }
-
-        guard let viewModel = viewModel else {
-            fatalError("viewModel must be instantiated in setUp() method.")
-        }
-
-        viewModel.didSelect(cellWithData: FeedSource(
-            name: "RSS",
-            url: MOCFeedService.FeedsList.rss.url
-        ))
-
-        wait(for: [expectation], timeout: 1.0)
+        testViewModelWithFeed(
+            ofType: .rss,
+            mustGetError: nil
+        )
     }
 
     func testViewModelWithAtomFeed() {
-        let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
-        downloadDelegate.downloadCompletedCallback = { result in
-            guard case let .failure(error) = result else {
-                XCTAssert(false)
-                return
-            }
-
-            XCTAssert(error == .atomFeedDownloaded)
-            expectation.fulfill()
-        }
-
-        guard let viewModel = viewModel else {
-            fatalError("viewModel must be instantiated in setUp() method.")
-        }
-
-        viewModel.didSelect(cellWithData: FeedSource(
-            name: "Atom",
-            url: MOCFeedService.FeedsList.atom.url
-        ))
-
-        wait(for: [expectation], timeout: 1.0)
+        testViewModelWithFeed(
+            ofType: .atom,
+            mustGetError: .atomFeedDownloaded
+        )
     }
 
     func testViewModelWithJSONFeed() {
+        testViewModelWithFeed(
+            ofType: .json,
+            mustGetError: .jsonFeedDownloaded
+        )
+    }
+
+    // MARK: Private methods
+
+    private func testViewModelWithFeed(
+        ofType type: MOCFeedService.FeedsList,
+        mustGetError downloadError: DownloadError?
+    ) {
         let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
         downloadDelegate.downloadCompletedCallback = { result in
-            guard case let .failure(error) = result else {
-                XCTAssert(false)
-                return
+            if let downloadError {
+                guard case let .failure(error) = result else {
+                    XCTAssert(false)
+                    return
+                }
+                XCTAssert(error == downloadError)
+                expectation.fulfill()
+            } else {
+                guard case .success = result else {
+                    XCTAssert(false)
+                    return
+                }
+                expectation.fulfill()
             }
-
-            XCTAssert(error == .jsonFeedDownloaded)
-            expectation.fulfill()
         }
 
         guard let viewModel = viewModel else {
@@ -114,10 +104,10 @@ final class FeedSourcesTests: XCTestCase {
         }
 
         viewModel.didSelect(cellWithData: FeedSource(
-            name: "JSON",
-            url: MOCFeedService.FeedsList.json.url
+            name: "Test",
+            url: type.url
         ))
-
+        
         wait(for: [expectation], timeout: 1.0)
     }
 
