@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
     private func newRootViewController() -> FeedSourcesViewController {
         guard let viewController = try? FeedPageFactory().controller(
             for: FeedPageFactory.NavigationPath.feedSources.rawValue,
-            with: FeedSourcesContext.moc
+            with: FeedSourcesContext.mock
         ) else {
             fatalError("Could not instantiate root view controller.")
         }
