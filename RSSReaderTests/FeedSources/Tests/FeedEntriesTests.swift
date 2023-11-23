@@ -24,7 +24,7 @@ class FeedEntriesTests: XCTestCase {
         }
         context = FeedEntriesContext(
             feedName: "Test",
-            rssFeed: MockFeeds.mockRSSFullImageLink.feed!.rssFeed!
+            rssFeed: mockRSSFeed
         )
         viewModel = FeedEntriesViewModel(
             dataSource: FMTableViewDataSource(tableView: nil),
