@@ -97,4 +97,28 @@ final class FeedSourcesTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func testViewModelWithJSONFeed() {
+        let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
+        downloadDelegate.downloadCompletedCallback = { result in
+            guard case let .failure(error) = result else {
+                XCTAssert(false)
+                return
+            }
+
+            XCTAssert(error == .jsonFeedDownloaded)
+            expectation.fulfill()
+        }
+
+        guard let viewModel = viewModel else {
+            fatalError("viewModel must be instantiated in setUp() method.")
+        }
+
+        viewModel.didSelect(cellWithData: FeedSource(
+            name: "JSON",
+            url: MOCFeedService.FeedsList.json.url
+        ))
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
 }
