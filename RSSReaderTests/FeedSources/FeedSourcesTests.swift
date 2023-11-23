@@ -40,21 +40,21 @@ final class FeedSourcesTests: XCTestCase {
 
     func testViewModelWithRSSFeed() {
         testViewModelWithFeed(
-            ofType: .rss,
+            ofType: .emptyRSS,
             mustGetError: nil
         )
     }
 
     func testViewModelWithAtomFeed() {
         testViewModelWithFeed(
-            ofType: .atom,
+            ofType: .emptyAtom,
             mustGetError: .atomFeedDownloaded
         )
     }
 
     func testViewModelWithJSONFeed() {
         testViewModelWithFeed(
-            ofType: .json,
+            ofType: .emptyJSON,
             mustGetError: .jsonFeedDownloaded
         )
     }

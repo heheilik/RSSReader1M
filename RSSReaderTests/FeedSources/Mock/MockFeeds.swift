@@ -8,11 +8,15 @@
 import FeedKit
 import Foundation
 
-enum MockFeeds {
-    case rss
-    case atom
-    case json
+enum MockFeeds: CaseIterable, Hashable {
+    
     case noFeed
+    case emptyRSS
+    case mockRSS
+    case emptyAtom
+    case emptyJSON
+
+    // MARK: Internal properties
 
     static let emptyRSSFeed = RSSFeed()
     static let emptyAtomFeed = AtomFeed()
@@ -37,7 +41,7 @@ enum MockFeeds {
         return jsonFeed
     }()
 
-    static let mock: RSSFeed = {
+    static let mockRSSFeed: RSSFeed = {
         let feed = RSSFeed()
 
         feed.title = "Test"
@@ -46,12 +50,12 @@ enum MockFeeds {
         let item1 = RSSFeedItem()
         item1.title = "First Title"
         item1.description = "First description."
-        item1.pubDate = Date(timeIntervalSince1970: 1078437600)
+        item1.pubDate = Date(timeIntervalSince1970: 1078437600)  // 05.03.2004 00:00:00 GMT+3
 
         let item2 = RSSFeedItem()
         item2.title = "Second Title"
         item2.description = "Second description."
-        item2.pubDate = Date(timeIntervalSinceNow: 1693515600)
+        item2.pubDate = Date(timeIntervalSinceNow: 1693515600)  // 01.09.2023 00:00:00 GMT+3
 
         feed.items = [item1, item2]
 
@@ -59,43 +63,51 @@ enum MockFeeds {
     }()
 
     var url: URL {
-        switch self {
-        case .rss:
-            return URL(string: "https://rssFeed.url")!
-        case .atom:
-            return URL(string: "https://atomFeed.url")!
-        case .json:
-            return URL(string: "https://jsonFeed.url")!
-        case .noFeed:
-            return URL(string: "https://noFeed.url")!
-        }
+        return URL(string: Self.urlStringFor(type: self))!
     }
 
     var feed: Feed? {
         switch self {
-        case .rss:
-            return Feed.rss(MockFeeds.emptyRSSFeed)
-        case .atom:
-            return Feed.atom(MockFeeds.emptyAtomFeed)
-        case .json:
-            return Feed.json(MockFeeds.emptyJSONFeed)
         case .noFeed:
             return nil
+        case .emptyRSS:
+            return Feed.rss(Self.emptyRSSFeed)
+        case .mockRSS:
+            return Feed.rss(Self.mockRSSFeed)
+        case .emptyAtom:
+            return Feed.atom(Self.emptyAtomFeed)
+        case .emptyJSON:
+            return Feed.json(Self.emptyJSONFeed)
         }
     }
 
+    // MARK: Initialization
+
     init?(fromURL url: URL) {
-        switch url.absoluteString {
-        case "https://rssFeed.url":
-            self = .rss
-        case "https://atomFeed.url":
-            self = .atom
-        case "https://jsonFeed.url":
-            self = .json
-        case "https://noFeed.url":
-            self = .noFeed
-        default:
-            return nil
+        for type in Self.allCases {
+            if url.absoluteString == Self.urlStringFor(type: type) {
+                self = type
+                return
+            }
+        }
+        return nil
+    }
+
+    // MARK: Private methods
+
+    private static func urlStringFor(type: Self) -> String {
+        switch type {
+        case .noFeed:
+            return "https://noFeed.url"
+        case .emptyRSS:
+            return "https://emptyRSSFeed.url"
+        case .mockRSS:
+            return "https://mockRSSFeed.url"
+        case .emptyAtom:
+            return "https://emptyAtomFeed.url"
+        case .emptyJSON:
+            return "https://emptyJSONFeed.url"
         }
     }
+
 }
