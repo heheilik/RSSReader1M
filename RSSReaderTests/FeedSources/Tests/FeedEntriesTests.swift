@@ -72,6 +72,27 @@ class FeedEntriesTests: XCTestCase {
         XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.errorImage)
     }
 
+    func testSectionViewModelWithBadImageLinkInFeed() {
+        let imageService = MockFeedImageService()
+        
+        guard let feed = MockFeeds.mockRSSBadImageLink.feed?.rssFeed else {
+            fatalError("Can't get feed from MockFeeds enum.")
+        }
+        context = FeedEntriesContext(
+            feedName: "Test",
+            rssFeed: feed
+        )
+
+        let sectionViewModel = FeedEntriesSectionViewModel(
+            context: context,
+            feedImageService: imageService
+        )
+
+        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
+        XCTAssert(imageService.calledPrepareImage)
+        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.errorImage)
+    }
+
     func testSectionViewModelWithSeparatedImageLinkInFeed() {
         let imageService = MockFeedImageService()
         
