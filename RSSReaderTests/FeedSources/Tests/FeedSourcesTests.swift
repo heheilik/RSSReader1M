@@ -20,7 +20,7 @@ final class FeedSourcesTests: XCTestCase {
 
     override func setUp() {
         viewModel = FeedSourcesViewModel(
-            context: FeedSourcesContext.moc,
+            context: FeedSourcesContext.mock,
             dataSource: FMTableViewDataSource(tableView: nil),
             downloadDelegate: downloadDelegate,
             feedService: feedService
@@ -68,30 +68,30 @@ final class FeedSourcesTests: XCTestCase {
 
     func testSectionViewModel() {
         let sectionViewModel = FeedSourcesSectionViewModel(
-            context: FeedSourcesContext.moc,
+            context: FeedSourcesContext.mock,
             delegate: viewModel!
         )
         XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedSourceCell.self }))
 
-        XCTAssert(sectionViewModel.cellViewModels.count == FeedSourcesContext.moc.data.count)
+        XCTAssert(sectionViewModel.cellViewModels.count == FeedSourcesContext.mock.data.count)
 
         for (index, cellViewModel) in sectionViewModel.cellViewModels.enumerated() {
             guard let cellViewModel = cellViewModel as? FeedSourceCellViewModel else {
                 XCTFail("CellViewModel type must be FeedSourceCellViewModel.")
                 return
             }
-            XCTAssert(cellViewModel.feedSource.name == FeedSourcesContext.moc.data[index].name)
-            XCTAssert(cellViewModel.feedSource.url == FeedSourcesContext.moc.data[index].url)
+            XCTAssert(cellViewModel.feedSource.name == FeedSourcesContext.mock.data[index].name)
+            XCTAssert(cellViewModel.feedSource.url == FeedSourcesContext.mock.data[index].url)
         }
 
-        sectionViewModel.didSelect(cellWithData: FeedSourcesContext.moc.data[0])
+        sectionViewModel.didSelect(cellWithData: FeedSourcesContext.mock.data[0])
         XCTAssert(feedService.prepareFeedCalled)
         XCTAssert(downloadDelegate.didDownloadStart)
     }
 
     func testCellViewModel() {
         let sectionViewModel = FeedSourcesSectionViewModel(
-            context: FeedSourcesContext.moc,
+            context: FeedSourcesContext.mock,
             delegate: viewModel!
         )
         let cellViewModels = sectionViewModel.cellViewModels
