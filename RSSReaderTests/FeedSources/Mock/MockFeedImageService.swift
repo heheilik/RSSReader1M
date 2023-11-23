@@ -17,7 +17,7 @@ class MockFeedImageService: FeedImageService {
         static let fullURL = URL(string: MockFeeds.mockRSSFullImageLink.url.absoluteString + imageLinkString)!
 
         static let correctImage = UIImage(systemName: "figure.dance")!
-        static let errorImage = UIImage(systemName: "error")!
+        static let errorImage = UIImage(systemName: "photo")!
     }
 
     var calledPrepareImage = false

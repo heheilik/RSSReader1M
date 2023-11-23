@@ -44,46 +44,27 @@ enum MockFeeds: CaseIterable, Hashable {
         case .noFeed:
             return nil
         case .emptyRSS:
-            return Feed.rss(Self.emptyRSSFeed)
+            return Feed.rss(Self.emptyRSSFeed())
         case .mockRSSNoImageLink:
-            return Feed.rss(Self.noImageLinkRSSFeed)
+            return Feed.rss(Self.noImageLinkRSSFeed())
         case .mockRSSSeparatedImageLink:
-            return Feed.rss(Self.separatedImageLinkRSSFeed)
+            return Feed.rss(Self.separatedImageLinkRSSFeed())
         case .mockRSSFullImageLink:
-            return Feed.rss(Self.fullImageLinkRSSFeed)
+            return Feed.rss(Self.fullImageLinkRSSFeed())
         case .emptyAtom:
-            return Feed.atom(Self.emptyAtomFeed)
+            return Feed.atom(Self.emptyAtomFeed())
         case .emptyJSON:
-            return Feed.json(Self.emptyJSONFeed)
+            return Feed.json(Self.emptyJSONFeed())
         }
     }
 
     // MARK: Private properties
 
-    private static let emptyRSSFeed = RSSFeed()
-    private static let emptyAtomFeed = AtomFeed()
-    private static let emptyJSONFeed: JSONFeed = {
-        let jsonString = """
-        {
-            "version": "0.0.0",
-            "title": "JSON"
-        }
-        """
-        let jsonData = jsonString.data(using: .utf8)!
-        let parser = FeedParser(data: jsonData)
+    private static let emptyRSSFeed = {
+        return RSSFeed()
+    }
 
-        let result = parser.parse()
-        guard
-            case let .success(feed) = result,
-            case let .json(jsonFeed) = feed
-        else {
-            fatalError("Feed parsing must succeed.")
-        }
-
-        return jsonFeed
-    }()
-
-    private static let noImageLinkRSSFeed: RSSFeed = {
+    private static let noImageLinkRSSFeed = {
         let feed = RSSFeed()
 
         feed.title = "Test"
@@ -104,10 +85,10 @@ enum MockFeeds: CaseIterable, Hashable {
         }()
 
         return feed
-    }()
+    }
 
-    private static let separatedImageLinkRSSFeed: RSSFeed = {
-        let feed = Self.noImageLinkRSSFeed
+    private static let separatedImageLinkRSSFeed = {
+        let feed = Self.noImageLinkRSSFeed()
 
         feed.link = MockFeedImageService.Constants.separatedImageFeedURL.absoluteString
         feed.image = {
@@ -117,11 +98,12 @@ enum MockFeeds: CaseIterable, Hashable {
         }()
 
         return feed
-    }()
+    }
 
-    private static let fullImageLinkRSSFeed: RSSFeed = {
-        let feed = Self.noImageLinkRSSFeed
+    private static let fullImageLinkRSSFeed = {
+        let feed = Self.noImageLinkRSSFeed()
 
+        feed.link = MockFeeds.mockRSSFullImageLink.url.absoluteString
         feed.image = {
             let image = RSSFeedImage()
             image.url = MockFeedImageService.Constants.fullURL.absoluteString
@@ -129,7 +111,32 @@ enum MockFeeds: CaseIterable, Hashable {
         }()
 
         return feed
-    }()
+    }
+
+    private static let emptyAtomFeed = {
+        return AtomFeed()
+    }
+
+    private static let emptyJSONFeed = {
+        let jsonString = """
+        {
+            "version": "0.0.0",
+            "title": "JSON"
+        }
+        """
+        let jsonData = jsonString.data(using: .utf8)!
+        let parser = FeedParser(data: jsonData)
+
+        let result = parser.parse()
+        guard
+            case let .success(feed) = result,
+            case let .json(jsonFeed) = feed
+        else {
+            fatalError("Feed parsing must succeed.")
+        }
+
+        return jsonFeed
+    }
 
     // MARK: Initialization
 

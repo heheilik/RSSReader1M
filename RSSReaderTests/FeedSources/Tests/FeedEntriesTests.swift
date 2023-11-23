@@ -11,7 +11,10 @@ import XCTest
 class FeedEntriesTests: XCTestCase {
 
     var viewModel: FeedEntriesViewModel?
-    var context: FeedEntriesContext?
+    var context: FeedEntriesContext = FeedEntriesContext(
+        feedName: "Test",
+        rssFeed: MockFeeds.mockRSSFullImageLink.feed!.rssFeed!
+    )
 
     // MARK: Lifecycle
 
@@ -21,11 +24,11 @@ class FeedEntriesTests: XCTestCase {
         }
         context = FeedEntriesContext(
             feedName: "Test",
-            rssFeed: mockRSSFeed
+            rssFeed: MockFeeds.mockRSSFullImageLink.feed!.rssFeed!
         )
         viewModel = FeedEntriesViewModel(
             dataSource: FMTableViewDataSource(tableView: nil),
-            context: context!
+            context: context
         )
     }
 
@@ -48,11 +51,38 @@ class FeedEntriesTests: XCTestCase {
         }
     }
 
-    func testSectionViewModel() {
+    func testSectionViewModelWithNoImageLinkInFeed() {
         let imageService = MockFeedImageService()
-        guard let context else {
-            fatalError("Context must be instantiated before this test.")
+
+        guard let feed = MockFeeds.mockRSSNoImageLink.feed?.rssFeed else {
+            fatalError("Can't get feed from MockFeeds enum.")
         }
+        context = FeedEntriesContext(
+            feedName: "Test",
+            rssFeed: feed
+        )
+
+        let sectionViewModel = FeedEntriesSectionViewModel(
+            context: context,
+            feedImageService: imageService
+        )
+
+        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
+        XCTAssertFalse(imageService.calledPrepareImage)
+        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.errorImage)
+    }
+
+    func testSectionViewModelWithSeparatedImageLinkInFeed() {
+        let imageService = MockFeedImageService()
+        
+        guard let feed = MockFeeds.mockRSSSeparatedImageLink.feed?.rssFeed else {
+            fatalError("Can't get feed from MockFeeds enum.")
+        }
+        context = FeedEntriesContext(
+            feedName: "Test",
+            rssFeed: feed
+        )
+
         let sectionViewModel = FeedEntriesSectionViewModel(
             context: context,
             feedImageService: imageService
@@ -60,6 +90,29 @@ class FeedEntriesTests: XCTestCase {
 
         XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
         XCTAssert(imageService.calledPrepareImage)
+        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.correctImage)
     }
+
+    func testSectionViewModelWithFullImageLinkInFeed() {
+        let imageService = MockFeedImageService()
+
+        guard let feed = MockFeeds.mockRSSFullImageLink.feed?.rssFeed else {
+            fatalError("Can't get feed from MockFeeds enum.")
+        }
+        context = FeedEntriesContext(
+            feedName: "Test",
+            rssFeed: feed
+        )
+
+        let sectionViewModel = FeedEntriesSectionViewModel(
+            context: context,
+            feedImageService: imageService
+        )
+
+        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
+        XCTAssert(imageService.calledPrepareImage)
+        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.correctImage)
+    }
+
 
 }
