@@ -11,10 +11,13 @@ import XCTest
 class FeedEntriesTests: XCTestCase {
 
     var viewModel: FeedEntriesViewModel?
+
     var context: FeedEntriesContext = FeedEntriesContext(
         feedName: "Test",
         rssFeed: MockFeeds.mockRSSFullImageLink.feed!.rssFeed!
     )
+
+    var imageService = MockFeedImageService()
 
     // MARK: Lifecycle
 
@@ -26,6 +29,7 @@ class FeedEntriesTests: XCTestCase {
             feedName: "Test",
             rssFeed: mockRSSFeed
         )
+        imageService = MockFeedImageService()
         viewModel = FeedEntriesViewModel(
             dataSource: FMTableViewDataSource(tableView: nil),
             context: context
@@ -52,8 +56,6 @@ class FeedEntriesTests: XCTestCase {
     }
 
     func testSectionViewModelWithNoImageLinkInFeed() {
-        let imageService = MockFeedImageService()
-
         guard let feed = MockFeeds.mockRSSNoImageLink.feed?.rssFeed else {
             fatalError("Can't get feed from MockFeeds enum.")
         }
@@ -73,8 +75,6 @@ class FeedEntriesTests: XCTestCase {
     }
 
     func testSectionViewModelWithBadImageLinkInFeed() {
-        let imageService = MockFeedImageService()
-        
         guard let feed = MockFeeds.mockRSSBadImageLink.feed?.rssFeed else {
             fatalError("Can't get feed from MockFeeds enum.")
         }
@@ -94,8 +94,6 @@ class FeedEntriesTests: XCTestCase {
     }
 
     func testSectionViewModelWithSeparatedImageLinkInFeed() {
-        let imageService = MockFeedImageService()
-        
         guard let feed = MockFeeds.mockRSSSeparatedImageLink.feed?.rssFeed else {
             fatalError("Can't get feed from MockFeeds enum.")
         }
@@ -115,8 +113,6 @@ class FeedEntriesTests: XCTestCase {
     }
 
     func testSectionViewModelWithFullImageLinkInFeed() {
-        let imageService = MockFeedImageService()
-
         guard let feed = MockFeeds.mockRSSFullImageLink.feed?.rssFeed else {
             fatalError("Can't get feed from MockFeeds enum.")
         }
