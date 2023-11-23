@@ -12,8 +12,8 @@ final class FeedSourcesTests: XCTestCase {
 
     var viewModel: FeedSourcesViewModel?
 
-    let downloadDelegate = MOCDownloadDelegate()
-    let feedService = MOCFeedService()
+    let downloadDelegate = MockDownloadDelegate()
+    let feedService = MockFeedService()
 
     // MARK: Lifecycle
 
@@ -114,7 +114,7 @@ final class FeedSourcesTests: XCTestCase {
     // MARK: Private methods
 
     private func testViewModelWithFeed(
-        ofType type: MOCFeedService.FeedsList,
+        ofType type: MockFeedService.FeedsList,
         mustGetError downloadError: DownloadError?
     ) {
         let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")

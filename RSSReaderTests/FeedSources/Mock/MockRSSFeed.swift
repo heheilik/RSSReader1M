@@ -1,5 +1,5 @@
 //
-//  MOCRSSFeed.swift
+//  MockRSSFeed.swift
 //  RSSReaderTests
 //
 //  Created by Heorhi Heilik on 23.11.23.
@@ -10,11 +10,11 @@ import Foundation
 
 extension RSSFeed {
 
-    static let moc: RSSFeed = {
+    static let mock: RSSFeed = {
         let feed = RSSFeed()
 
         feed.title = "Test"
-        feed.description = "MOC feed for testing."
+        feed.description = "Mock feed for testing."
 
         let item1 = RSSFeedItem()
         item1.title = "First Title"

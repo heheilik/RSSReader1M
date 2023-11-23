@@ -1,5 +1,5 @@
 //
-//  MOCFeedService.swift
+//  MockFeedService.swift
 //  RSSReaderTests
 //
 //  Created by Heorhi Heilik on 22.11.23.
@@ -8,7 +8,7 @@
 import FeedKit
 import Foundation
 
-class MOCFeedService: FeedService {
+class MockFeedService: FeedService {
 
     var prepareFeedCalled = false
 
@@ -21,9 +21,9 @@ class MOCFeedService: FeedService {
 
 }
 
-// MARK: - Static MOC Feeds
+// MARK: - Static Mock Feeds
 
-extension MOCFeedService {
+extension MockFeedService {
 
     enum FeedsList {
         case rss
@@ -70,11 +70,11 @@ extension MOCFeedService {
         var feed: Feed? {
             switch self {
             case .rss:
-                return Feed.rss(MOCFeedService.FeedsList.emptyRSSFeed)
+                return Feed.rss(MockFeedService.FeedsList.emptyRSSFeed)
             case .atom:
-                return Feed.atom(MOCFeedService.FeedsList.emptyAtomFeed)
+                return Feed.atom(MockFeedService.FeedsList.emptyAtomFeed)
             case .json:
-                return Feed.json(MOCFeedService.FeedsList.emptyJSONFeed)
+                return Feed.json(MockFeedService.FeedsList.emptyJSONFeed)
             case .noFeed:
                 return nil
             }

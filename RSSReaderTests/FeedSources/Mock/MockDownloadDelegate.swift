@@ -1,5 +1,5 @@
 //
-//  MOCDownloadDelegate.swift
+//  MockDownloadDelegate.swift
 //  RSSReaderTests
 //
 //  Created by Heorhi Heilik on 22.11.23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MOCDownloadDelegate: FeedDownloadDelegate {
+class MockDownloadDelegate: FeedDownloadDelegate {
 
     var didDownloadStart = false
 
