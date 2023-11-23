@@ -16,7 +16,7 @@ struct FeedSourcesContext: PageContext {
 
 extension FeedSourcesContext {
 
-    static let moc = FeedSourcesContext(data: [
+    static let mock = FeedSourcesContext(data: [
         FeedSource(name: "Рамблер. В мире", url: URL(string: "https://news.rambler.ru/rss/world")!),
         FeedSource(name: "Swift", url: URL(string: "https://www.swift.org/atom.xml")!),
         FeedSource(name: "ООН. Последние сообщения", url: URL(string: "https://news.un.org/feed/subscribe/ru/news/all/rss.xml")!),
