@@ -22,6 +22,20 @@
 		5D14F0E62B0E2F9000F57B14 /* FeedSourceCellViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A7A2AF1087300EA2965 /* FeedSourceCellViewModelDelegate.swift */; };
 		5D14F0E82B0F7DB900F57B14 /* FeedEntriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */; };
 		5D14F0EA2B0F884600F57B14 /* MockFeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0E92B0F884600F57B14 /* MockFeeds.swift */; };
+		5D14F0ED2B0F91EC00F57B14 /* FeedEntriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B4162AEF9EDA00F22F84 /* FeedEntriesViewModel.swift */; };
+		5D14F0EE2B0F91EE00F57B14 /* FeedEntriesSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B4182AEF9FD600F22F84 /* FeedEntriesSectionViewModel.swift */; };
+		5D14F0EF2B0F91F000F57B14 /* FeedEntriesCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B41A2AEF9FDF00F22F84 /* FeedEntriesCellViewModel.swift */; };
+		5D14F0F02B0F922200F57B14 /* FeedEntriesContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B4102AEF9B5800F22F84 /* FeedEntriesContext.swift */; };
+		5D14F0F12B0F92CF00F57B14 /* FeedEntriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B41C2AEF9FE600F22F84 /* FeedEntriesCell.swift */; };
+		5D14F0F22B0F92D300F57B14 /* FeedPageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B40E2AEF9B0700F22F84 /* FeedPageFactory.swift */; };
+		5D14F0F62B0F92F400F57B14 /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
+		5D14F0F72B0F92F400F57B14 /* FeedDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */; };
+		5D14F0F82B0F92F400F57B14 /* FeedDetailsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */; };
+		5D14F0F92B0F92F700F57B14 /* FeedEntriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE6B4142AEF9E9800F22F84 /* FeedEntriesViewController.swift */; };
+		5D14F0FA2B0F92FD00F57B14 /* FeedSourcesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD964D2AE8FC9C00DEBF9A /* FeedSourcesViewController.swift */; };
+		5D14F0FB2B0F92FD00F57B14 /* FeedSourcesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE81F322AEBB0E9003159C0 /* FeedSourcesTableViewDelegate.swift */; };
+		5D14F0FC2B0F930600F57B14 /* FeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB4D2AF28C470069672B /* FeedImageService.swift */; };
+		5D14F0FD2B0F930900F57B14 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD96492AE8FC9C00DEBF9A /* AppDelegate.swift */; };
 		5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB4D2AF28C470069672B /* FeedImageService.swift */; };
 		5D93DB532AF29A2A0069672B /* FeedDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */; };
 		5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
@@ -415,21 +429,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D14F0EE2B0F91EE00F57B14 /* FeedEntriesSectionViewModel.swift in Sources */,
 				5D14F0E12B0E2E0D00F57B14 /* FeedSource.swift in Sources */,
 				5D14F0D62B0E1F0000F57B14 /* FeedSourcesTests.swift in Sources */,
 				5D14F0E22B0E2F7F00F57B14 /* FeedSourcesSectionViewModelDelegate.swift in Sources */,
+				5D14F0FD2B0F930900F57B14 /* AppDelegate.swift in Sources */,
 				5D14F0E62B0E2F9000F57B14 /* FeedSourceCellViewModelDelegate.swift in Sources */,
 				5D14F0E42B0E2F8A00F57B14 /* FeedSourceCell.swift in Sources */,
+				5D14F0FB2B0F92FD00F57B14 /* FeedSourcesTableViewDelegate.swift in Sources */,
 				5D14F0D82B0E29F700F57B14 /* FeedSourcesContext.swift in Sources */,
+				5D14F0F92B0F92F700F57B14 /* FeedEntriesViewController.swift in Sources */,
 				5D14F0E82B0F7DB900F57B14 /* FeedEntriesTests.swift in Sources */,
 				5D14F0E52B0E2F8A00F57B14 /* FeedSourceCellViewModel.swift in Sources */,
 				5D14F0DE2B0E2A9D00F57B14 /* FeedService.swift in Sources */,
+				5D14F0F12B0F92CF00F57B14 /* FeedEntriesCell.swift in Sources */,
+				5D14F0FC2B0F930600F57B14 /* FeedImageService.swift in Sources */,
 				5D14F0EA2B0F884600F57B14 /* MockFeeds.swift in Sources */,
 				5D14F0DB2B0E2A3F00F57B14 /* FeedDownloadDelegate.swift in Sources */,
+				5D14F0F22B0F92D300F57B14 /* FeedPageFactory.swift in Sources */,
+				5D14F0F02B0F922200F57B14 /* FeedEntriesContext.swift in Sources */,
 				5D14F0DD2B0E2A8C00F57B14 /* MockFeedService.swift in Sources */,
+				5D14F0F72B0F92F400F57B14 /* FeedDetailsViewController.swift in Sources */,
 				5D14F0E32B0E2F7F00F57B14 /* FeedSourcesSectionViewModel.swift in Sources */,
+				5D14F0F82B0F92F400F57B14 /* FeedDetailsContext.swift in Sources */,
+				5D14F0F62B0F92F400F57B14 /* FeedDetailsViewModel.swift in Sources */,
 				5D14F0DA2B0E2A2E00F57B14 /* MockDownloadDelegate.swift in Sources */,
+				5D14F0EF2B0F91F000F57B14 /* FeedEntriesCellViewModel.swift in Sources */,
+				5D14F0FA2B0F92FD00F57B14 /* FeedSourcesViewController.swift in Sources */,
 				5D14F0D72B0E299400F57B14 /* FeedSourcesViewModel.swift in Sources */,
+				5D14F0ED2B0F91EC00F57B14 /* FeedEntriesViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
