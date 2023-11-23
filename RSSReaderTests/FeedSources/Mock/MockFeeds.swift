@@ -79,17 +79,25 @@ enum MockFeeds: CaseIterable, Hashable {
         feed.title = "Test"
         feed.description = "Mock feed for testing."
 
-        let item1 = RSSFeedItem()
-        item1.title = "First Title"
-        item1.description = "First description."
-        item1.pubDate = Date(timeIntervalSince1970: 1078437600)  // 05.03.2004 00:00:00 GMT+3
+        feed.image = {
+            let image = RSSFeedImage()
+            image.url = MockFeedImageService.Constants.correctURL.absoluteString
+            return image
+        }()
 
-        let item2 = RSSFeedItem()
-        item2.title = "Second Title"
-        item2.description = "Second description."
-        item2.pubDate = Date(timeIntervalSinceNow: 1693515600)  // 01.09.2023 00:00:00 GMT+3
+        feed.items = {
+            let item1 = RSSFeedItem()
+            item1.title = "First Title"
+            item1.description = "First description."
+            item1.pubDate = Date(timeIntervalSince1970: 1078437600)  // 05.03.2004 00:00:00 GMT+3
 
-        feed.items = [item1, item2]
+            let item2 = RSSFeedItem()
+            item2.title = "Second Title"
+            item2.description = "Second description."
+            item2.pubDate = Date(timeIntervalSinceNow: 1693515600)  // 01.09.2023 00:00:00 GMT+3
+
+            return [item1, item2]
+        }()
 
         return feed
     }()
