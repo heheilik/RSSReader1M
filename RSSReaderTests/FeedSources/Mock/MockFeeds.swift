@@ -63,7 +63,18 @@ enum MockFeeds: CaseIterable, Hashable {
     }()
 
     var url: URL {
-        return URL(string: Self.urlStringFor(type: self))!
+        switch self {
+        case .noFeed:
+            return URL(string: "https://noFeed.url")!
+        case .emptyRSS:
+            return URL(string: "https://emptyRSSFeed.url")!
+        case .mockRSS:
+            return URL(string: "https://mockRSSFeed.url")!
+        case .emptyAtom:
+            return URL(string: "https://emptyAtomFeed.url")!
+        case .emptyJSON:
+            return URL(string: "https://emptyJSONFeed.url")!
+        }
     }
 
     var feed: Feed? {
@@ -85,29 +96,12 @@ enum MockFeeds: CaseIterable, Hashable {
 
     init?(fromURL url: URL) {
         for type in Self.allCases {
-            if url.absoluteString == Self.urlStringFor(type: type) {
+            if url == type.url {
                 self = type
                 return
             }
         }
         return nil
-    }
-
-    // MARK: Private methods
-
-    private static func urlStringFor(type: Self) -> String {
-        switch type {
-        case .noFeed:
-            return "https://noFeed.url"
-        case .emptyRSS:
-            return "https://emptyRSSFeed.url"
-        case .mockRSS:
-            return "https://mockRSSFeed.url"
-        case .emptyAtom:
-            return "https://emptyAtomFeed.url"
-        case .emptyJSON:
-            return "https://emptyJSONFeed.url"
-        }
     }
 
 }
