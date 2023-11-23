@@ -133,8 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				5D14F0E02B0E2B6E00F57B14 /* Mock */,
-				5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */,
-				5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */,
+				5D14F0EC2B0F91A800F57B14 /* Tests */,
 			);
 			path = FeedSources;
 			sourceTree = "<group>";
@@ -147,6 +146,15 @@
 				5D14F0E92B0F884600F57B14 /* MockFeeds.swift */,
 			);
 			path = Mock;
+			sourceTree = "<group>";
+		};
+		5D14F0EC2B0F91A800F57B14 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */,
+				5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		5D8841862AF1018A00A3951E /* Feed */ = {
