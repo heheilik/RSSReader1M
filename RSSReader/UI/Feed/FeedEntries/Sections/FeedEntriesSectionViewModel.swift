@@ -23,6 +23,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     // MARK: Private properties
 
+    private let feedImageService: FeedImageService
+
     private var downloadedImage: UIImage? {
         didSet {
             for cellViewModel in self.cellViewModels {
@@ -44,7 +46,11 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     // MARK: Initialization
 
-    init(context: FeedEntriesContext) {
+    init(
+        context: FeedEntriesContext,
+        feedImageService: FeedImageService = FeedImageService()
+    ) {
+        self.feedImageService = feedImageService
         super.init()
         configureCellViewModels(context: context)
         self.downloadImageIfPossible(
@@ -101,8 +107,10 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             url = tempURL
         }
 
-        let service = FeedImageService()
-        service.prepareImage(at: url) { image in
+        feedImageService.prepareImage(at: url) { [weak self] image in
+            guard let self = self else {
+                return
+            }
             guard let image else {
                 self.downloadedImage = nil
                 return
