@@ -12,7 +12,9 @@ enum MockFeeds: CaseIterable, Hashable {
     
     case noFeed
     case emptyRSS
-    case mockRSS
+    case mockRSSNoImageLink
+    case mockRSSSeparatedImageLink
+    case mockRSSFullImageLink
     case emptyAtom
     case emptyJSON
     
@@ -21,15 +23,19 @@ enum MockFeeds: CaseIterable, Hashable {
     var url: URL {
         switch self {
         case .noFeed:
-            return URL(string: "https://noFeed.url")!
+            return URL(string: "https://noFeed/")!
         case .emptyRSS:
-            return URL(string: "https://emptyRSSFeed.url")!
-        case .mockRSS:
-            return URL(string: "https://mockRSSFeed.url")!
+            return URL(string: "https://emptyRSSFeed/")!
+        case .mockRSSNoImageLink:
+            return URL(string: "https://noImageRSSFeed/")!
+        case .mockRSSSeparatedImageLink:
+            return URL(string: "https://separatedImageLinkRSSFeed/")!
+        case .mockRSSFullImageLink:
+            return URL(string: "https://fullImageLinkRSSFeed/")!
         case .emptyAtom:
-            return URL(string: "https://emptyAtomFeed.url")!
+            return URL(string: "https://emptyAtomFeed/")!
         case .emptyJSON:
-            return URL(string: "https://emptyJSONFeed.url")!
+            return URL(string: "https://emptyJSONFeed/")!
         }
     }
 
@@ -39,8 +45,12 @@ enum MockFeeds: CaseIterable, Hashable {
             return nil
         case .emptyRSS:
             return Feed.rss(Self.emptyRSSFeed)
-        case .mockRSS:
-            return Feed.rss(Self.mockRSSFeed)
+        case .mockRSSNoImageLink:
+            return Feed.rss(Self.noImageLinkRSSFeed)
+        case .mockRSSSeparatedImageLink:
+            return Feed.rss(Self.separatedImageLinkRSSFeed)
+        case .mockRSSFullImageLink:
+            return Feed.rss(Self.fullImageLinkRSSFeed)
         case .emptyAtom:
             return Feed.atom(Self.emptyAtomFeed)
         case .emptyJSON:
@@ -73,17 +83,11 @@ enum MockFeeds: CaseIterable, Hashable {
         return jsonFeed
     }()
 
-    private static let mockRSSFeed: RSSFeed = {
+    private static let noImageLinkRSSFeed: RSSFeed = {
         let feed = RSSFeed()
 
         feed.title = "Test"
         feed.description = "Mock feed for testing."
-
-        feed.image = {
-            let image = RSSFeedImage()
-            image.url = MockFeedImageService.Constants.correctURL.absoluteString
-            return image
-        }()
 
         feed.items = {
             let item1 = RSSFeedItem()
@@ -97,6 +101,31 @@ enum MockFeeds: CaseIterable, Hashable {
             item2.pubDate = Date(timeIntervalSinceNow: 1693515600)  // 01.09.2023 00:00:00 GMT+3
 
             return [item1, item2]
+        }()
+
+        return feed
+    }()
+
+    private static let separatedImageLinkRSSFeed: RSSFeed = {
+        let feed = Self.noImageLinkRSSFeed
+
+        feed.link = MockFeedImageService.Constants.separatedImageFeedURL.absoluteString
+        feed.image = {
+            let image = RSSFeedImage()
+            image.url = MockFeedImageService.Constants.separatedImageURL.absoluteString
+            return image
+        }()
+
+        return feed
+    }()
+
+    private static let fullImageLinkRSSFeed: RSSFeed = {
+        let feed = Self.noImageLinkRSSFeed
+
+        feed.image = {
+            let image = RSSFeedImage()
+            image.url = MockFeedImageService.Constants.fullURL.absoluteString
+            return image
         }()
 
         return feed

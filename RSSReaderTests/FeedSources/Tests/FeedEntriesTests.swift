@@ -16,7 +16,7 @@ class FeedEntriesTests: XCTestCase {
     // MARK: Lifecycle
 
     override func setUp() {
-        guard let mockRSSFeed = MockFeeds.mockRSS.feed?.rssFeed else {
+        guard let mockRSSFeed = MockFeeds.mockRSSFullImageLink.feed?.rssFeed else {
             fatalError("Can't get feed from MockFeeds enum.")
         }
         context = FeedEntriesContext(
