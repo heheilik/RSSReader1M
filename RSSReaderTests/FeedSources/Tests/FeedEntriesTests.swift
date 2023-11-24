@@ -57,6 +57,14 @@ class FeedEntriesTests: XCTestCase {
             resultingImage: MockFeedImageService.Constants.errorImage
         )
     }
+    
+    func testSectionViewModelWithEmptyImageLinkInFeed() {
+        testSectionViewModel(
+            with: .mockRSSEmptyImageLink,
+            mustCallPrepareImage: false,
+            resultingImage: MockFeedImageService.Constants.errorImage
+        )
+    }
 
     func testSectionViewModelWithSeparatedImageLinkInFeed() {
         testSectionViewModel(

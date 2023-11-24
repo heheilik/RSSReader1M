@@ -14,6 +14,7 @@ enum MockFeeds: CaseIterable, Hashable {
     case emptyRSS
     case mockRSSNoImageLink
     case mockRSSBadImageLink
+    case mockRSSEmptyImageLink
     case mockRSSSeparatedImageLink
     case mockRSSFullImageLink
     case emptyAtom
@@ -31,6 +32,8 @@ enum MockFeeds: CaseIterable, Hashable {
             return URL(string: "https://noImageRSSFeed/")!
         case .mockRSSBadImageLink:
             return URL(string: "https://badImageRSSFeed/")!
+        case .mockRSSEmptyImageLink:
+            return URL(string: "https://emptyImageLinkRSSFeed/")!
         case .mockRSSSeparatedImageLink:
             return URL(string: "https://separatedImageLinkRSSFeed/")!
         case .mockRSSFullImageLink:
@@ -52,6 +55,8 @@ enum MockFeeds: CaseIterable, Hashable {
             return Feed.rss(Self.noImageLinkRSSFeed())
         case .mockRSSBadImageLink:
             return Feed.rss(Self.badImageLinkRSSFeed())
+        case .mockRSSEmptyImageLink:
+            return Feed.rss(Self.emptyImageLinkRSSFeed())
         case .mockRSSSeparatedImageLink:
             return Feed.rss(Self.separatedImageLinkRSSFeed())
         case .mockRSSFullImageLink:
@@ -99,6 +104,19 @@ enum MockFeeds: CaseIterable, Hashable {
         feed.image = {
             let image = RSSFeedImage()
             image.url = "https://reallyBad.url"
+            return image
+        }()
+
+        return feed
+    }
+    
+    private static let emptyImageLinkRSSFeed = {
+        let feed = Self.noImageLinkRSSFeed()
+
+        feed.link = ""
+        feed.image = {
+            let image = RSSFeedImage()
+            image.url = ""
             return image
         }()
 
