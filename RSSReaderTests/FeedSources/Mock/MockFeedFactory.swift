@@ -71,9 +71,9 @@ final class MockFeedFactory {
     }
 
     public static func urlForConfig(
-        feedType: FeedType = .notExisting,
-        itemConfig: ItemConfig = .noItems,
-        imageConfig: ImageConfig = .noImage
+        feedType: FeedType,
+        itemConfig: ItemConfig,
+        imageConfig: ImageConfig
     ) -> URL {
         var components = URLComponents()
         components.scheme = "https"
@@ -136,9 +136,9 @@ final class MockFeedFactory {
     }
 
     public static func feedForConfig(
-        feedType: FeedType = .notExisting,
-        itemConfig: ItemConfig = .noItems,
-        imageConfig: ImageConfig = .noImage
+        feedType: FeedType,
+        itemConfig: ItemConfig,
+        imageConfig: ImageConfig
     ) -> Feed? {
         var feed: Feed?
 

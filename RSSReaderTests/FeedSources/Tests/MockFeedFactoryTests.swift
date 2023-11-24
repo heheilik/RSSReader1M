@@ -11,27 +11,27 @@ import XCTest
 class MockFeedFactoryTests: XCTestCase {
 
     func testNotExistingFeed() {
-        let feed = MockFeedFactory.feedForConfig()
+        let feed = MockFeedFactory.feedForConfig(FeedConfig())
         XCTAssertNil(feed)
     }
 
     func testAtomFeed() {
-        let feed = MockFeedFactory.feedForConfig(feedType: .atom)
+        let feed = MockFeedFactory.feedForConfig(FeedConfig(feedType: .atom))
         XCTAssertNotNil(feed?.atomFeed)
     }
 
     func testJSONFeed() {
-        let feed = MockFeedFactory.feedForConfig(feedType: .json)
+        let feed = MockFeedFactory.feedForConfig(FeedConfig(feedType: .json))
         XCTAssertNotNil(feed?.jsonFeed)
     }
 
     func testRSSFeed() {
-        let feed = MockFeedFactory.feedForConfig(feedType: .rss)
+        let feed = MockFeedFactory.feedForConfig(FeedConfig(feedType: .rss))
         XCTAssertNotNil(feed?.rssFeed)
     }
 
     func testRSSFeedNoItems() {
-        let feed = MockFeedFactory.feedForConfig(feedType: .rss, itemConfig: .noItems)
+        let feed = MockFeedFactory.feedForConfig(FeedConfig(feedType: .rss, itemConfig: .noItems))
         guard let rssFeed = feed?.rssFeed else {
             XCTFail()
             return
@@ -41,7 +41,7 @@ class MockFeedFactoryTests: XCTestCase {
     }
 
     func testRSSFeedWithoutDateItems() {
-        let feed = MockFeedFactory.feedForConfig(feedType: .rss, itemConfig: .withoutDate)
+        let feed = MockFeedFactory.feedForConfig(FeedConfig(feedType: .rss, itemConfig: .withoutDate))
         guard let rssFeed = feed?.rssFeed else {
             XCTFail()
             return
@@ -58,7 +58,7 @@ class MockFeedFactoryTests: XCTestCase {
     }
 
     func testRSSFeedFullItems() {
-        let feed = MockFeedFactory.feedForConfig(feedType: .rss, itemConfig: .full)
+        let feed = MockFeedFactory.feedForConfig(FeedConfig(feedType: .rss, itemConfig: .full))
         guard let rssFeed = feed?.rssFeed else {
             XCTFail()
             return

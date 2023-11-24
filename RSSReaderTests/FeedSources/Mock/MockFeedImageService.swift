@@ -12,10 +12,18 @@ class MockFeedImageService: FeedImageService {
 
     enum Constants {
         static let imageLinkString = "image.img"
-        static let separatedImageFeedURL = MockFeedFactory.urlForConfig(feedType: .rss, imageConfig: .separatedLink)
+        static let separatedImageFeedURL = MockFeedFactory.urlForConfig(
+            feedType: .rss,
+            itemConfig: .noItems,
+            imageConfig: .separatedLink
+        )
         static let separatedImageURL = URL(string: imageLinkString)!
         static let fullURL = URL(
-            string: MockFeedFactory.urlForConfig(feedType: .rss, imageConfig: .fullLink).absoluteString + imageLinkString
+            string: MockFeedFactory.urlForConfig(
+                feedType: .rss,
+                itemConfig: .noItems,
+                imageConfig: .fullLink
+            ).absoluteString + imageLinkString
         )!
 
         static let correctImage = UIImage(systemName: "figure.dance")!
