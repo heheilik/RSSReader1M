@@ -10,42 +10,28 @@ import XCTest
 
 class FeedEntriesTests: XCTestCase {
 
-    var viewModel: FeedEntriesViewModel?
-
-    var context: FeedEntriesContext = FeedEntriesContext(
-        feedName: "Test",
-        rssFeed: MockFeeds.mockRSSFullImageLink.feed!.rssFeed!
-    )
-
-    var imageService = MockFeedImageService()
+    private var imageService = MockFeedImageService()
 
     // MARK: Lifecycle
 
     override func setUp() {
-        guard let mockRSSFeed = MockFeeds.mockRSSFullImageLink.feed?.rssFeed else {
-            fatalError("Can't get feed from MockFeeds enum.")
-        }
-        context = FeedEntriesContext(
-            feedName: "Test",
-            rssFeed: mockRSSFeed
-        )
         imageService = MockFeedImageService()
-        viewModel = FeedEntriesViewModel(
-            dataSource: FMTableViewDataSource(tableView: nil),
-            context: context
-        )
-    }
-
-    override func tearDown() {
-        viewModel = nil
     }
 
     // MARK: Tests
 
     func testViewModel() {
-        guard let viewModel else {
-            fatalError("ViewModel must be instantiated in setUp.")
+        guard let mockRSSFeed = MockFeeds.mockRSSFullImageLink.feed?.rssFeed else {
+            fatalError("Can't get feed from MockFeeds enum.")
         }
+        let context = FeedEntriesContext(
+            feedName: "Test",
+            rssFeed: mockRSSFeed
+        )
+        let viewModel = FeedEntriesViewModel(
+            dataSource: FMTableViewDataSource(tableView: nil),
+            context: context
+        )
 
         let sectionViewModels = viewModel.dataSource.sectionViewModels
         XCTAssert(sectionViewModels.count == 1)
