@@ -42,6 +42,22 @@ class FeedEntriesTests: XCTestCase {
         XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
     }
 
+    func testSectionViewModelNoItemsInFeed() {
+        testSectionViewModel(
+            with: .mockRSSNoItems,
+            mustCallPrepareImage: false,
+            resultingImage: MockFeedImageService.Constants.errorImage
+        )
+    }
+
+    func testSectionViewModelItemsWithoutDateInFeed() {
+        testSectionViewModel(
+            with: .mockRSSItemsWithoutDate,
+            mustCallPrepareImage: false,
+            resultingImage: MockFeedImageService.Constants.errorImage
+        )
+    }
+
     func testSectionViewModelWithNoImageLinkInFeed() {
         testSectionViewModel(
             with: .mockRSSNoImageLink,

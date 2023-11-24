@@ -8,6 +8,8 @@
 import FeedKit
 import Foundation
 
+// TODO: Make feed factory
+
 enum MockFeeds: CaseIterable, Hashable {
     
     case noFeed
@@ -17,6 +19,8 @@ enum MockFeeds: CaseIterable, Hashable {
     case mockRSSEmptyImageLink
     case mockRSSSeparatedImageLink
     case mockRSSFullImageLink
+    case mockRSSNoItems
+    case mockRSSItemsWithoutDate
     case emptyAtom
     case emptyJSON
     
@@ -38,6 +42,10 @@ enum MockFeeds: CaseIterable, Hashable {
             return URL(string: "https://separatedImageLinkRSSFeed/")!
         case .mockRSSFullImageLink:
             return URL(string: "https://fullImageLinkRSSFeed/")!
+        case .mockRSSNoItems:
+            return URL(string: "https://noItemsRSSFeed/")!
+        case .mockRSSItemsWithoutDate:
+            return URL(string: "https://itemsWithoutDateRSSFeed/")!
         case .emptyAtom:
             return URL(string: "https://emptyAtomFeed/")!
         case .emptyJSON:
@@ -61,6 +69,10 @@ enum MockFeeds: CaseIterable, Hashable {
             return Feed.rss(Self.separatedImageLinkRSSFeed())
         case .mockRSSFullImageLink:
             return Feed.rss(Self.fullImageLinkRSSFeed())
+        case .mockRSSNoItems:
+            return Feed.rss(Self.noItemsRSSFeed())
+        case .mockRSSItemsWithoutDate:
+            return Feed.rss(Self.itemsWithoutDateRSSFeed())
         case .emptyAtom:
             return Feed.atom(Self.emptyAtomFeed())
         case .emptyJSON:
@@ -74,11 +86,35 @@ enum MockFeeds: CaseIterable, Hashable {
         return RSSFeed()
     }
 
-    private static let noImageLinkRSSFeed = {
+    private static let noItemsRSSFeed = {
         let feed = RSSFeed()
 
         feed.title = "Test"
         feed.description = "Mock feed for testing."
+
+        return feed
+    }
+
+    private static let itemsWithoutDateRSSFeed = {
+        let feed = Self.noItemsRSSFeed()
+
+        feed.items = {
+            let item1 = RSSFeedItem()
+            item1.title = "First Title"
+            item1.description = "First description."
+
+            let item2 = RSSFeedItem()
+            item2.title = "Second Title"
+            item2.description = "Second description."
+
+            return [item1, item2]
+        }()
+
+        return feed
+    }
+
+    private static let noImageLinkRSSFeed = {
+        let feed = Self.noItemsRSSFeed()
 
         feed.items = {
             let item1 = RSSFeedItem()
