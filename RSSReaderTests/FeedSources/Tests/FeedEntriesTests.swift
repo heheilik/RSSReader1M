@@ -56,69 +56,50 @@ class FeedEntriesTests: XCTestCase {
     }
 
     func testSectionViewModelWithNoImageLinkInFeed() {
-        guard let feed = MockFeeds.mockRSSNoImageLink.feed?.rssFeed else {
-            fatalError("Can't get feed from MockFeeds enum.")
-        }
-        context = FeedEntriesContext(
-            feedName: "Test",
-            rssFeed: feed
+        testSectionViewModel(
+            with: .mockRSSNoImageLink,
+            mustCallPrepareImage: false,
+            resultingImage: MockFeedImageService.Constants.errorImage
         )
-
-        let sectionViewModel = FeedEntriesSectionViewModel(
-            context: context,
-            feedImageService: imageService
-        )
-
-        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
-        XCTAssertFalse(imageService.calledPrepareImage)
-        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.errorImage)
     }
 
     func testSectionViewModelWithBadImageLinkInFeed() {
-        guard let feed = MockFeeds.mockRSSBadImageLink.feed?.rssFeed else {
-            fatalError("Can't get feed from MockFeeds enum.")
-        }
-        context = FeedEntriesContext(
-            feedName: "Test",
-            rssFeed: feed
+        testSectionViewModel(
+            with: .mockRSSBadImageLink,
+            mustCallPrepareImage: true,
+            resultingImage: MockFeedImageService.Constants.errorImage
         )
-
-        let sectionViewModel = FeedEntriesSectionViewModel(
-            context: context,
-            feedImageService: imageService
-        )
-
-        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
-        XCTAssert(imageService.calledPrepareImage)
-        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.errorImage)
     }
 
     func testSectionViewModelWithSeparatedImageLinkInFeed() {
-        guard let feed = MockFeeds.mockRSSSeparatedImageLink.feed?.rssFeed else {
-            fatalError("Can't get feed from MockFeeds enum.")
-        }
-        context = FeedEntriesContext(
-            feedName: "Test",
-            rssFeed: feed
+        testSectionViewModel(
+            with: .mockRSSSeparatedImageLink,
+            mustCallPrepareImage: true,
+            resultingImage: MockFeedImageService.Constants.correctImage
         )
-
-        let sectionViewModel = FeedEntriesSectionViewModel(
-            context: context,
-            feedImageService: imageService
-        )
-
-        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
-        XCTAssert(imageService.calledPrepareImage)
-        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.correctImage)
     }
 
     func testSectionViewModelWithFullImageLinkInFeed() {
-        guard let feed = MockFeeds.mockRSSFullImageLink.feed?.rssFeed else {
+        testSectionViewModel(
+            with: .mockRSSFullImageLink,
+            mustCallPrepareImage: true,
+            resultingImage: MockFeedImageService.Constants.correctImage
+        )
+    }
+
+    // MARK: Private methods
+
+    private func testSectionViewModel(
+        with feed: MockFeeds,
+        mustCallPrepareImage: Bool,
+        resultingImage: UIImage
+    ) {
+        guard let rssFeed = feed.feed?.rssFeed else {
             fatalError("Can't get feed from MockFeeds enum.")
         }
-        context = FeedEntriesContext(
+        let context = FeedEntriesContext(
             feedName: "Test",
-            rssFeed: feed
+            rssFeed: rssFeed
         )
 
         let sectionViewModel = FeedEntriesSectionViewModel(
@@ -126,10 +107,11 @@ class FeedEntriesTests: XCTestCase {
             feedImageService: imageService
         )
 
+        // TODO: Move to viewModel check
         XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
-        XCTAssert(imageService.calledPrepareImage)
-        XCTAssert(sectionViewModel.image == MockFeedImageService.Constants.correctImage)
-    }
 
+        XCTAssert(imageService.calledPrepareImage == mustCallPrepareImage)
+        XCTAssert(sectionViewModel.image == resultingImage)
+    }
 
 }
