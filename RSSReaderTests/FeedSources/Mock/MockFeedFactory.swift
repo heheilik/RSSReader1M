@@ -8,6 +8,22 @@
 import FeedKit
 import Foundation
 
+struct FeedConfig {
+    let feedType: MockFeedFactory.FeedType
+    let itemConfig: MockFeedFactory.ItemConfig
+    let imageConfig: MockFeedFactory.ImageConfig
+
+    init(
+        feedType: MockFeedFactory.FeedType = .nonExisting,
+        itemConfig: MockFeedFactory.ItemConfig = .noItems,
+        imageConfig: MockFeedFactory.ImageConfig = .noLink
+    ) {
+        self.feedType = feedType
+        self.itemConfig = itemConfig
+        self.imageConfig = imageConfig
+    }
+}
+
 final class MockFeedFactory {
 
     enum ConfigFieldsNames: String {
@@ -64,6 +80,16 @@ final class MockFeedFactory {
             fatalError("Error constructing URL.")
         }
         return url
+    }
+
+    // TODO: Add configForURL
+
+    public static func feedForConfig(_ config: FeedConfig) -> Feed? {
+        feedForConfig(
+            feedType: config.feedType,
+            itemConfig: config.itemConfig,
+            imageConfig: config.imageConfig
+        )
     }
 
     public static func feedForConfig(

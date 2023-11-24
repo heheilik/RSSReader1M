@@ -44,7 +44,10 @@ class FeedEntriesTests: XCTestCase {
 
     func testSectionViewModelNoItemsInFeed() {
         testSectionViewModel(
-            with: .mockRSSNoItems,
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .noItems
+            ),
             mustCallPrepareImage: false,
             resultingImage: MockFeedImageService.Constants.errorImage
         )
@@ -52,7 +55,10 @@ class FeedEntriesTests: XCTestCase {
 
     func testSectionViewModelItemsWithoutDateInFeed() {
         testSectionViewModel(
-            with: .mockRSSItemsWithoutDate,
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .withoutDate
+            ),
             mustCallPrepareImage: false,
             resultingImage: MockFeedImageService.Constants.errorImage
         )
@@ -60,7 +66,11 @@ class FeedEntriesTests: XCTestCase {
 
     func testSectionViewModelWithNoImageLinkInFeed() {
         testSectionViewModel(
-            with: .mockRSSNoImageLink,
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .full,
+                imageConfig: .noLink
+            ),
             mustCallPrepareImage: false,
             resultingImage: MockFeedImageService.Constants.errorImage
         )
@@ -68,7 +78,11 @@ class FeedEntriesTests: XCTestCase {
 
     func testSectionViewModelWithBadImageLinkInFeed() {
         testSectionViewModel(
-            with: .mockRSSBadImageLink,
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .full,
+                imageConfig: .badLink
+            ),
             mustCallPrepareImage: true,
             resultingImage: MockFeedImageService.Constants.errorImage
         )
@@ -76,7 +90,11 @@ class FeedEntriesTests: XCTestCase {
     
     func testSectionViewModelWithEmptyImageLinkInFeed() {
         testSectionViewModel(
-            with: .mockRSSEmptyImageLink,
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .full,
+                imageConfig: .emptyLink
+            ),
             mustCallPrepareImage: false,
             resultingImage: MockFeedImageService.Constants.errorImage
         )
@@ -84,7 +102,11 @@ class FeedEntriesTests: XCTestCase {
 
     func testSectionViewModelWithSeparatedImageLinkInFeed() {
         testSectionViewModel(
-            with: .mockRSSSeparatedImageLink,
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .full,
+                imageConfig: .separatedLink
+            ),
             mustCallPrepareImage: true,
             resultingImage: MockFeedImageService.Constants.correctImage
         )
@@ -92,7 +114,11 @@ class FeedEntriesTests: XCTestCase {
 
     func testSectionViewModelWithFullImageLinkInFeed() {
         testSectionViewModel(
-            with: .mockRSSFullImageLink,
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .full,
+                imageConfig: .fullLink
+            ),
             mustCallPrepareImage: true,
             resultingImage: MockFeedImageService.Constants.correctImage
         )
@@ -101,12 +127,12 @@ class FeedEntriesTests: XCTestCase {
     // MARK: Private methods
 
     private func testSectionViewModel(
-        with feed: MockFeeds,
+        withConfig config: FeedConfig,
         mustCallPrepareImage: Bool,
         resultingImage: UIImage
     ) {
-        guard let rssFeed = feed.feed?.rssFeed else {
-            fatalError("Can't get feed from MockFeeds enum.")
+        guard let rssFeed = MockFeedFactory.feedForConfig(config)?.rssFeed else {
+            fatalError("Can't create mock feed.")
         }
         let context = FeedEntriesContext(
             feedName: "Test",
