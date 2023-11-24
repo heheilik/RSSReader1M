@@ -15,7 +15,7 @@ class MockFeedService: FeedService {
     override func prepareFeed(at url: URL, completion: @escaping (Feed?) -> Void) {
         prepareFeedCalled = true
         completion(
-            MockFeeds(fromURL: url)?.feed
+            MockFeedFactory.feedForUrl(url)
         )
     }
 

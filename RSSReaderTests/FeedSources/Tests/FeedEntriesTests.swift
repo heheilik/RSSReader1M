@@ -21,7 +21,10 @@ class FeedEntriesTests: XCTestCase {
     // MARK: Tests
 
     func testViewModel() {
-        guard let mockRSSFeed = MockFeeds.mockRSSFullImageLink.feed?.rssFeed else {
+        guard let mockRSSFeed = MockFeedFactory.feedForConfig(
+            feedType: .rss,
+            itemConfig: .full
+        )?.rssFeed else {
             fatalError("Can't get feed from MockFeeds enum.")
         }
         let context = FeedEntriesContext(

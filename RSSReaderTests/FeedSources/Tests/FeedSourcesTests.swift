@@ -40,28 +40,36 @@ final class FeedSourcesTests: XCTestCase {
 
     func testViewModelWithRSSFeed() {
         testViewModelWithFeed(
-            ofType: .emptyRSS,
+            config: FeedConfig(
+                feedType: .rss
+            ),
             mustGetError: nil
         )
     }
 
     func testViewModelWithAtomFeed() {
         testViewModelWithFeed(
-            ofType: .emptyAtom,
+            config: FeedConfig(
+                feedType: .atom
+            ),
             mustGetError: .atomFeedDownloaded
         )
     }
 
     func testViewModelWithJSONFeed() {
         testViewModelWithFeed(
-            ofType: .emptyJSON,
+            config: FeedConfig(
+                feedType: .json
+            ),
             mustGetError: .jsonFeedDownloaded
         )
     }
 
     func testViewModelWithNoFeed() {
         testViewModelWithFeed(
-            ofType: .noFeed,
+            config: FeedConfig(
+                feedType: .nonExisting
+            ),
             mustGetError: .feedNotDownloaded
         )
     }
@@ -115,7 +123,7 @@ final class FeedSourcesTests: XCTestCase {
     // MARK: Private methods
 
     private func testViewModelWithFeed(
-        ofType type: MockFeeds,
+        config: FeedConfig,
         mustGetError downloadError: DownloadError?
     ) {
         let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
@@ -142,7 +150,7 @@ final class FeedSourcesTests: XCTestCase {
 
         viewModel.didSelect(cellWithData: FeedSource(
             name: "Test",
-            url: type.url
+            url: MockFeedFactory.urlForConfig(config)
         ))
 
         XCTAssert(feedService.prepareFeedCalled)

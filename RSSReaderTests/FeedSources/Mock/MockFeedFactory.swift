@@ -61,6 +61,14 @@ final class MockFeedFactory {
 
     // MARK: Public methods
 
+    public static func urlForConfig(_ config: FeedConfig) -> URL {
+        urlForConfig(
+            feedType: config.feedType,
+            itemConfig: config.itemConfig,
+            imageConfig: config.imageConfig
+        )
+    }
+
     public static func urlForConfig(
         feedType: FeedType = .nonExisting,
         itemConfig: ItemConfig = .noItems,
@@ -82,31 +90,7 @@ final class MockFeedFactory {
         return url
     }
 
-    // TODO: Add configForURL
-
-    public static func feedForConfig(_ config: FeedConfig) -> Feed? {
-        feedForConfig(
-            feedType: config.feedType,
-            itemConfig: config.itemConfig,
-            imageConfig: config.imageConfig
-        )
-    }
-
-    public static func feedForConfig(
-        feedType: FeedType = .nonExisting,
-        itemConfig: ItemConfig = .noItems,
-        imageConfig: ImageConfig = .noLink
-    ) -> Feed? {
-        var feed: Feed?
-
-        feed = createFeed(ofType: feedType)
-        feed = configureItems(for: feed, with: itemConfig)
-        feed = configureImage(for: feed, with: imageConfig)
-
-        return feed
-    }
-
-    public static func feedForUrl(_ url: URL) -> Feed? {
+    public static func configForURL(_ url: URL) -> FeedConfig? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
 
         guard let items = components?.queryItems else {
@@ -135,12 +119,40 @@ final class MockFeedFactory {
         guard let feedType, let itemConfig, let imageConfig else {
             return nil
         }
-
-        return feedForConfig(
+        return FeedConfig(
             feedType: feedType,
             itemConfig: itemConfig,
             imageConfig: imageConfig
         )
+    }
+
+    public static func feedForConfig(_ config: FeedConfig) -> Feed? {
+        feedForConfig(
+            feedType: config.feedType,
+            itemConfig: config.itemConfig,
+            imageConfig: config.imageConfig
+        )
+    }
+
+    public static func feedForConfig(
+        feedType: FeedType = .nonExisting,
+        itemConfig: ItemConfig = .noItems,
+        imageConfig: ImageConfig = .noLink
+    ) -> Feed? {
+        var feed: Feed?
+
+        feed = createFeed(ofType: feedType)
+        feed = configureItems(for: feed, with: itemConfig)
+        feed = configureImage(for: feed, with: imageConfig)
+
+        return feed
+    }
+
+    public static func feedForUrl(_ url: URL) -> Feed? {
+        guard let config = configForURL(url) else {
+            return nil
+        }
+        return feedForConfig(config)
     }
 
     // MARK: Private methods
