@@ -7,11 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D14F0D62B0E1F0000F57B14 /* FeedSourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */; };
+		5D14F0DA2B0E2A2E00F57B14 /* MockDownloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0D92B0E2A2E00F57B14 /* MockDownloadDelegate.swift */; };
+		5D14F0DD2B0E2A8C00F57B14 /* MockFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0DC2B0E2A8C00F57B14 /* MockFeedService.swift */; };
+		5D14F0E82B0F7DB900F57B14 /* FeedEntriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */; };
+		5D14F0FF2B0F97D800F57B14 /* MockFeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0FE2B0F97D800F57B14 /* MockFeedImageService.swift */; };
 		5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB4D2AF28C470069672B /* FeedImageService.swift */; };
 		5D93DB532AF29A2A0069672B /* FeedDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */; };
 		5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
 		5D93DB572AF29C4F0069672B /* FeedDetailsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */; };
 		5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
+		5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB170692B108FE5000689E9 /* MockFeedFactory.swift */; };
+		5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */; };
 		5DC03A762AF1020B00EA2965 /* FeedSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */; };
 		5DC03A772AF1020B00EA2965 /* FeedSourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */; };
 		5DC03A792AF1038C00EA2965 /* FeedSourcesContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A782AF1038C00EA2965 /* FeedSourcesContext.swift */; };
@@ -38,12 +45,30 @@
 		5DFD966F2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD966E2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		5D14F0D02B0E1E0E00F57B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DFD963E2AE8FC9C00DEBF9A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5DFD96452AE8FC9C00DEBF9A;
+			remoteInfo = RSSReader;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		5D14F0CC2B0E1E0E00F57B14 /* RSSReaderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RSSReaderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSourcesTests.swift; sourceTree = "<group>"; };
+		5D14F0D92B0E2A2E00F57B14 /* MockDownloadDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDownloadDelegate.swift; sourceTree = "<group>"; };
+		5D14F0DC2B0E2A8C00F57B14 /* MockFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedService.swift; sourceTree = "<group>"; };
+		5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEntriesTests.swift; sourceTree = "<group>"; };
+		5D14F0FE2B0F97D800F57B14 /* MockFeedImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedImageService.swift; sourceTree = "<group>"; };
 		5D93DB4D2AF28C470069672B /* FeedImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageService.swift; sourceTree = "<group>"; };
 		5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewController.swift; sourceTree = "<group>"; };
 		5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewModel.swift; sourceTree = "<group>"; };
 		5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsContext.swift; sourceTree = "<group>"; };
 		5DAEF75D2AEA679D0091436C /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
+		5DB170692B108FE5000689E9 /* MockFeedFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactory.swift; sourceTree = "<group>"; };
+		5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactoryTests.swift; sourceTree = "<group>"; };
 		5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCell.swift; sourceTree = "<group>"; };
 		5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCellViewModel.swift; sourceTree = "<group>"; };
 		5DC03A782AF1038C00EA2965 /* FeedSourcesContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSourcesContext.swift; sourceTree = "<group>"; };
@@ -70,6 +95,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5D14F0C92B0E1E0E00F57B14 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5DFD96432AE8FC9C00DEBF9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -83,6 +115,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D14F0CD2B0E1E0E00F57B14 /* RSSReaderTests */ = {
+			isa = PBXGroup;
+			children = (
+				5D14F0DF2B0E2B6600F57B14 /* FeedSources */,
+			);
+			path = RSSReaderTests;
+			sourceTree = "<group>";
+		};
+		5D14F0DF2B0E2B6600F57B14 /* FeedSources */ = {
+			isa = PBXGroup;
+			children = (
+				5D14F0E02B0E2B6E00F57B14 /* Mock */,
+				5D14F0EC2B0F91A800F57B14 /* Tests */,
+			);
+			path = FeedSources;
+			sourceTree = "<group>";
+		};
+		5D14F0E02B0E2B6E00F57B14 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				5D14F0D92B0E2A2E00F57B14 /* MockDownloadDelegate.swift */,
+				5D14F0FE2B0F97D800F57B14 /* MockFeedImageService.swift */,
+				5D14F0DC2B0E2A8C00F57B14 /* MockFeedService.swift */,
+				5DB170692B108FE5000689E9 /* MockFeedFactory.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
+		5D14F0EC2B0F91A800F57B14 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */,
+				5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */,
+				5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		5D8841862AF1018A00A3951E /* Feed */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				5DFD96482AE8FC9C00DEBF9A /* RSSReader */,
+				5D14F0CD2B0E1E0E00F57B14 /* RSSReaderTests */,
 				5DFD96472AE8FC9C00DEBF9A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -172,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				5DFD96462AE8FC9C00DEBF9A /* RSSReader.app */,
+				5D14F0CC2B0E1E0E00F57B14 /* RSSReaderTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -232,6 +304,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5D14F0CB2B0E1E0E00F57B14 /* RSSReaderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5D14F0D42B0E1E0E00F57B14 /* Build configuration list for PBXNativeTarget "RSSReaderTests" */;
+			buildPhases = (
+				5D14F0C82B0E1E0E00F57B14 /* Sources */,
+				5D14F0C92B0E1E0E00F57B14 /* Frameworks */,
+				5D14F0CA2B0E1E0E00F57B14 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5D14F0D12B0E1E0E00F57B14 /* PBXTargetDependency */,
+			);
+			name = RSSReaderTests;
+			productName = RSSReaderTests;
+			productReference = 5D14F0CC2B0E1E0E00F57B14 /* RSSReaderTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		5DFD96452AE8FC9C00DEBF9A /* RSSReader */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5DFD965A2AE8FC9D00DEBF9A /* Build configuration list for PBXNativeTarget "RSSReader" */;
@@ -264,6 +354,10 @@
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					5D14F0CB2B0E1E0E00F57B14 = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = 5DFD96452AE8FC9C00DEBF9A;
+					};
 					5DFD96452AE8FC9C00DEBF9A = {
 						CreatedOnToolsVersion = 15.0;
 					};
@@ -288,11 +382,19 @@
 			projectRoot = "";
 			targets = (
 				5DFD96452AE8FC9C00DEBF9A /* RSSReader */,
+				5D14F0CB2B0E1E0E00F57B14 /* RSSReaderTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5D14F0CA2B0E1E0E00F57B14 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5DFD96442AE8FC9C00DEBF9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -305,6 +407,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5D14F0C82B0E1E0E00F57B14 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D14F0D62B0E1F0000F57B14 /* FeedSourcesTests.swift in Sources */,
+				5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */,
+				5D14F0FF2B0F97D800F57B14 /* MockFeedImageService.swift in Sources */,
+				5D14F0E82B0F7DB900F57B14 /* FeedEntriesTests.swift in Sources */,
+				5D14F0DD2B0E2A8C00F57B14 /* MockFeedService.swift in Sources */,
+				5D14F0DA2B0E2A2E00F57B14 /* MockDownloadDelegate.swift in Sources */,
+				5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5DFD96422AE8FC9C00DEBF9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -338,6 +454,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		5D14F0D12B0E1E0E00F57B14 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5DFD96452AE8FC9C00DEBF9A /* RSSReader */;
+			targetProxy = 5D14F0D02B0E1E0E00F57B14 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		5DFD96542AE8FC9D00DEBF9A /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -350,6 +474,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5D14F0D22B0E1E0E00F57B14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B74GGX94X2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heheilik.RSSReaderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RSSReader.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RSSReader";
+			};
+			name = Debug;
+		};
+		5D14F0D32B0E1E0E00F57B14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B74GGX94X2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heheilik.RSSReaderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RSSReader.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RSSReader";
+			};
+			name = Release;
+		};
 		5DFD96582AE8FC9D00DEBF9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -526,6 +686,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5D14F0D42B0E1E0E00F57B14 /* Build configuration list for PBXNativeTarget "RSSReaderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5D14F0D22B0E1E0E00F57B14 /* Debug */,
+				5D14F0D32B0E1E0E00F57B14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5DFD96412AE8FC9C00DEBF9A /* Build configuration list for PBXProject "RSSReader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
