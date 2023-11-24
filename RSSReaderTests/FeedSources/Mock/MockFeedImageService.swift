@@ -7,6 +7,7 @@
 
 import FMArchitecture
 import UIKit
+@testable import RSSReader
 
 class MockFeedImageService: FeedImageService {
 

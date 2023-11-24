@@ -8,6 +8,7 @@
 import FeedKit
 import FMArchitecture
 import XCTest
+@testable import RSSReader
 
 final class FeedSourcesTests: XCTestCase {
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@testable import RSSReader
 
 class MockDownloadDelegate: FeedDownloadDelegate {
 

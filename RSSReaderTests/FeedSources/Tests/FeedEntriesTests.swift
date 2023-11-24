@@ -7,6 +7,7 @@
 
 import FMArchitecture
 import XCTest
+@testable import RSSReader
 
 class FeedEntriesTests: XCTestCase {
 
@@ -138,6 +139,52 @@ class FeedEntriesTests: XCTestCase {
             mustCallPrepareImage: true,
             resultingImage: MockFeedImageService.Constants.correctImage
         )
+    }
+
+    func testCellClickability() {
+        guard let rssFeed = MockFeedFactory.feedForConfig(
+            feedType: .rss,
+            itemConfig: .full,
+            imageConfig: .fullLink
+        )?.rssFeed else {
+            fatalError("Can't create mock feed.")
+        }
+
+        let context = FeedEntriesContext(
+            feedName: "Test",
+            rssFeed: rssFeed
+        )
+
+        let viewModel = FeedEntriesViewModel(
+            dataSource: FMTableViewDataSource(tableView: nil),
+            context: context
+        )
+
+        guard let sectionViewModel = viewModel.dataSource.sectionViewModels.first else {
+            fatalError("Couldn't get sectionViewModel from pageViewModel.")
+        }
+
+        guard
+            let cellViewModel = sectionViewModel.cellViewModels.randomElement(),
+            let cellViewModel = cellViewModel as? FeedEntriesCellViewModel
+        else {
+            fatalError("Couldn't retrieve cellViewModel from sectionViewModel.")
+        }
+
+        let expectation = XCTestExpectation(description: "Read status changes in cell.")
+        var firstTime = true
+        let cancellable = cellViewModel.$isRead.sink { isRead in
+            guard !firstTime else {
+                XCTAssertFalse(isRead)
+                firstTime = false
+                return
+            }
+            XCTAssertTrue(isRead)
+            expectation.fulfill()
+        }
+        cellViewModel.didSelect()
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
     // MARK: Private methods

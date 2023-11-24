@@ -7,6 +7,7 @@
 
 import FeedKit
 import Foundation
+@testable import RSSReader
 
 struct FeedConfig {
     let feedType: MockFeedFactory.FeedType
