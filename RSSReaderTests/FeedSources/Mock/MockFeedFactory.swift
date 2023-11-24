@@ -14,7 +14,7 @@ struct FeedConfig {
     let imageConfig: MockFeedFactory.ImageConfig
 
     init(
-        feedType: MockFeedFactory.FeedType = .nonExisting,
+        feedType: MockFeedFactory.FeedType = .notExisting,
         itemConfig: MockFeedFactory.ItemConfig = .noItems,
         imageConfig: MockFeedFactory.ImageConfig = .noLink
     ) {
@@ -33,7 +33,7 @@ final class MockFeedFactory {
     }
 
     enum FeedType: String {
-        case nonExisting
+        case notExisting
         case rss
         case atom
         case json
@@ -70,7 +70,7 @@ final class MockFeedFactory {
     }
 
     public static func urlForConfig(
-        feedType: FeedType = .nonExisting,
+        feedType: FeedType = .notExisting,
         itemConfig: ItemConfig = .noItems,
         imageConfig: ImageConfig = .noLink
     ) -> URL {
@@ -135,7 +135,7 @@ final class MockFeedFactory {
     }
 
     public static func feedForConfig(
-        feedType: FeedType = .nonExisting,
+        feedType: FeedType = .notExisting,
         itemConfig: ItemConfig = .noItems,
         imageConfig: ImageConfig = .noLink
     ) -> Feed? {
@@ -159,7 +159,7 @@ final class MockFeedFactory {
 
     private static func createFeed(ofType type: FeedType) -> Feed? {
         switch type {
-        case .nonExisting:
+        case .notExisting:
             return nil
         case .rss:
             return Feed.rss(RSSFeed())
@@ -202,7 +202,7 @@ final class MockFeedFactory {
 
         case .withoutDate:
             guard let rssFeed = configureItems(for: feed, with: .noItems)?.rssFeed else {
-                return nil
+                return feed
             }
 
             rssFeed.items = {
@@ -221,7 +221,7 @@ final class MockFeedFactory {
 
         case .full:
             guard let rssFeed = configureItems(for: feed, with: .withoutDate)?.rssFeed else {
-                return nil
+                return feed
             }
 
             rssFeed.items?.forEach({ item in

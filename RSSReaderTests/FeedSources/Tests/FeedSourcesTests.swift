@@ -68,7 +68,7 @@ final class FeedSourcesTests: XCTestCase {
     func testViewModelWithNoFeed() {
         testViewModelWithFeed(
             config: FeedConfig(
-                feedType: .nonExisting
+                feedType: .notExisting
             ),
             mustGetError: .feedNotDownloaded
         )
