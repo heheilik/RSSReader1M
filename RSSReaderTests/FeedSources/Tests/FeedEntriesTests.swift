@@ -53,6 +53,7 @@ class FeedEntriesTests: XCTestCase {
         guard let sectionViewModel = sectionViewModels.first else {
             fatalError("This array must have been checked earlier.")
         }
+        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
     }
 
     func testSectionViewModelWithNoImageLinkInFeed() {
@@ -106,9 +107,6 @@ class FeedEntriesTests: XCTestCase {
             context: context,
             feedImageService: imageService
         )
-
-        // TODO: Move to viewModel check
-        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
 
         XCTAssert(imageService.calledPrepareImage == mustCallPrepareImage)
         XCTAssert(sectionViewModel.image == resultingImage)
