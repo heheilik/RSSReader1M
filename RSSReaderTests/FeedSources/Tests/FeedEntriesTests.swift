@@ -67,6 +67,18 @@ class FeedEntriesTests: XCTestCase {
         )
     }
 
+    func testSectionViewModelWithNoImageInFeed() {
+        testSectionViewModel(
+            withConfig: FeedConfig(
+                feedType: .rss,
+                itemConfig: .full,
+                imageConfig: .noImage
+            ),
+            mustCallPrepareImage: false,
+            resultingImage: MockFeedImageService.Constants.errorImage
+        )
+    }
+    
     func testSectionViewModelWithNoImageLinkInFeed() {
         testSectionViewModel(
             withConfig: FeedConfig(

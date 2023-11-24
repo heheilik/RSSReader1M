@@ -74,6 +74,29 @@ class MockFeedFactoryTests: XCTestCase {
         }
     }
 
+    func testRSSFeedFullItemsNoImage() {
+        let feed = MockFeedFactory.feedForConfig(
+            feedType: .rss,
+            itemConfig: .full,
+            imageConfig: .noImage
+        )
+        guard let rssFeed = feed?.rssFeed else {
+            XCTFail()
+            return
+        }
+
+        guard let items = rssFeed.items else {
+            XCTFail()
+            return
+        }
+        items.forEach { item in
+            XCTAssertNotNil(item.pubDate)
+        }
+
+        XCTAssertNil(rssFeed.link)
+        XCTAssertNil(rssFeed.image)
+    }
+
     func testRSSFeedFullItemsNoImageLink() {
         let feed = MockFeedFactory.feedForConfig(
             feedType: .rss,

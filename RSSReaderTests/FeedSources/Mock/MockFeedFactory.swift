@@ -16,7 +16,7 @@ struct FeedConfig {
     init(
         feedType: MockFeedFactory.FeedType = .notExisting,
         itemConfig: MockFeedFactory.ItemConfig = .noItems,
-        imageConfig: MockFeedFactory.ImageConfig = .noLink
+        imageConfig: MockFeedFactory.ImageConfig = .noImage
     ) {
         self.feedType = feedType
         self.itemConfig = itemConfig
@@ -47,6 +47,7 @@ final class MockFeedFactory {
 
     // TODO: Add noImage
     enum ImageConfig: String {
+        case noImage
         case noLink
         case emptyLink
         case badLink
@@ -72,7 +73,7 @@ final class MockFeedFactory {
     public static func urlForConfig(
         feedType: FeedType = .notExisting,
         itemConfig: ItemConfig = .noItems,
-        imageConfig: ImageConfig = .noLink
+        imageConfig: ImageConfig = .noImage
     ) -> URL {
         var components = URLComponents()
         components.scheme = "https"
@@ -137,7 +138,7 @@ final class MockFeedFactory {
     public static func feedForConfig(
         feedType: FeedType = .notExisting,
         itemConfig: ItemConfig = .noItems,
-        imageConfig: ImageConfig = .noLink
+        imageConfig: ImageConfig = .noImage
     ) -> Feed? {
         var feed: Feed?
 
@@ -238,6 +239,9 @@ final class MockFeedFactory {
         }
 
         switch config {
+        case .noImage:
+            rssFeed.image = nil
+
         case .noLink:
             rssFeed.image = {
                 let image = RSSFeedImage()
