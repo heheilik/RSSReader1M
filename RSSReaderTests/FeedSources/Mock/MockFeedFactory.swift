@@ -1,0 +1,245 @@
+//
+//  MockFeedFactory.swift
+//  RSSReaderTests
+//
+//  Created by Heorhi Heilik on 24.11.23.
+//
+
+import FeedKit
+import Foundation
+
+final class MockFeedFactory {
+
+    enum ConfigFieldsNames: String {
+        case feedType
+        case itemConfig
+        case imageConfig
+    }
+
+    enum FeedType: String {
+        case nonExisting
+        case rss
+        case atom
+        case json
+    }
+
+    enum ItemConfig: String {
+        case noItems
+        case withoutDate
+        case full
+    }
+
+    // TODO: Add noImage
+    enum ImageConfig: String {
+        case noLink
+        case emptyLink
+        case badLink
+        case separatedLink
+        case fullLink
+    }
+
+    private static let dateConstants: [Date] = [
+        Date(timeIntervalSince1970: 1078437600),  // 05.03.2004 00:00:00 GMT+3
+        Date(timeIntervalSince1970: 1693515600),  // 01.09.2023 00:00:00 GMT+3
+    ]
+
+    // MARK: Public methods
+
+    public static func urlForConfig(
+        feedType: FeedType = .nonExisting,
+        itemConfig: ItemConfig = .noItems,
+        imageConfig: ImageConfig = .noLink
+    ) -> URL {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "\(feedType.rawValue).feed"
+
+        components.queryItems = [
+            URLQueryItem(name: ConfigFieldsNames.feedType.rawValue, value: feedType.rawValue),
+            URLQueryItem(name: ConfigFieldsNames.itemConfig.rawValue, value: itemConfig.rawValue),
+            URLQueryItem(name: ConfigFieldsNames.imageConfig.rawValue, value: imageConfig.rawValue),
+        ]
+
+        guard let url = components.url else {
+            fatalError("Error constructing URL.")
+        }
+        return url
+    }
+
+    public static func feedForConfig(
+        feedType: FeedType = .nonExisting,
+        itemConfig: ItemConfig = .noItems,
+        imageConfig: ImageConfig = .noLink
+    ) -> Feed? {
+        var feed: Feed?
+
+        feed = createFeed(ofType: feedType)
+        feed = configureItems(for: feed, with: itemConfig)
+        feed = configureImage(for: feed, with: imageConfig)
+
+        return feed
+    }
+
+    public static func feedForUrl(_ url: URL) -> Feed? {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+
+        guard let items = components?.queryItems else {
+            return nil
+        }
+
+        var feedType: FeedType?
+        var itemConfig: ItemConfig?
+        var imageConfig: ImageConfig?
+
+        for item in items {
+            guard let itemType = ConfigFieldsNames(rawValue: item.name) else {
+                return nil
+            }
+
+            switch itemType {
+            case .feedType:
+                feedType = FeedType(rawValue: item.value ?? "")
+            case .itemConfig:
+                itemConfig = ItemConfig(rawValue: item.value ?? "")
+            case .imageConfig:
+                imageConfig = ImageConfig(rawValue: item.value ?? "")
+            }
+        }
+
+        guard let feedType, let itemConfig, let imageConfig else {
+            return nil
+        }
+
+        return feedForConfig(
+            feedType: feedType,
+            itemConfig: itemConfig,
+            imageConfig: imageConfig
+        )
+    }
+
+    // MARK: Private methods
+
+    private static func createFeed(ofType type: FeedType) -> Feed? {
+        switch type {
+        case .nonExisting:
+            return nil
+        case .rss:
+            return Feed.rss(RSSFeed())
+        case .atom:
+            return Feed.atom(AtomFeed())
+        case .json:
+            let jsonString = """
+            {
+                "version": "0.0.0",
+                "title": "JSON"
+            }
+            """
+            let jsonData = jsonString.data(using: .utf8)!
+            let parser = FeedParser(data: jsonData)
+
+            let result = parser.parse()
+            guard
+                case let .success(feed) = result,
+                case let .json(jsonFeed) = feed
+            else {
+                fatalError("Feed parsing must succeed.")
+            }
+
+            return Feed.json(jsonFeed)
+        }
+    }
+
+    private static func configureItems(for feed: Feed?, with config: ItemConfig) -> Feed? {
+        switch config {
+        case .noItems:
+            guard let rssFeed = feed?.rssFeed else {
+                return feed
+            }
+
+            rssFeed.title = "Test"
+            rssFeed.description = "Mock feed for testing."
+            rssFeed.items = nil
+
+            return Feed.rss(rssFeed)
+
+        case .withoutDate:
+            guard let rssFeed = configureItems(for: feed, with: .noItems)?.rssFeed else {
+                return nil
+            }
+
+            rssFeed.items = {
+                let item1 = RSSFeedItem()
+                item1.title = "First Title"
+                item1.description = "First description."
+
+                let item2 = RSSFeedItem()
+                item2.title = "Second Title"
+                item2.description = "Second description."
+
+                return [item1, item2]
+            }()
+
+            return Feed.rss(rssFeed)
+
+        case .full:
+            guard let rssFeed = configureItems(for: feed, with: .withoutDate)?.rssFeed else {
+                return nil
+            }
+
+            rssFeed.items?.forEach({ item in
+                item.pubDate = dateConstants.randomElement()
+            })
+
+            return Feed.rss(rssFeed)
+        }
+    }
+
+    private static func configureImage(for feed: Feed?, with config: ImageConfig) -> Feed? {
+        guard let rssFeed = feed?.rssFeed else {
+            return feed
+        }
+
+        switch config {
+        case .noLink:
+            rssFeed.image = {
+                let image = RSSFeedImage()
+                return image
+            }()
+
+        case .emptyLink:
+            rssFeed.link = ""
+            rssFeed.image = {
+                let image = RSSFeedImage()
+                image.url = ""
+                return image
+            }()
+
+        case .badLink:
+            rssFeed.link = "https://someBadLink.url"
+            rssFeed.image = {
+                let image = RSSFeedImage()
+                image.url = "https://badButCorrect.url"
+                return image
+            }()
+
+        case .separatedLink:
+            rssFeed.link = MockFeedImageService.Constants.separatedImageFeedURL.absoluteString
+            rssFeed.image = {
+                let image = RSSFeedImage()
+                image.url = MockFeedImageService.Constants.separatedImageURL.absoluteString
+                return image
+            }()
+
+        case .fullLink:
+            rssFeed.image = {
+                let image = RSSFeedImage()
+                image.url = MockFeedImageService.Constants.fullURL.absoluteString
+                return image
+            }()
+
+        }
+
+        return Feed.rss(rssFeed)
+    }
+
+}

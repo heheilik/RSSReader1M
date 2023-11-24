@@ -42,6 +42,8 @@
 		5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
 		5D93DB572AF29C4F0069672B /* FeedDetailsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */; };
 		5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
+		5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB170692B108FE5000689E9 /* MockFeedFactory.swift */; };
+		5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */; };
 		5DC03A762AF1020B00EA2965 /* FeedSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */; };
 		5DC03A772AF1020B00EA2965 /* FeedSourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */; };
 		5DC03A792AF1038C00EA2965 /* FeedSourcesContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A782AF1038C00EA2965 /* FeedSourcesContext.swift */; };
@@ -91,6 +93,8 @@
 		5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewModel.swift; sourceTree = "<group>"; };
 		5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsContext.swift; sourceTree = "<group>"; };
 		5DAEF75D2AEA679D0091436C /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
+		5DB170692B108FE5000689E9 /* MockFeedFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactory.swift; sourceTree = "<group>"; };
+		5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactoryTests.swift; sourceTree = "<group>"; };
 		5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCell.swift; sourceTree = "<group>"; };
 		5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCellViewModel.swift; sourceTree = "<group>"; };
 		5DC03A782AF1038C00EA2965 /* FeedSourcesContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSourcesContext.swift; sourceTree = "<group>"; };
@@ -161,6 +165,7 @@
 				5D14F0FE2B0F97D800F57B14 /* MockFeedImageService.swift */,
 				5D14F0DC2B0E2A8C00F57B14 /* MockFeedService.swift */,
 				5D14F0E92B0F884600F57B14 /* MockFeeds.swift */,
+				5DB170692B108FE5000689E9 /* MockFeedFactory.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 			children = (
 				5D14F0D52B0E1F0000F57B14 /* FeedSourcesTests.swift */,
 				5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */,
+				5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -436,6 +442,7 @@
 				5D14F0E12B0E2E0D00F57B14 /* FeedSource.swift in Sources */,
 				5D14F0D62B0E1F0000F57B14 /* FeedSourcesTests.swift in Sources */,
 				5D14F0E22B0E2F7F00F57B14 /* FeedSourcesSectionViewModelDelegate.swift in Sources */,
+				5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */,
 				5D14F0FD2B0F930900F57B14 /* AppDelegate.swift in Sources */,
 				5D14F0E62B0E2F9000F57B14 /* FeedSourceCellViewModelDelegate.swift in Sources */,
 				5D14F0E42B0E2F8A00F57B14 /* FeedSourceCell.swift in Sources */,
@@ -461,6 +468,7 @@
 				5D14F0EF2B0F91F000F57B14 /* FeedEntriesCellViewModel.swift in Sources */,
 				5D14F0FA2B0F92FD00F57B14 /* FeedSourcesViewController.swift in Sources */,
 				5D14F0D72B0E299400F57B14 /* FeedSourcesViewModel.swift in Sources */,
+				5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */,
 				5D14F0ED2B0F91EC00F57B14 /* FeedEntriesViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
