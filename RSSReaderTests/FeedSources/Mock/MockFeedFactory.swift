@@ -45,7 +45,6 @@ final class MockFeedFactory {
         case full
     }
 
-    // TODO: Add noImage
     enum ImageConfig: String {
         case noImage
         case noLink
