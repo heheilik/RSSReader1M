@@ -58,7 +58,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
         lastClickedFeedName = feedSource.name
 
         downloadDelegate?.downloadStarted()
-        feedService.prepareFeed(at: feedSource.url) { feed in
+        Task {
             var result: Result<RSSFeed, DownloadError>?
             defer {
                 guard let result else {
@@ -68,6 +68,8 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
                     self.downloadDelegate?.downloadCompleted(result)
                 }
             }
+
+            let feed = await feedService.prepareFeed(at: feedSource.url)
 
             guard let feed else {
                 result = .failure(.feedNotDownloaded)
