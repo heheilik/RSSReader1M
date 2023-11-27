@@ -33,12 +33,12 @@ class MockFeedImageService: FeedImageService {
 
     var calledPrepareImage = false
 
-    override func prepareImage(at url: URL, completion: @escaping (UIImage?) -> Void) {
+    override func prepareImage(at url: URL) async -> UIImage? {
         calledPrepareImage = true
         let urlIsCorrect = url == Constants.fullURL || url == URL(
             string: Constants.separatedImageFeedURL.absoluteString + Constants.separatedImageURL.absoluteString
         )
-        completion(urlIsCorrect ? Self.Constants.correctImage : nil)
+        return urlIsCorrect ? Self.Constants.correctImage : nil
     }
 
 }
