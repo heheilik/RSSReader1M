@@ -94,7 +94,7 @@ final class FeedSourcesTests: XCTestCase {
         }
 
         sectionViewModel.didSelect(cellWithData: FeedSourcesContext.mock.data[0])
-        XCTAssert(self.downloadDelegate.didDownloadStart)
+        XCTAssert(downloadDelegate.didDownloadStart)
 
         let expectation = XCTestExpectation(description: "Called prepareFeed method.")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem {
