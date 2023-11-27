@@ -207,19 +207,20 @@ class FeedEntriesTests: XCTestCase {
             feedImageService: imageService
         )
 
-        XCTAssert(imageService.calledPrepareImage == mustCallPrepareImage)
-        XCTAssert(sectionViewModel.image == resultingImage)
-
         let expectation = XCTestExpectation(description: "cellViewModel images are updated.")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem(block: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem {
+            XCTAssert(self.imageService.calledPrepareImage == mustCallPrepareImage)
+
+            XCTAssert(sectionViewModel.image == resultingImage)
             for cellViewModel in sectionViewModel.cellViewModels {
                 guard let cellViewModel = cellViewModel as? FeedEntriesCellViewModel else {
                     continue
                 }
                 XCTAssert(sectionViewModel.image == cellViewModel.image)
             }
+
             expectation.fulfill()
-        }))
+        })
         wait(for: [expectation], timeout: 1.0)
     }
 
