@@ -172,9 +172,7 @@ final class FeedSourcesTests: XCTestCase {
             XCTAssert(self.feedService.prepareFeedCalled)
             prepareFeedExpectation.fulfill()
         })
-        wait(for: [prepareFeedExpectation], timeout: 0.2)
-
-        wait(for: [downloadCompletedExpectation], timeout: 1.0)
+        wait(for: [prepareFeedExpectation, downloadCompletedExpectation], timeout: 0.2)
     }
 
 }
