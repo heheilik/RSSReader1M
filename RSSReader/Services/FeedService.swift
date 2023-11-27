@@ -17,11 +17,14 @@ class FeedService {
         let parsingTask = Task {
             parser.parse()
         }
+
         let result = await parsingTask.value
-        guard case let .success(feed) = result else {
+        switch result {
+        case .success(let feed):
+            return feed
+        case .failure(_):
             return nil
         }
-        return feed
     }
 
 }
