@@ -123,7 +123,7 @@ final class FeedSourcesTests: XCTestCase {
         }
 
         cellViewModel.didSelect()
-        XCTAssert(self.downloadDelegate.didDownloadStart)
+        XCTAssert(downloadDelegate.didDownloadStart)
 
         let expectation = XCTestExpectation(description: "Called prepareFeed method.")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem {
@@ -165,7 +165,7 @@ final class FeedSourcesTests: XCTestCase {
             name: "Test",
             url: MockFeedFactory.urlForConfig(config)
         ))
-        XCTAssert(self.downloadDelegate.didDownloadStart)
+        XCTAssert(downloadDelegate.didDownloadStart)
 
         let prepareFeedExpectation = XCTestExpectation(description: "Called prepareFeed method.")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem {
