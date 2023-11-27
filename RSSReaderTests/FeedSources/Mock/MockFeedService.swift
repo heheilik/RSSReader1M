@@ -13,11 +13,9 @@ class MockFeedService: FeedService {
 
     var prepareFeedCalled = false
 
-    override func prepareFeed(at url: URL, completion: @escaping (Feed?) -> Void) {
+    override func prepareFeed(at url: URL) async -> Feed? {
         prepareFeedCalled = true
-        completion(
-            MockFeedFactory.feedForUrl(url)
-        )
+        return MockFeedFactory.feedForUrl(url)
     }
 
 }

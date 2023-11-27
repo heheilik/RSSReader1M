@@ -94,8 +94,14 @@ final class FeedSourcesTests: XCTestCase {
         }
 
         sectionViewModel.didSelect(cellWithData: FeedSourcesContext.mock.data[0])
-        XCTAssert(feedService.prepareFeedCalled)
-        XCTAssert(downloadDelegate.didDownloadStart)
+        XCTAssert(self.downloadDelegate.didDownloadStart)
+
+        let expectation = XCTestExpectation(description: "Called prepareFeed method.")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem {
+            XCTAssert(self.feedService.prepareFeedCalled)
+            expectation.fulfill()
+        })
+        wait(for: [expectation], timeout: 0.2)
     }
 
     func testCellViewModel() {
@@ -117,8 +123,14 @@ final class FeedSourcesTests: XCTestCase {
         }
 
         cellViewModel.didSelect()
-        XCTAssert(feedService.prepareFeedCalled)
-        XCTAssert(downloadDelegate.didDownloadStart)
+        XCTAssert(self.downloadDelegate.didDownloadStart)
+
+        let expectation = XCTestExpectation(description: "Called prepareFeed method.")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem {
+            XCTAssert(self.feedService.prepareFeedCalled)
+            expectation.fulfill()
+        })
+        wait(for: [expectation], timeout: 0.2)
     }
 
     // MARK: Private methods
@@ -127,7 +139,7 @@ final class FeedSourcesTests: XCTestCase {
         config: FeedConfig,
         mustGetError downloadError: DownloadError?
     ) {
-        let expectation = XCTestExpectation(description: "Call downloadCompleted() method.")
+        let downloadCompletedExpectation = XCTestExpectation(description: "Call downloadCompleted() method.")
         downloadDelegate.downloadCompletedCallback = { result in
             if let downloadError {
                 guard case let .failure(error) = result else {
@@ -135,13 +147,13 @@ final class FeedSourcesTests: XCTestCase {
                     return
                 }
                 XCTAssert(error == downloadError)
-                expectation.fulfill()
+                downloadCompletedExpectation.fulfill()
             } else {
                 guard case .success = result else {
                     XCTFail("Must succeed.")
                     return
                 }
-                expectation.fulfill()
+                downloadCompletedExpectation.fulfill()
             }
         }
 
@@ -153,11 +165,16 @@ final class FeedSourcesTests: XCTestCase {
             name: "Test",
             url: MockFeedFactory.urlForConfig(config)
         ))
+        XCTAssert(self.downloadDelegate.didDownloadStart)
 
-        XCTAssert(feedService.prepareFeedCalled)
-        XCTAssert(downloadDelegate.didDownloadStart)
+        let prepareFeedExpectation = XCTestExpectation(description: "Called prepareFeed method.")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: DispatchWorkItem {
+            XCTAssert(self.feedService.prepareFeedCalled)
+            prepareFeedExpectation.fulfill()
+        })
+        wait(for: [prepareFeedExpectation], timeout: 0.2)
 
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [downloadCompletedExpectation], timeout: 1.0)
     }
 
 }
