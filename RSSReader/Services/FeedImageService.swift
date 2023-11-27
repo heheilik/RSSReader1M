@@ -22,23 +22,18 @@ class FeedImageService {
 
     // MARK: Internal methods
 
-    func prepareImage(at url: URL, completion: @escaping (UIImage?) -> Void) {
-        let task = urlSession.dataTask(with: URLRequest(url: url)) { data, _, error in
-            var image: UIImage?
-            defer {
-                completion(image)
-            }
+    func prepareImage(at url: URL) async -> UIImage? {
+        let result = try? await urlSession.data(from: url)
 
-            guard
-                error == nil,
-                let data
-            else {
-                return
-            }
-
-            image = UIImage(data: data)
+        guard let result else {
+            return nil
         }
-        task.resume()
+
+        let (data, _) = result
+        guard let image = UIImage(data: data) else {
+            return nil
+        }
+        return image
     }
 
 }
