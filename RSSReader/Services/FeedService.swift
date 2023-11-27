@@ -12,18 +12,19 @@ class FeedService {
 
     // MARK: Internal Methods
 
-    func prepareFeed(at url: URL, completion: @escaping (Feed?) -> Void) {
+    func prepareFeed(at url: URL) async -> Feed? {
         let parser = FeedParser(URL: url)
-        parser.parseAsync { result in
-            switch result {
-            case .success(let feed):
-                completion(feed)
-            case .failure(let error):
-                print(error)
-                completion(nil)
-            }
+        let parsingTask = Task {
+            parser.parse()
         }
 
+        let result = await parsingTask.value
+        switch result {
+        case .success(let feed):
+            return feed
+        case .failure(_):
+            return nil
+        }
     }
 
 }

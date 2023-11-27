@@ -107,10 +107,12 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             url = tempURL
         }
 
-        feedImageService.prepareImage(at: url) { [weak self] image in
+        Task { [weak self] in
             guard let self = self else {
                 return
             }
+
+            let image = await self.feedImageService.prepareImage(at: url)
             guard let image else {
                 self.downloadedImage = nil
                 return
