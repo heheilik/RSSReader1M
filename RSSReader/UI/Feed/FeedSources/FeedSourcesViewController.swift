@@ -7,6 +7,7 @@
 
 import ALNavigation
 import FMArchitecture
+import Lottie
 import UIKit
 
 class FeedSourcesViewController: FMTablePageViewController {
@@ -17,11 +18,7 @@ class FeedSourcesViewController: FMTablePageViewController {
 
     // MARK: UI
 
-    private let activityIndicator = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
+    private let progressAnimation = LottieAnimationView(name: "loader")
 
     // MARK: Lifecycle
 
@@ -33,14 +30,20 @@ class FeedSourcesViewController: FMTablePageViewController {
 
     // MARK: Internal methods
 
+    override func configureViews() {
+        progressAnimation.loopMode = .loop
+        progressAnimation.isHidden = true
+        super.configureViews()
+    }
+
     override func addSubviews() {
         super.addSubviews()
-        view.addSubview(activityIndicator)
+        view.addSubview(progressAnimation)
     }
 
     override func setupConstraints() {
         super.setupConstraints()
-        activityIndicator.snp.makeConstraints { make in
+        progressAnimation.snp.makeConstraints { make in
             make.centerX.centerY.equalTo(view)
         }
     }
@@ -76,14 +79,16 @@ class FeedSourcesViewController: FMTablePageViewController {
 extension FeedSourcesViewController: FeedDownloadDelegate {
 
     func downloadStarted() {
-        activityIndicator.startAnimating()
+        progressAnimation.isHidden = false
+        progressAnimation.play()
         if let delegate = delegate as? FeedSourcesTableViewDelegate {
             delegate.cellsAreSelectable = false
         }
     }
 
     func downloadCompleted(_ result: DownloadResult) {
-        activityIndicator.stopAnimating()
+        progressAnimation.stop()
+        progressAnimation.isHidden = true
         if let delegate = delegate as? FeedSourcesTableViewDelegate {
             delegate.cellsAreSelectable = true
         }
