@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 class FeedEntriesViewController: FMTablePageViewController {
+    
+    // MARK: Internal methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
