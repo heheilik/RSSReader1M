@@ -243,7 +243,7 @@ class FeedEntriesCell: FMTableViewCell {
 
 extension FeedEntriesCell: FMAnimatable {
     func startAnimation() {
-        hideSkeleton(transition: .none)
+        layoutIfNeeded()
         showAnimatedGradientSkeleton(
             usingGradient: SkeletonGradient(colors: [.systemCyan, .systemGreen]),
             animation: SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight),
