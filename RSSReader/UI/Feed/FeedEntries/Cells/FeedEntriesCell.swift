@@ -226,9 +226,9 @@ class FeedEntriesCell: FMTableViewCell {
     }
 
     private func configureAnimatedView() {
-        titleLabel.text = "."
-        descriptionLabel.text = "."
-        dateLabel.text = "."
+        titleLabel.text = " "
+        descriptionLabel.text = " "
+        dateLabel.text = " "
         readStatusView.isHidden = true
         descriptionSizeToggleButton.isHidden = true
     }
@@ -243,7 +243,7 @@ class FeedEntriesCell: FMTableViewCell {
 
 extension FeedEntriesCell: FMAnimatable {
     func startAnimation() {
-        showSkeleton()
+        showSkeleton(animated: false, delay: 0, transition: .none)
     }
     
     func stopAnimation() {
