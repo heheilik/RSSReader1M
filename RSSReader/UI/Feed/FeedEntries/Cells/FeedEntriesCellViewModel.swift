@@ -19,6 +19,10 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     let description: String?
     let date: String?
 
+    var descriptionShownFull = false
+    
+    @Published var isRead = false
+
     weak var image: UIImage? {
         didSet {
             DispatchQueue.main.async {
@@ -26,9 +30,6 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             }
         }
     }
-
-    var descriptionShownFull = false
-    @Published var isRead = false
 
     // MARK: Initialization
 
@@ -43,14 +44,20 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         self.description = description
         self.date = date
         self.image = image
-        super.init(cellIdentifier: FeedEntriesCell.cellIdentifier, delegate: delegate)
+        super.init(
+            cellIdentifier: FeedEntriesCell.cellIdentifier,
+            delegate: delegate
+        )
     }
-
 }
 
-extension FeedEntriesCellViewModel: FMSelectableCellModel {
+// MARK: - FMSelectableCellModel
 
+extension FeedEntriesCellViewModel: FMSelectableCellModel {
     func didSelect() {
+        guard !isAnimation else {
+            return
+        }
         isRead = true
         Router.shared.push(
             FeedPageFactory.NavigationPath.feedDetails.rawValue,
@@ -63,6 +70,20 @@ extension FeedEntriesCellViewModel: FMSelectableCellModel {
             )
         )
     }
-
 }
 
+// MARK: - FMAnimatable
+
+extension FeedEntriesCellViewModel: FMAnimatable {
+    func startAnimation() {
+        isAnimation = true
+        fillableCell?.fill(viewModel: self)
+        delegate?.didUpdate(cellViewModel: self)
+    }
+
+    func stopAnimation() {
+        isAnimation = false
+        fillableCell?.fill(viewModel: self)
+        delegate?.didUpdate(cellViewModel: self)
+    }
+}

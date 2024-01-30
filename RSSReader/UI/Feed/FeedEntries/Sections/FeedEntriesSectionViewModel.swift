@@ -63,10 +63,9 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private func configureCellViewModels(context: FeedEntriesContext) {
         guard let feedItems = context.rssFeed.items else {
-            cellViewModels = []
             return
         }
-        cellViewModels = feedItems.map({ item in
+        reload(cellModels: feedItems.map({ item in
             let date: String?
             if let typedDate = item.pubDate {
                 date = dateFormatter.string(from: typedDate)
@@ -80,7 +79,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
                 image: image,
                 delegate: self
             )
-        })
+        }))
     }
 
     private func downloadImageIfPossible(feedURLString: String?, imageURLString: String?) {
@@ -122,3 +121,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     }
 
 }
+
+// MARK: - FMAnimatable
+
+extension FeedEntriesSectionViewModel: FMAnimatable { }
