@@ -77,7 +77,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
                 description: item.description,
                 date: date,
                 image: image,
-                delegate: self
+                delegate: self,
+                isAnimatedAtStart: true
             )
         }))
     }

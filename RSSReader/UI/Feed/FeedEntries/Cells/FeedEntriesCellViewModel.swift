@@ -38,7 +38,8 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         description: String?,
         date: String?,
         image: UIImage,
-        delegate: FMCellViewModelDelegate
+        delegate: FMCellViewModelDelegate,
+        isAnimatedAtStart: Bool
     ) {
         self.title = title
         self.description = description
@@ -48,6 +49,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             cellIdentifier: FeedEntriesCell.cellIdentifier,
             delegate: delegate
         )
+        isAnimation = isAnimatedAtStart
     }
 }
 
