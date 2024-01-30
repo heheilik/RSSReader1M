@@ -9,9 +9,22 @@ import ALNavigation
 import Combine
 import Foundation
 import FMArchitecture
+import SwipeCellKit
 import UIKit
 
 class FeedEntriesCellViewModel: FMCellViewModel {
+
+    // MARK: Constants
+
+    private enum UIStrings {
+        static let isRead = "Прочитано"
+        static let isUnread = "Непрочитано"
+    }
+
+    private enum Images {
+        static let message = UIImage(systemName: "message")!
+        static let messageWithBadge = UIImage(systemName: "message.badge")!
+    }
 
     // MARK: Internal properties
 
@@ -29,6 +42,27 @@ class FeedEntriesCellViewModel: FMCellViewModel {
                 self.fillableCell?.fill(viewModel: self)
             }
         }
+    }
+
+    override var rightSwipeAction: [SwipeAction]? {
+        guard !isAnimation else {
+            return nil
+        }
+
+        let action = SwipeAction(
+            style: .default,
+            title: isRead ? UIStrings.isUnread : UIStrings.isRead
+        ) { [weak self] _, _ in
+            guard let self = self else {
+                return
+            }
+            self.isRead = !self.isRead
+        }
+        action.configure(
+            with: isRead ? Images.messageWithBadge : Images.message,
+            backgroundColor: .systemBlue
+        )
+        return [action]
     }
 
     // MARK: Initialization
