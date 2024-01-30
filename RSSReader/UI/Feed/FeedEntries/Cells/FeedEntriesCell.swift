@@ -11,7 +11,7 @@ import FMArchitecture
 import SkeletonView
 import UIKit
 
-class FeedEntriesCell: FMTableViewCell {
+class FeedEntriesCell: FMSwipeTableViewCell {
 
     private weak var currentViewModel: FeedEntriesCellViewModel? {
         return viewModel as? FeedEntriesCellViewModel
