@@ -12,7 +12,7 @@ import SkeletonView
 
 class FeedEntriesViewModel: FMTablePageViewModel {
 
-    private let persistenceManager: FeedEntryPersistenceManager
+    private let persistenceManager: FeedPersistenceManager
 
     // MARK: Initialization
 

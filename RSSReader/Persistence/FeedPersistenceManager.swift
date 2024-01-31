@@ -1,5 +1,5 @@
 //
-//  FeedEntryPersistenceManager.swift
+//  FeedPersistenceManager.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 31.01.24.
@@ -8,12 +8,12 @@
 import CoreData
 import Foundation
 
-class FeedEntryPersistenceManager {
+class FeedPersistenceManager {
 
     // MARK: Constants
 
     private enum ModelNames {
-        static let feedEntry = "FeedEntryModel"
+        static let feedEntry = "FeedModel"
     }
 
     private enum SubstitutableVariables {
@@ -31,6 +31,7 @@ class FeedEntryPersistenceManager {
         let fetchRequest = FeedEntry.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "FALSEPREDICATE")
         fetchRequest.sortDescriptors = [
+            NSSortDescriptor(keyPath: \FeedEntry.orderID, ascending: false),
             NSSortDescriptor(keyPath: \FeedEntry.date, ascending: false)
         ]
         return fetchRequest

@@ -16,6 +16,7 @@ extension Feed {
 
     @NSManaged public var url: URL?
     @NSManaged public var imageLink: URL?
+    @NSManaged public var lastReadOrderID: Int64
     @NSManaged public var entries: NSSet?
 
 }

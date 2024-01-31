@@ -17,6 +17,8 @@ extension FeedEntry {
     @NSManaged public var date: Date?
     @NSManaged public var entryDescription: String?
     @NSManaged public var title: String?
+    @NSManaged public var guid: UUID?
+    @NSManaged public var orderID: Int64
     @NSManaged public var feed: Feed?
 
 }
