@@ -14,10 +14,10 @@ extension FeedEntry {
         return NSFetchRequest<FeedEntry>(entityName: "FeedEntry")
     }
 
-    @NSManaged public var url: URL?
-    @NSManaged public var title: String?
-    @NSManaged public var entryDescription: String?
     @NSManaged public var date: Date?
+    @NSManaged public var entryDescription: String?
+    @NSManaged public var title: String?
+    @NSManaged public var feed: Feed?
 
 }
 

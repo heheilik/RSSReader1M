@@ -21,11 +21,11 @@
 		5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB170692B108FE5000689E9 /* MockFeedFactory.swift */; };
 		5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */; };
 		5DB4326A2B6A203A008F30D3 /* FeedEntryModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5DB432682B6A203A008F30D3 /* FeedEntryModel.xcdatamodeld */; };
-		5DB4326F2B6A210A008F30D3 /* FeedImage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB4326B2B6A210A008F30D3 /* FeedImage+CoreDataClass.swift */; };
-		5DB432702B6A210A008F30D3 /* FeedImage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB4326C2B6A210A008F30D3 /* FeedImage+CoreDataProperties.swift */; };
-		5DB432712B6A210A008F30D3 /* FeedEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB4326D2B6A210A008F30D3 /* FeedEntry+CoreDataClass.swift */; };
-		5DB432722B6A210A008F30D3 /* FeedEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB4326E2B6A210A008F30D3 /* FeedEntry+CoreDataProperties.swift */; };
 		5DB432742B6A29E2008F30D3 /* FeedEntryPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB432732B6A29E2008F30D3 /* FeedEntryPersistenceManager.swift */; };
+		5DB432792B6A3F83008F30D3 /* FeedEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB432752B6A3F83008F30D3 /* FeedEntry+CoreDataClass.swift */; };
+		5DB4327A2B6A3F83008F30D3 /* FeedEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB432762B6A3F83008F30D3 /* FeedEntry+CoreDataProperties.swift */; };
+		5DB4327B2B6A3F83008F30D3 /* Feed+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB432772B6A3F83008F30D3 /* Feed+CoreDataClass.swift */; };
+		5DB4327C2B6A3F83008F30D3 /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB432782B6A3F83008F30D3 /* Feed+CoreDataProperties.swift */; };
 		5DC03A762AF1020B00EA2965 /* FeedSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */; };
 		5DC03A772AF1020B00EA2965 /* FeedSourceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */; };
 		5DC03A792AF1038C00EA2965 /* FeedSourcesContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC03A782AF1038C00EA2965 /* FeedSourcesContext.swift */; };
@@ -80,11 +80,11 @@
 		5DB170692B108FE5000689E9 /* MockFeedFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactory.swift; sourceTree = "<group>"; };
 		5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactoryTests.swift; sourceTree = "<group>"; };
 		5DB432692B6A203A008F30D3 /* FeedEntryModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedEntryModel.xcdatamodel; sourceTree = "<group>"; };
-		5DB4326B2B6A210A008F30D3 /* FeedImage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImage+CoreDataClass.swift"; sourceTree = "<group>"; };
-		5DB4326C2B6A210A008F30D3 /* FeedImage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImage+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		5DB4326D2B6A210A008F30D3 /* FeedEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
-		5DB4326E2B6A210A008F30D3 /* FeedEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5DB432732B6A29E2008F30D3 /* FeedEntryPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEntryPersistenceManager.swift; sourceTree = "<group>"; };
+		5DB432752B6A3F83008F30D3 /* FeedEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5DB432762B6A3F83008F30D3 /* FeedEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5DB432772B6A3F83008F30D3 /* Feed+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5DB432782B6A3F83008F30D3 /* Feed+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5DC03A742AF1020B00EA2965 /* FeedSourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCell.swift; sourceTree = "<group>"; };
 		5DC03A752AF1020B00EA2965 /* FeedSourceCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedSourceCellViewModel.swift; sourceTree = "<group>"; };
 		5DC03A782AF1038C00EA2965 /* FeedSourcesContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSourcesContext.swift; sourceTree = "<group>"; };
@@ -204,10 +204,10 @@
 		5DB432602B6A1ED5008F30D3 /* NSManagedObjects */ = {
 			isa = PBXGroup;
 			children = (
-				5DB4326D2B6A210A008F30D3 /* FeedEntry+CoreDataClass.swift */,
-				5DB4326E2B6A210A008F30D3 /* FeedEntry+CoreDataProperties.swift */,
-				5DB4326B2B6A210A008F30D3 /* FeedImage+CoreDataClass.swift */,
-				5DB4326C2B6A210A008F30D3 /* FeedImage+CoreDataProperties.swift */,
+				5DB432772B6A3F83008F30D3 /* Feed+CoreDataClass.swift */,
+				5DB432782B6A3F83008F30D3 /* Feed+CoreDataProperties.swift */,
+				5DB432752B6A3F83008F30D3 /* FeedEntry+CoreDataClass.swift */,
+				5DB432762B6A3F83008F30D3 /* FeedEntry+CoreDataProperties.swift */,
 			);
 			path = NSManagedObjects;
 			sourceTree = "<group>";
@@ -489,11 +489,13 @@
 			files = (
 				5DC03A792AF1038C00EA2965 /* FeedSourcesContext.swift in Sources */,
 				5DE6B41B2AEF9FDF00F22F84 /* FeedEntriesCellViewModel.swift in Sources */,
+				5DB4327B2B6A3F83008F30D3 /* Feed+CoreDataClass.swift in Sources */,
+				5DB432792B6A3F83008F30D3 /* FeedEntry+CoreDataClass.swift in Sources */,
 				5DC03A7D2AF1088C00EA2965 /* FeedSourcesSectionViewModelDelegate.swift in Sources */,
+				5DB4327C2B6A3F83008F30D3 /* Feed+CoreDataProperties.swift in Sources */,
 				5DE81F352AEBB265003159C0 /* FeedDownloadDelegate.swift in Sources */,
 				5DE81F332AEBB0E9003159C0 /* FeedSourcesTableViewDelegate.swift in Sources */,
 				5DB4326A2B6A203A008F30D3 /* FeedEntryModel.xcdatamodeld in Sources */,
-				5DB432712B6A210A008F30D3 /* FeedEntry+CoreDataClass.swift in Sources */,
 				5DFD964E2AE8FC9C00DEBF9A /* FeedSourcesViewController.swift in Sources */,
 				5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */,
 				5DE6B4192AEF9FD600F22F84 /* FeedEntriesSectionViewModel.swift in Sources */,
@@ -503,11 +505,10 @@
 				5DFD964A2AE8FC9C00DEBF9A /* AppDelegate.swift in Sources */,
 				5DB432742B6A29E2008F30D3 /* FeedEntryPersistenceManager.swift in Sources */,
 				5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */,
-				5DB432722B6A210A008F30D3 /* FeedEntry+CoreDataProperties.swift in Sources */,
 				5DE6B4172AEF9EDA00F22F84 /* FeedEntriesViewModel.swift in Sources */,
 				5DC03A7B2AF1087300EA2965 /* FeedSourceCellViewModelDelegate.swift in Sources */,
+				5DB4327A2B6A3F83008F30D3 /* FeedEntry+CoreDataProperties.swift in Sources */,
 				5DC03A772AF1020B00EA2965 /* FeedSourceCellViewModel.swift in Sources */,
-				5DB4326F2B6A210A008F30D3 /* FeedImage+CoreDataClass.swift in Sources */,
 				5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */,
 				5DFD966A2AE9001900DEBF9A /* FeedSourcesViewModel.swift in Sources */,
 				5D93DB572AF29C4F0069672B /* FeedDetailsContext.swift in Sources */,
@@ -516,7 +517,6 @@
 				5DE6B41D2AEF9FE600F22F84 /* FeedEntriesCell.swift in Sources */,
 				5DC03A762AF1020B00EA2965 /* FeedSourceCell.swift in Sources */,
 				5DE6B40F2AEF9B0700F22F84 /* FeedPageFactory.swift in Sources */,
-				5DB432702B6A210A008F30D3 /* FeedImage+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

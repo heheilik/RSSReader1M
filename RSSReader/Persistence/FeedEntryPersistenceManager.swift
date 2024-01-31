@@ -94,6 +94,6 @@ class FeedEntryPersistenceManager {
     // MARK: Private methods
 
     private static func newPredicateTemplate() -> NSPredicate {
-        NSPredicate(format: "\(#keyPath(FeedEntry.url)) == $\(SubstitutableVariables.url)")
+        NSPredicate(format: "\(#keyPath(FeedEntry.feed.url)) == $\(SubstitutableVariables.url)")
     }
 }
