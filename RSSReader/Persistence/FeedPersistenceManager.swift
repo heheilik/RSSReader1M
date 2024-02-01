@@ -6,15 +6,12 @@
 //
 
 import CoreData
+import Factory
 import Foundation
 
 class FeedPersistenceManager {
 
     // MARK: Constants
-
-    private enum ModelNames {
-        static let feedEntry = "FeedModel"
-    }
 
     private enum SubstitutableVariables {
         static let url = "url"
@@ -23,9 +20,10 @@ class FeedPersistenceManager {
     // MARK: Internal properties
 
     let fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
-    let persistentContainer: NSPersistentContainer
 
     // MARK: Private properties
+
+    @Injected(\.feedModelPersistentContainer) private static var persistentContainer
 
     private static let falseFetchRequest = {
         let fetchRequest = ManagedFeedEntry.fetchRequest()
@@ -40,33 +38,18 @@ class FeedPersistenceManager {
     // MARK: Initialization
 
     convenience init() {
-        let persistentContainer = NSPersistentContainer(name: ModelNames.feedEntry)
-        persistentContainer.loadPersistentStores { description, error in
-            if let error {
-                fatalError("Unable to load persistent stores: \(error)")
-            }
-        }
-
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: Self.falseFetchRequest,
-            managedObjectContext: persistentContainer.viewContext,
+            managedObjectContext: Self.persistentContainer.viewContext,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
         self.init(
-            persistentContainer: NSPersistentContainer(name: ModelNames.feedEntry),
             fetchedResultsController: fetchedResultsController
         )
     }
 
     convenience init(activeURL: URL) {
-        let persistentContainer = NSPersistentContainer(name: ModelNames.feedEntry)
-        persistentContainer.loadPersistentStores { description, error in
-            if let error {
-                fatalError("Unable to load persistent stores: \(error)")
-            }
-        }
-
         let fetchRequest = Self.falseFetchRequest
         fetchRequest.predicate = Self.newPredicateTemplate().withSubstitutionVariables([
             SubstitutableVariables.url: activeURL
@@ -74,22 +57,19 @@ class FeedPersistenceManager {
 
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
-            managedObjectContext: persistentContainer.viewContext,
+            managedObjectContext: Self.persistentContainer.viewContext,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
         self.init(
-            persistentContainer: persistentContainer,
             fetchedResultsController: fetchedResultsController
         )
     }
 
     init(
-        persistentContainer: NSPersistentContainer,
         fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
     ) {
         self.fetchedResultsController = fetchedResultsController
-        self.persistentContainer = persistentContainer
         try? fetchedResultsController.performFetch()
     }
 
