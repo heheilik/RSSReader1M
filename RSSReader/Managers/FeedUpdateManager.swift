@@ -30,7 +30,7 @@ class FeedUpdateManager {
 
     private let feedService: FeedService
 
-    private var downloadedFeed: ManagedFeed?
+    private var downloadedFeed: RSSFeed?
 
     private var error: UpdateError?
 
@@ -66,6 +66,7 @@ class FeedUpdateManager {
         }
 
         // Processing data
+        removeOldEntriesFromDownloadedFeed()
         fatalError("Not implemented.", file: #file, line: #line)
     }
 
@@ -86,23 +87,15 @@ class FeedUpdateManager {
         }
 
         // Check downloaded data
-        let rssFeed: RSSFeed
         switch await downloadedFeed {
         case let .failure(error):
             self.error = error
             return false
+
         case let .success(feed):
-            rssFeed = feed
+            self.downloadedFeed = feed
+            return true
         }
-
-        // Parse downloaded feed to managed objects
-        guard let parsedFeed = parsedFeed(from: rssFeed) else {
-            self.error = .parsingToManagedError
-            return false
-        }
-        self.downloadedFeed = parsedFeed
-
-        return true
     }
     
     /// Downloads feed from web and checks if it's type is RSS.
@@ -140,11 +133,11 @@ class FeedUpdateManager {
     }
 
     private func removeOldEntriesFromDownloadedFeed() {
-        
-    }
-
-    private func formatDownloadedFeed() {
-
+        downloadedFeed?.items = downloadedFeed?.items?.filter { [weak self] item in
+            self?.feedPersistenceManager.fetchedResultsController.fetchedObjects?.contains {
+                $0.title == item.title
+            } != true
+        }
     }
 
     private func updateStoredFeed() {
