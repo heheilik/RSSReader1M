@@ -192,14 +192,15 @@ class FeedUpdateManager {
 
         // managedFeed doesn't exist on first download
         if let existingManagedFeed = feedPersistenceManager.fetchedResultsController.fetchedObjects?.first?.feed {
-            print("")
             let newFormattedManagedFeedEntries = formattedDownloadEntries(
                 context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
                 items: downloadedFeedEntries,
                 lastReadOrderID: existingManagedFeed.lastReadOrderID
             )
+            print("    Downloaded \(newFormattedManagedFeedEntries.count) new feed entries.")
             existingManagedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
         } else {
+            print("    Downloaded totally new feed.")
             let newManagedFeed = ManagedFeed(context: feedPersistenceManager.fetchedResultsController.managedObjectContext)
             guard newManagedFeed.fill(
                 with: downloadedFeed,
@@ -210,6 +211,7 @@ class FeedUpdateManager {
             }
         }
 
+        print("    Finally saving...")
         do {
             try feedPersistenceManager.fetchedResultsController.managedObjectContext.save()
         } catch {

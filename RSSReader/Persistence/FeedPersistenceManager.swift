@@ -41,6 +41,11 @@ class FeedPersistenceManager {
 
     convenience init() {
         let persistentContainer = NSPersistentContainer(name: ModelNames.feedEntry)
+        persistentContainer.loadPersistentStores { description, error in
+            if let error {
+                fatalError("Unable to load persistent stores: \(error)")
+            }
+        }
 
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: Self.falseFetchRequest,
@@ -56,6 +61,11 @@ class FeedPersistenceManager {
 
     convenience init(activeURL: URL) {
         let persistentContainer = NSPersistentContainer(name: ModelNames.feedEntry)
+        persistentContainer.loadPersistentStores { description, error in
+            if let error {
+                fatalError("Unable to load persistent stores: \(error)")
+            }
+        }
 
         let fetchRequest = Self.falseFetchRequest
         fetchRequest.predicate = Self.newPredicateTemplate().withSubstitutionVariables([
