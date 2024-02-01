@@ -10,39 +10,42 @@ import FMArchitecture
 import Foundation
 import FeedKit
 
+protocol FeedSourcesViewModelDelegate: AnyObject {
+    func updateStarted()
+    func updateCompleted(withError error: FeedUpdateManager.UpdateError?)
+}
+
 class FeedSourcesViewModel: FMTablePageViewModel {
 
     // MARK: Private properties
 
-    private var sectionViewModels: [FMSectionViewModel] = []
-
     private var feedService: FeedService
-    private weak var downloadDelegate: FeedUpdateDelegate?
+
+    private weak var delegate: FeedSourcesViewModelDelegate?
 
     // MARK: Initialization
 
     init(
         context: FeedSourcesContext,
         dataSource: FMDataManager,
-        downloadDelegate: FeedUpdateDelegate,
+        delegate: FeedSourcesViewModelDelegate,
         feedService: FeedService = FeedService()
     ) {
-        self.downloadDelegate = downloadDelegate
+        self.delegate = delegate
         self.feedService = feedService
         super.init(dataSource: dataSource)
         updateSectionViewModels(with: context)
-        dataSource.update(with: sectionViewModels)
     }
 
     // MARK: Private methods
 
     private func updateSectionViewModels(with context: FeedSourcesContext) {
-        sectionViewModels = [
+        dataSource.update(with: [
             FeedSourcesSectionViewModel(
                 context: context,
                 delegate: self
             )
-        ]
+        ])
     }
 }
 
@@ -51,8 +54,8 @@ class FeedSourcesViewModel: FMTablePageViewModel {
 extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
     func didSelect(cellWithData feedSource: FeedSource) {
         let feedUpdateManager = FeedUpdateManager(url: feedSource.url)
-        downloadDelegate?.updateStarted()
-        
+        delegate?.updateStarted()
+
         Task { [weak self] in
             guard let self = self else {
                 return
@@ -60,11 +63,11 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
             await feedUpdateManager.update()
             guard feedUpdateManager.error == nil else {
-                self.downloadDelegate?.updateCompleted(withError: nil)
+                self.delegate?.updateCompleted(withError: feedUpdateManager.error)
                 return
             }
 
-            self.downloadDelegate?.updateCompleted(withError: nil)
+            self.delegate?.updateCompleted(withError: nil)
             _ = await MainActor.run {
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.feedEntries.rawValue,

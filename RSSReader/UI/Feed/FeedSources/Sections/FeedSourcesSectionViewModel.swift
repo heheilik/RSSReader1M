@@ -8,15 +8,23 @@
 import FMArchitecture
 import Foundation
 
+protocol FeedSourcesSectionViewModelDelegate: AnyObject {
+    func didSelect(cellWithData feedSource: FeedSource)
+}
+
 class FeedSourcesSectionViewModel: FMSectionViewModel {
 
-    private weak var currentDelegate: FeedSourcesSectionViewModelDelegate? {
-        delegate as? FeedSourcesSectionViewModelDelegate
-    }
+    // MARK: Internal properties
 
     override var registeredCellTypes: [FMTableViewCellProtocol.Type] {[
         FeedSourceCell.self
     ]}
+
+    // MARK: Private properties
+
+    private weak var currentDelegate: FeedSourcesSectionViewModelDelegate? {
+        delegate as? FeedSourcesSectionViewModelDelegate
+    }
 
     // MARK: Initialization
 
@@ -31,22 +39,19 @@ class FeedSourcesSectionViewModel: FMSectionViewModel {
     // MARK: Private methods
 
     private func configureCellViewModels(with context: FeedSourcesContext) {
-        cellViewModels = context.data.map { feedSource in
+        reload(cellModels: context.data.map { feedSource in
             FeedSourceCellViewModel(
                 feedSource: feedSource,
                 delegate: self
             )
-        }
+        })
     }
-
 }
 
 // MARK: - FeedSourceCellViewModelDelegate
 
 extension FeedSourcesSectionViewModel: FeedSourceCellViewModelDelegate {
-    
     func didSelect(cellWithData feedSource: FeedSource) {
         currentDelegate?.didSelect(cellWithData: feedSource)
     }
-
 }

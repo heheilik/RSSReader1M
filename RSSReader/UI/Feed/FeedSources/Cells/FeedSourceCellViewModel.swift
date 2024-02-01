@@ -8,15 +8,21 @@
 import FMArchitecture
 import Foundation
 
-class FeedSourceCellViewModel: FMCellViewModel {
+protocol FeedSourceCellViewModelDelegate: AnyObject {
+    func didSelect(cellWithData feedSource: FeedSource)
+}
 
-    private weak var currentDelegate: FeedSourceCellViewModelDelegate? {
-        delegate as? FeedSourceCellViewModelDelegate
-    }
+class FeedSourceCellViewModel: FMCellViewModel {
 
     // MARK: Internal properties
 
     let feedSource: FeedSource
+
+    // MARK: Private properties
+
+    private weak var currentDelegate: FeedSourceCellViewModelDelegate? {
+        delegate as? FeedSourceCellViewModelDelegate
+    }
 
     // MARK: Initialization
 
@@ -30,15 +36,12 @@ class FeedSourceCellViewModel: FMCellViewModel {
             delegate: delegate
         )
     }
-
 }
 
 // MARK: - FMSelectableCellModel
 
 extension FeedSourceCellViewModel: FMSelectableCellModel {
-
     func didSelect() {
         currentDelegate?.didSelect(cellWithData: feedSource)
     }
-
 }

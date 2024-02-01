@@ -57,7 +57,7 @@ struct FeedPageFactory: PageFactoryProtocol {
         let viewModel = FeedSourcesViewModel(
             context: context,
             dataSource: dataSource,
-            downloadDelegate: viewController
+            delegate: viewController
         )
         viewController.viewModel = viewModel
 

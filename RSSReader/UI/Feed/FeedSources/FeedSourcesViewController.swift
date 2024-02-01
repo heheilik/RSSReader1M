@@ -36,8 +36,6 @@ class FeedSourcesViewController: FMTablePageViewController {
         navigationItem.title = "Источники"
     }
 
-    // MARK: Internal methods
-
     override func configureViews() {
         progressAnimation.loopMode = .loop
         progressAnimation.isHidden = true
@@ -101,7 +99,7 @@ class FeedSourcesViewController: FMTablePageViewController {
 
 // MARK: - FeedUpdateDelegate
 
-extension FeedSourcesViewController: FeedUpdateDelegate {
+extension FeedSourcesViewController: FeedSourcesViewModelDelegate {
     func updateStarted() {
         progressAnimation.isHidden = false
         progressAnimation.play()
