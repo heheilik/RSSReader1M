@@ -13,7 +13,7 @@ class FeedUpdateManager {
 
     // MARK: Constants
 
-    private enum UpdateError: Error {
+    enum UpdateError: Error {
         case feedNotDownloaded
         case wrongFeedType
         case parsingToManagedError
@@ -77,7 +77,7 @@ class FeedUpdateManager {
     /// - Returns: `true` if operation succeeded, otherwise `false`.
     private func acquireData() async -> Bool {
         // Start feed downloading
-        async let downloadedFeed = downloadFeed()
+        async let downloadedFeed = downloadRSSFeed()
 
         // Fetch data and check fetched data
         let fetchSucceded = await fetchFeed()
@@ -100,7 +100,7 @@ class FeedUpdateManager {
     }
     
     /// Downloads feed from web and checks if it's type is RSS.
-    private func downloadFeed() async -> Result<RSSFeed, UpdateError> {
+    private func downloadRSSFeed() async -> Result<RSSFeed, UpdateError> {
         let feed = await feedService.prepareFeed(at: url)
         guard let feed else {
             return .failure(.feedNotDownloaded)
