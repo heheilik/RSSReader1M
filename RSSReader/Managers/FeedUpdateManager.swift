@@ -19,6 +19,7 @@ class FeedUpdateManager {
         case parsingToManagedError
         case fetchError
         case saveError
+        case controllerUpdatingError
     }
 
     // MARK: Internal properties
@@ -78,7 +79,27 @@ class FeedUpdateManager {
 
         // Processing data
         removeOldEntriesFromDownloadedFeed()
-        fatalError("Not implemented.", file: #file, line: #line)
+        guard updateStoredFeed() else {
+            return false
+        }
+
+        // Updating fetchedResultsController
+        await MainActor.run { [weak self] in
+            guard let self = self else {
+                return
+            }
+            do {
+                try self.feedPersistenceManager.fetchedResultsController.performFetch()
+            } catch {
+                self.error = .controllerUpdatingError
+            }
+        }
+
+        // Checking if controller update succeeded
+        guard error == nil else {
+            return false
+        }
+        return true
     }
 
     // MARK: Private methods
