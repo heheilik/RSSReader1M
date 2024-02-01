@@ -18,6 +18,7 @@ class FeedUpdateManager {
         case wrongFeedType
         case parsingToManagedError
         case fetchError
+        case saveError
     }
 
     // MARK: Internal properties
@@ -140,7 +141,33 @@ class FeedUpdateManager {
         }
     }
 
-    private func updateStoredFeed() {
+    private func updateStoredFeed() -> Bool {
+        guard
+            let managedFeed = feedPersistenceManager.fetchedResultsController.fetchedObjects?.first?.feed,
+            let downloadedFeedEntries = downloadedFeed?.items,
+            let newFormattedManagedFeedEntries = formattedDownloadEntries(
+                context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
+                items: downloadedFeedEntries
+            )
+        else {
+            return false
+        }
+        managedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
 
+        do {
+            try feedPersistenceManager.fetchedResultsController.managedObjectContext.save()
+        } catch {
+            self.error = .saveError
+            return false
+        }
+
+        return true
+    }
+
+    private func formattedDownloadEntries(
+        context: NSManagedObjectContext,
+        items: [RSSFeedItem]
+    ) -> [ManagedFeedEntry]? {
+        fatalError("Not implemented.", file: #file, line: #line)
     }
 }
