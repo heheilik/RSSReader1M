@@ -35,6 +35,16 @@ class FeedUpdateManager {
 
     private var error: UpdateError?
 
+    private let pubDateAscendingFeedItemComparatorClosure: (RSSFeedItem, RSSFeedItem) -> Bool = {
+        guard let firstDate = $0.pubDate else {
+            return false
+        }
+        guard let secondDate = $1.pubDate else {
+            return true
+        }
+        return firstDate < secondDate
+    }
+
     // MARK: Initialization
 
     convenience init(url: URL) {
@@ -144,14 +154,16 @@ class FeedUpdateManager {
     private func updateStoredFeed() -> Bool {
         guard
             let managedFeed = feedPersistenceManager.fetchedResultsController.fetchedObjects?.first?.feed,
-            let downloadedFeedEntries = downloadedFeed?.items,
-            let newFormattedManagedFeedEntries = formattedDownloadEntries(
-                context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
-                items: downloadedFeedEntries
-            )
+            let downloadedFeedEntries = downloadedFeed?.items
         else {
             return false
         }
+
+        let newFormattedManagedFeedEntries = formattedDownloadEntries(
+            context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
+            items: downloadedFeedEntries,
+            lastReadOrderID: managedFeed.lastReadOrderID
+        )
         managedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
 
         do {
@@ -160,14 +172,24 @@ class FeedUpdateManager {
             self.error = .saveError
             return false
         }
-
         return true
     }
 
     private func formattedDownloadEntries(
         context: NSManagedObjectContext,
-        items: [RSSFeedItem]
-    ) -> [ManagedFeedEntry]? {
-        fatalError("Not implemented.", file: #file, line: #line)
+        items: [RSSFeedItem],
+        lastReadOrderID: Int64
+    ) -> [ManagedFeedEntry] {
+        var currentOrderID = lastReadOrderID + 1
+        return items
+            .sorted(by: pubDateAscendingFeedItemComparatorClosure)
+            .compactMap { item in
+                let managedFeedEntry = ManagedFeedEntry(context: context)
+                guard managedFeedEntry.fill(with: item, orderID: currentOrderID) else {
+                    return nil
+                }
+                currentOrderID += 1
+                return managedFeedEntry
+            }
     }
 }

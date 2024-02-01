@@ -14,7 +14,7 @@ public class ManagedFeedEntry: NSManagedObject {
 
     // MARK: Internal methods
 
-    func fill(with rssFeedItem: RSSFeedItem) -> Bool {
+    func fill(with rssFeedItem: RSSFeedItem, orderID: Int64) -> Bool {
         guard let title = rssFeedItem.title else {
             return false
         }
@@ -22,7 +22,7 @@ public class ManagedFeedEntry: NSManagedObject {
 
         entryDescription = rssFeedItem.description
         date = rssFeedItem.pubDate
-        orderID = Int64.max
+        self.orderID = orderID
 
         return true
     }

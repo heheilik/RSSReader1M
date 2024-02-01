@@ -24,14 +24,13 @@ public class ManagedFeed: NSManagedObject {
             imageLink = imageURL
         }
         self.url = url
-        lastReadOrderID = -1
 
         guard let items = rssFeed.items else {
             return false
         }
         for item in items {
             let managedFeedEntry = ManagedFeedEntry(context: context)
-            guard managedFeedEntry.fill(with: item) else {
+            guard managedFeedEntry.fill(with: item, orderID: Int64.max) else {
                 return false
             }
             addToEntries(managedFeedEntry)
