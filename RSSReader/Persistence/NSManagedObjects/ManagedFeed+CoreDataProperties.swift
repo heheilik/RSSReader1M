@@ -1,5 +1,5 @@
 //
-//  Feed+CoreDataProperties.swift
+//  ManagedFeed+CoreDataProperties.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 31.01.24.
@@ -8,10 +8,10 @@
 import Foundation
 import CoreData
 
-extension Feed {
+extension ManagedFeed {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Feed> {
-        return NSFetchRequest<Feed>(entityName: "Feed")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<ManagedFeed> {
+        return NSFetchRequest<ManagedFeed>(entityName: "ManagedFeed")
     }
 
     @NSManaged public var url: URL?
@@ -22,13 +22,13 @@ extension Feed {
 }
 
 // MARK: Generated accessors for entries
-extension Feed {
+extension ManagedFeed {
 
     @objc(addEntriesObject:)
-    @NSManaged public func addToEntries(_ value: FeedEntry)
+    @NSManaged public func addToEntries(_ value: ManagedFeedEntry)
 
     @objc(removeEntriesObject:)
-    @NSManaged public func removeFromEntries(_ value: FeedEntry)
+    @NSManaged public func removeFromEntries(_ value: ManagedFeedEntry)
 
     @objc(addEntries:)
     @NSManaged public func addToEntries(_ values: NSSet)
@@ -38,6 +38,6 @@ extension Feed {
 
 }
 
-extension Feed : Identifiable {
+extension ManagedFeed : Identifiable {
 
 }

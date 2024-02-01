@@ -22,17 +22,17 @@ class FeedPersistenceManager {
 
     // MARK: Internal properties
 
-    let fetchedResultsController: NSFetchedResultsController<FeedEntry>
+    let fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
     let persistentContainer: NSPersistentContainer
 
     // MARK: Private properties
 
     private static let falseFetchRequest = {
-        let fetchRequest = FeedEntry.fetchRequest()
+        let fetchRequest = ManagedFeedEntry.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "FALSEPREDICATE")
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(keyPath: \FeedEntry.orderID, ascending: false),
-            NSSortDescriptor(keyPath: \FeedEntry.date, ascending: false)
+            NSSortDescriptor(keyPath: \ManagedFeedEntry.orderID, ascending: false),
+            NSSortDescriptor(keyPath: \ManagedFeedEntry.date, ascending: false)
         ]
         return fetchRequest
     }()
@@ -76,7 +76,7 @@ class FeedPersistenceManager {
 
     init(
         persistentContainer: NSPersistentContainer,
-        fetchedResultsController: NSFetchedResultsController<FeedEntry>
+        fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
     ) {
         self.fetchedResultsController = fetchedResultsController
         self.persistentContainer = persistentContainer
@@ -95,6 +95,6 @@ class FeedPersistenceManager {
     // MARK: Private methods
 
     private static func newPredicateTemplate() -> NSPredicate {
-        NSPredicate(format: "\(#keyPath(FeedEntry.feed.url)) == $\(SubstitutableVariables.url)")
+        NSPredicate(format: "\(#keyPath(ManagedFeedEntry.feed.url)) == $\(SubstitutableVariables.url)")
     }
 }
