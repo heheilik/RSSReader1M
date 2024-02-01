@@ -65,7 +65,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
             }
 
             self.downloadDelegate?.updateCompleted(withError: nil)
-            await MainActor.run {
+            _ = await MainActor.run {
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.feedEntries.rawValue,
                     animated: true,
