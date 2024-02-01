@@ -63,12 +63,14 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
             await feedUpdateManager.update()
             guard feedUpdateManager.error == nil else {
-                self.delegate?.updateCompleted(withError: feedUpdateManager.error)
+                _ = await MainActor.run {
+                    self.delegate?.updateCompleted(withError: feedUpdateManager.error)
+                }
                 return
             }
 
-            self.delegate?.updateCompleted(withError: nil)
             _ = await MainActor.run {
+                self.delegate?.updateCompleted(withError: nil)
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.feedEntries.rawValue,
                     animated: true,
