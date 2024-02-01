@@ -9,7 +9,6 @@
     <entity name="ManagedFeedEntry" representedClassName="ManagedFeedEntry" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="entryDescription" optional="YES" attributeType="String"/>
-        <attribute name="guid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="orderID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="feed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedFeed" inverseName="entries" inverseEntity="ManagedFeed"/>
