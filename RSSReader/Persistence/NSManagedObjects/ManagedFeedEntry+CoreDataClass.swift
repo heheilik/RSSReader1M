@@ -26,5 +26,4 @@ public class ManagedFeedEntry: NSManagedObject {
 
         return true
     }
-
 }

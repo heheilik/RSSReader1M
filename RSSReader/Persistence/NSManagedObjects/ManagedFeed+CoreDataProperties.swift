@@ -2,7 +2,7 @@
 //  ManagedFeed+CoreDataProperties.swift
 //  RSSReader
 //
-//  Created by Heorhi Heilik on 31.01.24.
+//  Created by Heorhi Heilik on 1.02.24.
 //
 
 import Foundation
@@ -14,9 +14,9 @@ extension ManagedFeed {
         return NSFetchRequest<ManagedFeed>(entityName: "ManagedFeed")
     }
 
-    @NSManaged public var url: URL?
-    @NSManaged public var imageLink: URL?
+    @NSManaged public var imageURL: URL?
     @NSManaged public var lastReadOrderID: Int64
+    @NSManaged public var url: URL?
     @NSManaged public var entries: NSSet?
 
 }
@@ -38,6 +38,6 @@ extension ManagedFeed {
 
 }
 
-extension ManagedFeed : Identifiable {
+extension ManagedFeed: Identifiable {
 
 }

@@ -57,10 +57,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         super.init()
         configureCellViewModels(context: context)
 
-//        self.downloadImageIfPossible(
-//            feedURLString: context.rssFeed.link,
-//            imageURLString: context.rssFeed.image?.url
-//        )
+        let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
+        self.downloadImageIfPossible(imageURL: imageURL)
     }
 
     // MARK: Private methods
@@ -83,43 +81,25 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
                 title: entry.title,
                 description: entry.entryDescription,
                 date: dateString,
-                image: Self.errorImage,
+                image: image,
                 delegate: self,
                 isAnimatedAtStart: false
             )
         })
     }
 
-    private func downloadImageIfPossible(feedURLString: String?, imageURLString: String?) {
-        guard let imageURLString else {
+    private func downloadImageIfPossible(imageURL: URL?) {
+        guard let imageURL else {
             downloadedImage = nil
             return
         }
-
-        let url: URL
-        if imageURLString.starts(with: "http") {
-            guard let tempURL = URL(string: imageURLString) else {
-                downloadedImage = nil
-                return
-            }
-            url = tempURL
-        } else {
-            guard
-                let feedURLString,
-                let tempURL = URL(string: feedURLString + imageURLString)
-            else {
-                downloadedImage = nil
-                return
-            }
-            url = tempURL
-        }
-
         Task { [weak self] in
             guard let self = self else {
                 return
             }
 
-            let image = await self.feedImageService.prepareImage(at: url)
+            let image = await self.feedImageService.prepareImage(at: imageURL)
+
             guard let image else {
                 self.downloadedImage = nil
                 return
@@ -127,7 +107,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             self.downloadedImage = image
         }
     }
-
 }
 
 // MARK: - FMAnimatable

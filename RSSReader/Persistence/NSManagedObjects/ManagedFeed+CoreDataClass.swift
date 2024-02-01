@@ -19,25 +19,43 @@ public class ManagedFeed: NSManagedObject {
             return false
         }
 
-        if let urlString = rssFeed.image?.link,
-           let imageURL = URL(string: urlString) {
-            imageLink = imageURL
-        }
         self.url = url
-        lastReadOrderID = 0
+        imageURL = getImageURL(from: rssFeed.image)
 
         guard let items = rssFeed.items else {
             return false
         }
-        var currentOrderID: Int64 = 0
+        lastReadOrderID = 0
+        var currentOrderID: Int64 = 1
         for item in items {
             let managedFeedEntry = ManagedFeedEntry(context: context)
-            guard managedFeedEntry.fill(with: item, orderID: currentOrderID) else {
+            guard managedFeedEntry.fill(
+                with: item,
+                orderID: currentOrderID
+            ) else {
                 return false
             }
             addToEntries(managedFeedEntry)
             currentOrderID += 1
         }
         return true
+    }
+
+    // MARK: Private methods
+
+    private func getImageURL(from image: RSSFeedImage?) -> URL? {
+        guard let imageURLString = image?.url else {
+            return nil
+        }
+        if imageURLString.starts(with: "http") {
+            return URL(string: imageURLString)
+        }
+
+        guard let feedURLString = image?.link else {
+            return nil
+        }
+        print(feedURLString)
+        print(imageURLString)
+        return URL(string: feedURLString + imageURLString)
     }
 }
