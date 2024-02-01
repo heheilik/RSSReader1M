@@ -219,7 +219,6 @@
 			children = (
 				5DB432682B6A203A008F30D3 /* FeedModel.xcdatamodeld */,
 				5DB432732B6A29E2008F30D3 /* FeedPersistenceManager.swift */,
-				5DB432852B6A44BA008F30D3 /* FeedUpdateManager.swift */,
 				5DB432602B6A1ED5008F30D3 /* NSManagedObjects */,
 			);
 			path = Persistence;
@@ -289,6 +288,14 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		5DFBB2432B6B97EB00A2541F /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				5DB432852B6A44BA008F30D3 /* FeedUpdateManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		5DFD963D2AE8FC9C00DEBF9A = {
 			isa = PBXGroup;
 			children = (
@@ -313,6 +320,7 @@
 				5DFD96492AE8FC9C00DEBF9A /* AppDelegate.swift */,
 				5DFD96572AE8FC9D00DEBF9A /* Info.plist */,
 				5DFD96542AE8FC9D00DEBF9A /* LaunchScreen.storyboard */,
+				5DFBB2432B6B97EB00A2541F /* Managers */,
 				5DC03A7F2AF10A9300EA2965 /* Model */,
 				5DB432652B6A1F7D008F30D3 /* Persistence */,
 				5DAEF75C2AEA67940091436C /* Services */,

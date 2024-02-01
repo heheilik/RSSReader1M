@@ -59,15 +59,18 @@ class FeedUpdateManager {
     // MARK: Internal methods
     
     func update() async -> Bool {
+        // Acquiring data
         let dataAcquired = await acquireData()
         guard dataAcquired else {
             return false
         }
+
+        // Processing data
         fatalError("Not implemented.", file: #file, line: #line)
     }
 
     // MARK: Private methods
-    
+
     /// Downloads data from web and fetches data from persistent store.
     /// - Returns: `true` if operation succeeded, otherwise `false`.
     private func acquireData() async -> Bool {
@@ -118,7 +121,9 @@ class FeedUpdateManager {
     }
 
     private func parsedFeed(from rssFeed: RSSFeed) -> ManagedFeed? {
-        fatalError("Not implemented.", file: #file, line: #line)
+        let context = feedPersistenceManager.persistentContainer.newBackgroundContext()
+        let managedFeed = ManagedFeed(context: context)
+        return managedFeed.fill(with: rssFeed, url: url) ? managedFeed : nil
     }
 
     /// Fetches data from persistent store.
@@ -135,7 +140,7 @@ class FeedUpdateManager {
     }
 
     private func removeOldEntriesFromDownloadedFeed() {
-
+        
     }
 
     private func formatDownloadedFeed() {
@@ -144,33 +149,5 @@ class FeedUpdateManager {
 
     private func updateStoredFeed() {
 
-    }
-
-    private func managedFeed(from rssFeed: RSSFeed) -> ManagedFeed? {
-        let context = feedPersistenceManager.persistentContainer.newBackgroundContext()
-        let managedFeed = ManagedFeed(context: context)
-
-        if let urlString = rssFeed.image?.link,
-           let url = URL(string: urlString) {
-            managedFeed.imageLink = url
-        }
-        managedFeed.url = url
-        managedFeed.lastReadOrderID = -1
-
-        guard
-            let managedEntriesSet = rssFeed.items?.reduce(Set<ManagedFeedEntry>(), { partialResult, item in
-                guard let item = managedFeedEntry(from: item) else {
-                    return partialResult
-                }
-                var partialResult = partialResult
-                partialResult.insert(item)
-                return partialResult
-            }) as? NSSet
-        else {
-            return nil
-        }
-        managedFeed.addToEntries(managedEntriesSet)
-
-        return managedFeed
     }
 }

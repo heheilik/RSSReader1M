@@ -14,8 +14,28 @@ public class ManagedFeed: NSManagedObject {
 
     // MARK: Internal methods
 
-    func fill(with rssFeed: RSSFeed) {
-        fatalError("Not implemented.", file: #file, line: #line)
-    }
+    func fill(with rssFeed: RSSFeed, url: URL) -> Bool {
+        guard let context = managedObjectContext else {
+            return false
+        }
 
+        if let urlString = rssFeed.image?.link,
+           let imageURL = URL(string: urlString) {
+            imageLink = imageURL
+        }
+        self.url = url
+        lastReadOrderID = -1
+
+        guard let items = rssFeed.items else {
+            return false
+        }
+        for item in items {
+            let managedFeedEntry = ManagedFeedEntry(context: context)
+            guard managedFeedEntry.fill(with: item) else {
+                return false
+            }
+            addToEntries(managedFeedEntry)
+        }
+        return true
+    }
 }

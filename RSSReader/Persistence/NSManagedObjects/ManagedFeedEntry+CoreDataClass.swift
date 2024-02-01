@@ -14,8 +14,17 @@ public class ManagedFeedEntry: NSManagedObject {
 
     // MARK: Internal methods
 
-    func fill(with rssFeedItem: RSSFeedItem) {
-        fatalError("Not implemented.", file: #file, line: #line)
+    func fill(with rssFeedItem: RSSFeedItem) -> Bool {
+        guard let title = rssFeedItem.title else {
+            return false
+        }
+        self.title = title
+
+        entryDescription = rssFeedItem.description
+        date = rssFeedItem.pubDate
+        orderID = Int64.max
+
+        return true
     }
 
 }
