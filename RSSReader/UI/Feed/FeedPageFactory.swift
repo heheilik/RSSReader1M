@@ -12,6 +12,8 @@ import UIKit
 
 struct FeedPageFactory: PageFactoryProtocol {
 
+    // MARK: Constants
+
     enum NavigationPath: String, CaseIterable {
         case feedSources = "/feedSources"
         case feedEntries = "/feedEntries"
@@ -44,6 +46,8 @@ struct FeedPageFactory: PageFactoryProtocol {
             return newFeedDetailsViewController(context: context)
         }
     }
+
+    // MARK: Private methods
 
     private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedSourcesViewController {
         let viewController = FeedSourcesViewController()
@@ -90,5 +94,4 @@ struct FeedPageFactory: PageFactoryProtocol {
         viewController.viewModel = viewModel
         return viewController
     }
-
 }
