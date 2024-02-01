@@ -5,29 +5,26 @@
 //  Created by Heorhi Heilik on 25.10.23.
 //
 
+import ALNavigation
 import FMArchitecture
 import Foundation
 import FeedKit
 
 class FeedSourcesViewModel: FMTablePageViewModel {
 
-    // MARK: Internal properties
-
-    private(set) var lastClickedFeedName: String = ""
-
     // MARK: Private properties
 
     private var sectionViewModels: [FMSectionViewModel] = []
 
     private var feedService: FeedService
-    private weak var downloadDelegate: FeedDownloadDelegate?
+    private weak var downloadDelegate: FeedUpdateDelegate?
 
     // MARK: Initialization
 
     init(
         context: FeedSourcesContext,
         dataSource: FMDataManager,
-        downloadDelegate: FeedDownloadDelegate,
+        downloadDelegate: FeedUpdateDelegate,
         feedService: FeedService = FeedService()
     ) {
         self.downloadDelegate = downloadDelegate
@@ -47,48 +44,35 @@ class FeedSourcesViewModel: FMTablePageViewModel {
             )
         ]
     }
-
 }
 
 // MARK: - FeedSourcesSectionViewModelDelegate
 
 extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
-
     func didSelect(cellWithData feedSource: FeedSource) {
-        lastClickedFeedName = feedSource.name
-
-        downloadDelegate?.downloadStarted()
-        Task {
-            var result: Result<RSSFeed, DownloadError>?
-            defer {
-                guard let result else {
-                    fatalError("Result must be set before returning.")
-                }
-                DispatchQueue.main.async {
-                    self.downloadDelegate?.downloadCompleted(result)
-                }
-            }
-
-            let feed = await feedService.prepareFeed(at: feedSource.url)
-
-            guard let feed else {
-                result = .failure(.feedNotDownloaded)
+        let feedUpdateManager = FeedUpdateManager(url: feedSource.url)
+        downloadDelegate?.updateStarted()
+        
+        Task { [weak self] in
+            guard let self = self else {
                 return
             }
 
-            switch feed {
-            case let .rss(feed):
-                result = .success(feed)
-                return
-
-            case .atom(_):
-                result = .failure(.atomFeedDownloaded)
-                return
-            case .json(_):
-                result = .failure(.jsonFeedDownloaded)
+            await feedUpdateManager.update()
+            guard feedUpdateManager.error == nil else {
+                self.downloadDelegate?.updateCompleted(withError: nil)
                 return
             }
+
+            self.downloadDelegate?.updateCompleted(withError: nil)
+            Router.shared.push(
+                FeedPageFactory.NavigationPath.feedEntries.rawValue,
+                animated: true,
+                context: FeedEntriesContext(
+                    feedName: feedSource.name,
+                    feedPersistenceManager: feedUpdateManager.feedPersistenceManager
+                )
+            )
         }
     }
-
 }

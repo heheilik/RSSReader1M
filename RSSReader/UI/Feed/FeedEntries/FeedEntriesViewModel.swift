@@ -17,6 +17,7 @@ class FeedEntriesViewModel: FMTablePageViewModel {
     // MARK: Initialization
 
     init(dataSource: FMDataManager, context: FeedEntriesContext) {
+        persistenceManager = context.feedPersistenceManager
         super.init(dataSource: dataSource)
         updateSectionViewModels(with: context)
     }

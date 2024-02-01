@@ -28,13 +28,13 @@ class FeedUpdateManager {
 
     let url: URL
 
+    var error: UpdateError?
+
     // MARK: Private properties
 
     private let feedService: FeedService
 
     private var downloadedFeed: RSSFeed?
-
-    private var error: UpdateError?
 
     private let pubDateAscendingFeedItemComparatorClosure: (RSSFeedItem, RSSFeedItem) -> Bool = {
         guard let firstDate = $0.pubDate else {
@@ -70,7 +70,7 @@ class FeedUpdateManager {
 
     // MARK: Internal methods
     
-    func update() async -> Bool {
+    func update() async {
         // Acquiring data
         let dataAcquired = await acquireData()
         guard dataAcquired else {

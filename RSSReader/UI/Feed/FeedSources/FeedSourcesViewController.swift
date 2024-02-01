@@ -18,13 +18,15 @@ class FeedSourcesViewController: FMTablePageViewController {
         static let progressAnimationWidthHeight = 256
     }
 
-    private var currentViewModel: FeedSourcesViewModel? {
-        viewModel as? FeedSourcesViewModel
-    }
-
     // MARK: UI
 
     private let progressAnimation = LottieAnimationView(name: "loading")
+
+    // MARK: Private properties
+
+    private var currentViewModel: FeedSourcesViewModel? {
+        viewModel as? FeedSourcesViewModel
+    }
 
     // MARK: Lifecycle
 
@@ -57,7 +59,7 @@ class FeedSourcesViewController: FMTablePageViewController {
 
     // MARK: Private methods
 
-    private func alertFor(error: DownloadError) -> UIAlertController {
+    private func presentAlertFor(error: FeedUpdateManager.UpdateError, animated: Bool = true) {
         let alert = {
             let alert = UIAlertController(
                 title: "",
@@ -71,21 +73,36 @@ class FeedSourcesViewController: FMTablePageViewController {
             return alert
         }()
 
-        let representation = error.alertRepresentation()
+        let representation = alertRepresentation(for: error)
 
         alert.title = representation.title
         alert.message = representation.message
 
-        return alert
+        present(alert, animated: animated)
     }
 
+    private func alertRepresentation(for error: FeedUpdateManager.UpdateError) -> (title: String, message: String) {
+        switch error {
+        case .feedNotDownloaded:
+            return (title: "feedNotDownloaded", message: "")
+        case .wrongFeedType:
+            return (title: "wrongFeedType", message: "")
+        case .parsingToManagedError:
+            return (title: "parsingToManagedError", message: "")
+        case .fetchError:
+            return (title: "fetchError", message: "")
+        case .saveError:
+            return (title: "saveError", message: "")
+        case .controllerUpdatingError:
+            return (title: "controllerUpdatingError", message: "")
+        }
+    }
 }
 
-// MARK: - FeedDownloadDelegate
+// MARK: - FeedUpdateDelegate
 
-extension FeedSourcesViewController: FeedDownloadDelegate {
-
-    func downloadStarted() {
+extension FeedSourcesViewController: FeedUpdateDelegate {
+    func updateStarted() {
         progressAnimation.isHidden = false
         progressAnimation.play()
         if let delegate = delegate as? FeedSourcesTableViewDelegate {
@@ -93,45 +110,14 @@ extension FeedSourcesViewController: FeedDownloadDelegate {
         }
     }
 
-    func downloadCompleted(_ result: DownloadResult) {
+    func updateCompleted(withError error: FeedUpdateManager.UpdateError?) {
         progressAnimation.stop()
         progressAnimation.isHidden = true
         if let delegate = delegate as? FeedSourcesTableViewDelegate {
             delegate.cellsAreSelectable = true
         }
-
-        switch result {
-        case let .success(feed):
-            let feedName = currentViewModel?.lastClickedFeedName ?? "No name provided."
-            Router.shared.push(
-                FeedPageFactory.NavigationPath.feedEntries.rawValue,
-                animated: true,
-                context: FeedEntriesContext(
-                    feedName: feedName,
-                    rssFeed: feed
-                )
-            )
-        case let .failure(error):
-            present(alertFor(error: error), animated: true)
-            return
+        if let error {
+            presentAlertFor(error: error)
         }
     }
-
-}
-
-// MARK: - DownloadError User-Friendly Representation
-
-private extension DownloadError {
-
-    func alertRepresentation() -> (title: String, message: String) {
-        switch self {
-        case .atomFeedDownloaded:
-            return (title: "Atom feed is downloaded.", message: "This app can't parse Atom feeds.")
-        case .jsonFeedDownloaded:
-            return (title: "JSON feed is downloaded.", message: "This app can't parse JSON feeds.")
-        case .feedNotDownloaded:
-            return (title: "Could not download feed.", message: "Check connection and try again.")
-        }
-    }
-
 }
