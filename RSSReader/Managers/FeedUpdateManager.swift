@@ -84,7 +84,10 @@ class FeedUpdateManager {
 
         // Processing data
         print("Processing data...")
+        print("  Removing old entries from downloaded data...")
         removeOldEntriesFromDownloadedFeed()
+
+        print("  Writing results to disk...")
         guard updateStoredFeed() else {
             return
         }
@@ -117,10 +120,13 @@ class FeedUpdateManager {
     /// - Returns: `true` if operation succeeded, otherwise `false`.
     private func acquireData() async -> Bool {
         // Start feed downloading
+        print("  Started feed downloading...")
         async let downloadedFeed = downloadRSSFeed()
 
         // Fetch data and check fetched data
+        print("  Fetching data...")
         let fetchSucceded = await fetchFeed()
+        print("  Checking fetched data...")
         guard fetchSucceded else {
             self.error = .fetchError
             // TODO: Cancel downloading
@@ -128,6 +134,7 @@ class FeedUpdateManager {
         }
 
         // Check downloaded data
+        print("  Checking downloaded data...")
         switch await downloadedFeed {
         case let .failure(error):
             self.error = error
@@ -154,12 +161,6 @@ class FeedUpdateManager {
         }
     }
 
-    private func parsedFeed(from rssFeed: RSSFeed) -> ManagedFeed? {
-        let context = feedPersistenceManager.persistentContainer.newBackgroundContext()
-        let managedFeed = ManagedFeed(context: context)
-        return managedFeed.fill(with: rssFeed, url: url) ? managedFeed : nil
-    }
-
     /// Fetches data from persistent store.
     /// - Returns: `true` if operation succeeded, otherwise `false`.
     @MainActor
@@ -183,18 +184,31 @@ class FeedUpdateManager {
 
     private func updateStoredFeed() -> Bool {
         guard
-            let managedFeed = feedPersistenceManager.fetchedResultsController.fetchedObjects?.first?.feed,
-            let downloadedFeedEntries = downloadedFeed?.items
+            let downloadedFeed,
+            let downloadedFeedEntries = downloadedFeed.items
         else {
             return false
         }
 
-        let newFormattedManagedFeedEntries = formattedDownloadEntries(
-            context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
-            items: downloadedFeedEntries,
-            lastReadOrderID: managedFeed.lastReadOrderID
-        )
-        managedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
+        // managedFeed doesn't exist on first download
+        if let existingManagedFeed = feedPersistenceManager.fetchedResultsController.fetchedObjects?.first?.feed {
+            print("")
+            let newFormattedManagedFeedEntries = formattedDownloadEntries(
+                context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
+                items: downloadedFeedEntries,
+                lastReadOrderID: existingManagedFeed.lastReadOrderID
+            )
+            existingManagedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
+        } else {
+            let newManagedFeed = ManagedFeed(context: feedPersistenceManager.fetchedResultsController.managedObjectContext)
+            guard newManagedFeed.fill(
+                with: downloadedFeed,
+                url: url
+            ) else {
+                self.error = .parsingToManagedError
+                return false
+            }
+        }
 
         do {
             try feedPersistenceManager.fetchedResultsController.managedObjectContext.save()
