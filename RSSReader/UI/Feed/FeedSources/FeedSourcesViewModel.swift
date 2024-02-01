@@ -65,14 +65,16 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
             }
 
             self.downloadDelegate?.updateCompleted(withError: nil)
-            Router.shared.push(
-                FeedPageFactory.NavigationPath.feedEntries.rawValue,
-                animated: true,
-                context: FeedEntriesContext(
-                    feedName: feedSource.name,
-                    feedPersistenceManager: feedUpdateManager.feedPersistenceManager
+            await MainActor.run {
+                Router.shared.push(
+                    FeedPageFactory.NavigationPath.feedEntries.rawValue,
+                    animated: true,
+                    context: FeedEntriesContext(
+                        feedName: feedSource.name,
+                        feedPersistenceManager: feedUpdateManager.feedPersistenceManager
+                    )
                 )
-            )
+            }
         }
     }
 }

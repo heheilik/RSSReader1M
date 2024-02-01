@@ -28,7 +28,11 @@ class FeedUpdateManager {
 
     let url: URL
 
-    var error: UpdateError?
+    var error: UpdateError? {
+        didSet {
+            print(error)
+        }
+    }
 
     // MARK: Private properties
 
@@ -72,18 +76,21 @@ class FeedUpdateManager {
     
     func update() async {
         // Acquiring data
+        print("Acquiring data...")
         let dataAcquired = await acquireData()
         guard dataAcquired else {
-            return false
+            return
         }
 
         // Processing data
+        print("Processing data...")
         removeOldEntriesFromDownloadedFeed()
         guard updateStoredFeed() else {
-            return false
+            return
         }
 
         // Updating fetchedResultsController
+        print("Updating fetchedResultsController...")
         await MainActor.run { [weak self] in
             guard let self = self else {
                 return
@@ -96,10 +103,12 @@ class FeedUpdateManager {
         }
 
         // Checking if controller update succeeded
+        print("Checking if controller update succeeded...")
         guard error == nil else {
-            return false
+            return
         }
-        return true
+
+        print("Update completed")
     }
 
     // MARK: Private methods
