@@ -8,27 +8,22 @@
 import FeedKit
 import FMArchitecture
 import Foundation
+import SkeletonView
 
 class FeedEntriesViewModel: FMTablePageViewModel {
-
-    // MARK: Private properties
-
-    private var sectionViewModels: [FMSectionViewModel] = []
 
     // MARK: Initialization
 
     init(dataSource: FMDataManager, context: FeedEntriesContext) {
         super.init(dataSource: dataSource)
         updateSectionViewModels(with: context)
-        dataSource.update(with: sectionViewModels)
     }
 
     // MARK: Private methods
 
     private func updateSectionViewModels(with context: FeedEntriesContext) {
-        sectionViewModels = [
+        dataSource.update(with: [
             FeedEntriesSectionViewModel(context: context)
-        ]
+        ])
     }
-
 }

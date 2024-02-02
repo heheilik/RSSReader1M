@@ -8,9 +8,10 @@
 import Combine
 import Foundation
 import FMArchitecture
+import SkeletonView
 import UIKit
 
-class FeedEntriesCell: FMTableViewCell {
+class FeedEntriesCell: FMSwipeTableViewCell {
 
     private weak var currentViewModel: FeedEntriesCellViewModel? {
         return viewModel as? FeedEntriesCellViewModel
@@ -22,18 +23,22 @@ class FeedEntriesCell: FMTableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17)
         label.numberOfLines = 0
+        label.isSkeletonable = true
+        label.skeletonTextNumberOfLines = 1
         return label
     }()
 
     private let descriptionLabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
+        label.isSkeletonable = true
         return label
     }()
 
     private let dateLabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
+        label.isSkeletonable = true
         return label
     }()
 
@@ -57,6 +62,7 @@ class FeedEntriesCell: FMTableViewCell {
     private let feedImage = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
+        image.isSkeletonable = true
         return image
     }()
 
@@ -67,6 +73,7 @@ class FeedEntriesCell: FMTableViewCell {
     // MARK: Internal methods
 
     override func configureViews() {
+        isSkeletonable = true
         descriptionSizeToggleButton.addAction(UIAction { [weak self] _ in
             guard
                 let self = self,
@@ -150,6 +157,14 @@ class FeedEntriesCell: FMTableViewCell {
             return
         }
 
+        guard !viewModel.isAnimation else {
+            configureAnimatedView()
+            startAnimation()
+            return
+        }
+        configureNotAnimatedView()
+        stopAnimation()
+
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         dateLabel.text = viewModel.date
@@ -210,4 +225,33 @@ class FeedEntriesCell: FMTableViewCell {
         readStatusView.backgroundColor = isRead ? .white : .systemBlue
     }
 
+    private func configureAnimatedView() {
+        titleLabel.text = " "
+        descriptionLabel.text = " "
+        dateLabel.text = " "
+        readStatusView.isHidden = true
+        descriptionSizeToggleButton.isHidden = true
+    }
+
+    private func configureNotAnimatedView() {
+        readStatusView.isHidden = false
+        descriptionSizeToggleButton.isHidden = false
+    }
+}
+
+// MARK: - FMAnimatable
+
+extension FeedEntriesCell: FMAnimatable {
+    func startAnimation() {
+        layoutIfNeeded()
+        showAnimatedGradientSkeleton(
+            usingGradient: SkeletonGradient(colors: [.systemCyan, .systemGreen]),
+            animation: SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight),
+            transition: .none
+        )
+    }
+    
+    func stopAnimation() {
+        hideSkeleton()
+    }
 }
