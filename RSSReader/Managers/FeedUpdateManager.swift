@@ -24,6 +24,16 @@ class FeedUpdateManager {
 
     // MARK: Internal properties
 
+    static let newFeedComparatorClosure: (RSSFeedItem, RSSFeedItem) -> Bool = {
+        guard let firstDate = $0.pubDate else {
+            return false
+        }
+        guard let secondDate = $1.pubDate else {
+            return true
+        }
+        return firstDate < secondDate
+    }
+
     let feedPersistenceManager: FeedPersistenceManager
 
     let url: URL
@@ -40,15 +50,6 @@ class FeedUpdateManager {
 
     private var downloadedFeed: RSSFeed?
 
-    private let pubDateAscendingFeedItemComparatorClosure: (RSSFeedItem, RSSFeedItem) -> Bool = {
-        guard let firstDate = $0.pubDate else {
-            return false
-        }
-        guard let secondDate = $1.pubDate else {
-            return true
-        }
-        return firstDate < secondDate
-    }
 
     // MARK: Initialization
 
@@ -77,8 +78,7 @@ class FeedUpdateManager {
     func update() async {
         // Acquiring data
         print("Acquiring data...")
-        let dataAcquired = await acquireData()
-        guard dataAcquired else {
+        guard await acquireData() else {
             return
         }
 
@@ -88,7 +88,7 @@ class FeedUpdateManager {
         removeOldEntriesFromDownloadedFeed()
 
         print("  Writing results to disk...")
-        guard updateStoredFeed() else {
+        guard await updateStoredFeed() else {
             return
         }
 
@@ -182,7 +182,8 @@ class FeedUpdateManager {
         }
     }
 
-    private func updateStoredFeed() -> Bool {
+    @MainActor
+    private func updateStoredFeed() async -> Bool {
         guard
             let downloadedFeed,
             let downloadedFeedEntries = downloadedFeed.items
@@ -190,18 +191,35 @@ class FeedUpdateManager {
             return false
         }
 
-        // managedFeed doesn't exist on first download
         if let existingManagedFeed = feedPersistenceManager.fetchedResultsController.fetchedObjects?.first?.feed {
+            // Acquiring data needed to format entries
+            guard
+                let feedURL = existingManagedFeed.url,
+                let greatestOrderIDAvailable = await fetchGreatestOrderID(for: feedURL)
+            else {
+                return false
+            }
+            print("    Greatest Order ID: \(greatestOrderIDAvailable)")
+
+            // Formatting downloaded entries
             let newFormattedManagedFeedEntries = formattedDownloadEntries(
                 context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
                 items: downloadedFeedEntries,
-                lastReadOrderID: existingManagedFeed.lastReadOrderID
+                greatestOrderIDAvailable: greatestOrderIDAvailable
             )
             print("    Downloaded \(newFormattedManagedFeedEntries.count) new feed entries.")
+
+            // Adding formatted entries to existing feed
             existingManagedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
         } else {
             print("    Downloaded totally new feed.")
-            let newManagedFeed = ManagedFeed(context: feedPersistenceManager.fetchedResultsController.managedObjectContext)
+            
+            // Creating new feed
+            let newManagedFeed = ManagedFeed(
+                context: feedPersistenceManager.fetchedResultsController.managedObjectContext
+            )
+
+            // Filling feed with downloaded data
             guard newManagedFeed.fill(
                 with: downloadedFeed,
                 url: url
@@ -221,21 +239,60 @@ class FeedUpdateManager {
         return true
     }
 
+    @MainActor
     private func formattedDownloadEntries(
         context: NSManagedObjectContext,
         items: [RSSFeedItem],
-        lastReadOrderID: Int64
+        greatestOrderIDAvailable: Int64
     ) -> [ManagedFeedEntry] {
-        var currentOrderID = lastReadOrderID + 1
+        var currentOrderID = greatestOrderIDAvailable + 1
         return items
-            .sorted(by: pubDateAscendingFeedItemComparatorClosure)
+            .sorted(by: Self.newFeedComparatorClosure)
             .compactMap { item in
                 let managedFeedEntry = ManagedFeedEntry(context: context)
                 guard managedFeedEntry.fill(with: item, orderID: currentOrderID) else {
                     return nil
                 }
+                print("      Order ID set: \(currentOrderID)")
                 currentOrderID += 1
                 return managedFeedEntry
             }
+    }
+
+    @MainActor
+    private func fetchGreatestOrderID(for url: URL) async -> Int64? {
+        // Creating expression that calculates max for keyPath
+        let maxFuncExpression = NSExpression(
+            forFunction: "max:",
+            arguments: [NSExpression(forKeyPath: #keyPath(ManagedFeedEntry.orderID))]
+        )
+
+        // Creating a description for returned object
+        let key = "orderID"
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = key
+        expressionDescription.expression = maxFuncExpression
+        expressionDescription.resultType = .integer64
+
+        // Creating predicate
+        let predicate = NSPredicate(
+            format: "\(#keyPath(ManagedFeedEntry.feed.url)) == %@",
+            argumentArray: [url]
+        )
+        print("      Feed URL: \(url)")
+
+        // Creating fetch request
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ManagedFeedEntry.fetchRequest()
+        fetchRequest.predicate = predicate
+        fetchRequest.propertiesToFetch = [expressionDescription]
+        fetchRequest.resultType = .dictionaryResultType
+
+        // Running fetch and returning result
+        do {
+            let result = try feedPersistenceManager.fetchedResultsController.managedObjectContext.fetch(fetchRequest)
+            return (result as? [[String: Int64]])?.first?[key]
+        } catch {
+            return nil
+        }
     }
 }

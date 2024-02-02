@@ -22,7 +22,7 @@ public class ManagedFeed: NSManagedObject {
         self.url = url
         imageURL = getImageURL(from: rssFeed.image)
 
-        guard let items = rssFeed.items else {
+        guard let items = rssFeed.items?.sorted(by: FeedUpdateManager.newFeedComparatorClosure) else {
             return false
         }
         lastReadOrderID = 0
