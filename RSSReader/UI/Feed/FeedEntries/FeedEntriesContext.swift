@@ -12,5 +12,5 @@ import FeedKit
 struct FeedEntriesContext: PageContext {
     let feedName: String
     let feedPersistenceManager: FeedPersistenceManager
-    let unseenEntriesAmount: Int64
+    let lastReadOrderID: Int64
 }

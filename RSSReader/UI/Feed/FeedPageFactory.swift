@@ -70,7 +70,10 @@ struct FeedPageFactory: PageFactoryProtocol {
 
     private func newFeedEntriesViewController(context: FeedEntriesContext) -> FeedEntriesViewController {
         let viewController = FeedEntriesViewController()
-        viewController.delegate = FMTableViewDelegate()
+
+        let delegate = FeedEntriesTableViewDelegate()
+        viewController.delegate = delegate
+        delegate.feedEntriesScrollDelegate = viewController
 
         let dataSource = FMTableViewDataSource(
             tableView: viewController.tableView

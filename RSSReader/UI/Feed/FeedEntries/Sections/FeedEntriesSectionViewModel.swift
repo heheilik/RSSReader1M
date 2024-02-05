@@ -31,6 +31,9 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private let persistenceManager: FeedPersistenceManager
 
+    private var currentLastReadOrderID: Int64
+    private var unseenEntriesAmount: Int64
+
     private var downloadedImage: UIImage? {
         didSet {
             for cellViewModel in self.cellViewModels {
@@ -58,12 +61,36 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ) {
         self.feedImageService = feedImageService
         persistenceManager = context.feedPersistenceManager
+        currentLastReadOrderID = context.lastReadOrderID
+
+        guard let entriesAmount = persistenceManager.fetchedResultsController.fetchedObjects?.count else {
+            fatalError("No entries fetched.")
+            // TODO: Improve safety
+        }
+        unseenEntriesAmount = Int64(entriesAmount) -  context.lastReadOrderID
+
         super.init()
         configureCellViewModels(context: context)
-        configureHeader(context: context)
+        configureHeader()
 
         let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
         self.downloadImageIfPossible(imageURL: imageURL)
+    }
+
+    // MARK: Internal methods
+
+    func updateVisibleCellsViewModelsList(with viewModels: [FeedEntriesCellViewModel]) {
+        let maxCellOrderID = viewModels.reduce(currentLastReadOrderID) { maxOrderID, viewModel in
+            max(maxOrderID, viewModel.orderID)
+        }
+
+        let difference = maxCellOrderID - currentLastReadOrderID
+        if difference > 0 {
+            unseenEntriesAmount -= difference
+            updateHeader(unseenEntriesAmount: unseenEntriesAmount)
+        }
+
+        currentLastReadOrderID = maxCellOrderID
     }
 
     // MARK: Private methods
@@ -86,6 +113,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
                 title: entry.title,
                 description: entry.entryDescription,
                 date: dateString,
+                orderID: entry.orderID,
                 image: image,
                 delegate: self,
                 isAnimatedAtStart: false
@@ -93,8 +121,16 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         })
     }
 
-    private func configureHeader(context: FeedEntriesContext) {
-        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "\(context.unseenEntriesAmount) new entries.")
+    private func configureHeader() {
+        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "\(unseenEntriesAmount) new entries.")
+    }
+
+    private func updateHeader(unseenEntriesAmount: Int64) {
+        guard let headerViewModel = headerViewModel as? UnseenEntriesAmountHeaderViewModel else {
+            return
+        }
+        headerViewModel.text = "\(unseenEntriesAmount) new entries."
+        headerViewModel.view?.fill(viewModel: headerViewModel)
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {

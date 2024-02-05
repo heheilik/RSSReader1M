@@ -32,6 +32,8 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     let description: String?
     let date: String?
 
+    let orderID: Int64
+
     var descriptionShownFull = false
     
     @Published var isRead = false
@@ -71,6 +73,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         title: String?,
         description: String?,
         date: String?,
+        orderID: Int64,
         image: UIImage,
         delegate: FMCellViewModelDelegate,
         isAnimatedAtStart: Bool
@@ -78,6 +81,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         self.title = title
         self.description = description
         self.date = date
+        self.orderID = orderID
         self.image = image
         super.init(
             cellIdentifier: FeedEntriesCell.cellIdentifier,

@@ -83,7 +83,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
                     context: FeedEntriesContext(
                         feedName: feedSource.name,
                         feedPersistenceManager: feedUpdateManager.feedPersistenceManager,
-                        unseenEntriesAmount: greatestOrderID - lastReadOrderID
+                        lastReadOrderID: lastReadOrderID
                     )
                 )
             }
