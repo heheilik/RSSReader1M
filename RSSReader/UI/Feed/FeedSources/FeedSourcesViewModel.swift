@@ -71,12 +71,19 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
             _ = await MainActor.run {
                 self.delegate?.updateCompleted(withError: nil)
+                guard
+                    let greatestOrderID = feedUpdateManager.greatestOrderID,
+                    let lastReadOrderID = feedUpdateManager.lastReadOrderID
+                else {
+                    return
+                }
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.feedEntries.rawValue,
                     animated: true,
                     context: FeedEntriesContext(
                         feedName: feedSource.name,
-                        feedPersistenceManager: feedUpdateManager.feedPersistenceManager
+                        feedPersistenceManager: feedUpdateManager.feedPersistenceManager,
+                        unseenEntriesAmount: greatestOrderID - lastReadOrderID
                     )
                 )
             }

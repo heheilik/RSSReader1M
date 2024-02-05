@@ -60,7 +60,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         persistenceManager = context.feedPersistenceManager
         super.init()
         configureCellViewModels(context: context)
-        configureHeader()
+        configureHeader(context: context)
 
         let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
         self.downloadImageIfPossible(imageURL: imageURL)
@@ -93,8 +93,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         })
     }
 
-    private func configureHeader() {
-        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "0 new entries.")
+    private func configureHeader(context: FeedEntriesContext) {
+        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "\(context.unseenEntriesAmount) new entries.")
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {

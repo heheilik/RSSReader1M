@@ -40,12 +40,14 @@ class FeedUpdateManager {
 
     var error: UpdateError?
 
+    private(set) var greatestOrderID: Int64?
+    private(set) var lastReadOrderID: Int64?
+
     // MARK: Private properties
 
     private let feedService: FeedService
 
     private var downloadedFeed: RSSFeed?
-
 
     // MARK: Initialization
 
@@ -205,6 +207,9 @@ class FeedUpdateManager {
 
             // Adding formatted entries to existing feed
             existingManagedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
+
+            self.greatestOrderID = greatestOrderIDAvailable + Int64(newFormattedManagedFeedEntries.count)
+            self.lastReadOrderID = existingManagedFeed.lastReadOrderID
         } else {
             print("    Downloaded totally new feed.")
             
@@ -221,6 +226,9 @@ class FeedUpdateManager {
                 self.error = .parsingToManagedError
                 return false
             }
+
+            self.greatestOrderID = Int64(newManagedFeed.entries?.count ?? 0)
+            self.lastReadOrderID = newManagedFeed.lastReadOrderID
         }
 
         print("    Finally saving...")
