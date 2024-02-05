@@ -38,11 +38,7 @@ class FeedUpdateManager {
 
     let url: URL
 
-    var error: UpdateError? {
-        didSet {
-            print(error)
-        }
-    }
+    var error: UpdateError?
 
     // MARK: Private properties
 
@@ -125,9 +121,7 @@ class FeedUpdateManager {
 
         // Fetch data and check fetched data
         print("  Fetching data...")
-        let fetchSucceded = await fetchFeed()
-        print("  Checking fetched data...")
-        guard fetchSucceded else {
+        guard await fetchFeed() else {
             self.error = .fetchError
             // TODO: Cancel downloading
             return false
