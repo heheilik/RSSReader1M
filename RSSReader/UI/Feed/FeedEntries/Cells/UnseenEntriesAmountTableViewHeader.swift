@@ -14,8 +14,7 @@ class UnseenEntriesAmountTableViewHeader: FMHeaderFooterView {
     // MARK: Constants
 
     private enum Dimensions {
-        static let horizontalInset = 8
-        static let verticalInset = 16
+        static let inset = 16
         static let fontSize: CGFloat = 14
     }
 
@@ -33,7 +32,7 @@ class UnseenEntriesAmountTableViewHeader: FMHeaderFooterView {
 
     override func configureViews() {
         titleLabel.font = UIFont.systemFont(ofSize: Dimensions.fontSize)
-        contentView.backgroundColor = .systemGray5
+        contentView.backgroundColor = .systemGray6
     }
 
     override func addSubviews() {
@@ -42,8 +41,7 @@ class UnseenEntriesAmountTableViewHeader: FMHeaderFooterView {
 
     override func setupConstraints() {
         titleLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(Dimensions.horizontalInset)
-            $0.top.bottom.equalToSuperview().inset(Dimensions.verticalInset)
+            $0.edges.equalToSuperview().inset(Dimensions.inset)
         }
     }
 
