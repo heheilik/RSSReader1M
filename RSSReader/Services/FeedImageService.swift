@@ -35,5 +35,4 @@ class FeedImageService {
         }
         return image
     }
-
 }

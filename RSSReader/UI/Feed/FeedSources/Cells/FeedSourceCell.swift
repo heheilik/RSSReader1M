@@ -11,26 +11,25 @@ import UIKit
 
 class FeedSourceCell: FMTableViewCell {
 
+    // MARK: UI
+
+    private let nameLabel = UILabel()
+
+    // MARK: Private properties
+
     private weak var currentViewModel: FeedSourceCellViewModel? {
         return viewModel as? FeedSourceCellViewModel
     }
 
-    // MARK: UI
-
-    private let nameLabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17)
-        return label
-    }()
-
-    // MARK: Internal methods
-
-    override func addSubviews() {
-        contentView.addSubview(nameLabel)
-    }
+    // MARK: Lifecycle
 
     override func configureViews() {
         selectionStyle = .default
+        configureLabel()
+    }
+
+    override func addSubviews() {
+        contentView.addSubview(nameLabel)
     }
 
     override func setupConstraints() {
@@ -46,4 +45,9 @@ class FeedSourceCell: FMTableViewCell {
         nameLabel.text = currentViewModel?.feedSource.name
     }
 
+    // MARK: Private methods
+
+    private func configureLabel() {
+        nameLabel.font = UIFont.systemFont(ofSize: 17)
+    }
 }

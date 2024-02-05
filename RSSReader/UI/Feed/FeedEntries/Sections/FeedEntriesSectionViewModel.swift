@@ -11,11 +11,11 @@ import UIKit
 
 class FeedEntriesSectionViewModel: FMSectionViewModel {
 
+    // MARK: Internal properties
+
     override var registeredCellTypes: [FMTableViewCellProtocol.Type] {[
         FeedEntriesCell.self
     ]}
-
-    // MARK: Internal properties
 
     var image: UIImage {
         downloadedImage ?? Self.errorImage
@@ -24,6 +24,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     // MARK: Private properties
 
     private let feedImageService: FeedImageService
+
+    private let persistenceManager: FeedPersistenceManager
 
     private var downloadedImage: UIImage? {
         didSet {
@@ -51,68 +53,53 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         feedImageService: FeedImageService = FeedImageService()
     ) {
         self.feedImageService = feedImageService
+        persistenceManager = context.feedPersistenceManager
         super.init()
         configureCellViewModels(context: context)
-        self.downloadImageIfPossible(
-            feedURLString: context.rssFeed.link,
-            imageURLString: context.rssFeed.image?.url
-        )
+
+        let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
+        self.downloadImageIfPossible(imageURL: imageURL)
     }
 
     // MARK: Private methods
 
     private func configureCellViewModels(context: FeedEntriesContext) {
-        guard let feedItems = context.rssFeed.items else {
+        guard let managedFeedEntries = persistenceManager.fetchedResultsController.fetchedObjects else {
             return
         }
-        reload(cellModels: feedItems.map({ item in
-            let date: String?
-            if let typedDate = item.pubDate {
-                date = dateFormatter.string(from: typedDate)
-            } else {
-                date = nil
+        reload(cellModels: managedFeedEntries.compactMap { [weak self] entry in
+            guard let self else {
+                return nil
             }
+
+            var dateString: String? = nil
+            if let date = entry.date {
+                dateString = dateFormatter.string(from: date)
+            }
+
             return FeedEntriesCellViewModel(
-                title: item.title,
-                description: item.description,
-                date: date,
+                title: entry.title,
+                description: entry.entryDescription,
+                date: dateString,
                 image: image,
                 delegate: self,
-                isAnimatedAtStart: true
+                isAnimatedAtStart: false
             )
-        }))
+        })
     }
 
-    private func downloadImageIfPossible(feedURLString: String?, imageURLString: String?) {
-        guard let imageURLString else {
+    private func downloadImageIfPossible(imageURL: URL?) {
+        guard let imageURL else {
             downloadedImage = nil
             return
         }
-
-        let url: URL
-        if imageURLString.starts(with: "http") {
-            guard let tempURL = URL(string: imageURLString) else {
-                downloadedImage = nil
-                return
-            }
-            url = tempURL
-        } else {
-            guard
-                let feedURLString,
-                let tempURL = URL(string: feedURLString + imageURLString)
-            else {
-                downloadedImage = nil
-                return
-            }
-            url = tempURL
-        }
-
         Task { [weak self] in
             guard let self = self else {
                 return
             }
 
-            let image = await self.feedImageService.prepareImage(at: url)
+            let image = await self.feedImageService.prepareImage(at: imageURL)
+
             guard let image else {
                 self.downloadedImage = nil
                 return
@@ -120,7 +107,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             self.downloadedImage = image
         }
     }
-
 }
 
 // MARK: - FMAnimatable
