@@ -17,6 +17,10 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         FeedEntriesCell.self
     ]}
 
+    override var registeredHeaderFooterTypes: [FMHeaderFooterView.Type] {[
+        UnseenEntriesAmountTableViewHeader.self
+    ]}
+
     var image: UIImage {
         downloadedImage ?? Self.errorImage
     }
@@ -56,6 +60,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         persistenceManager = context.feedPersistenceManager
         super.init()
         configureCellViewModels(context: context)
+        configureHeader()
 
         let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
         self.downloadImageIfPossible(imageURL: imageURL)
@@ -86,6 +91,10 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
                 isAnimatedAtStart: false
             )
         })
+    }
+
+    private func configureHeader() {
+        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "0 new entries.")
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {
