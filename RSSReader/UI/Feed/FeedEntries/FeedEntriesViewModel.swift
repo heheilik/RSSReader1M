@@ -29,6 +29,10 @@ class FeedEntriesViewModel: FMTablePageViewModel {
     func updateVisibleCellsViewModelsList(with viewModels: [FeedEntriesCellViewModel]) {
         sectionViewModel.updateVisibleCellsViewModelsList(with: viewModels)
     }
+    
+    func heightOfPresentedContent() -> CGFloat {
+        return sectionViewModel.heightOfPresentedContent()
+    }
 
     // MARK: Private methods
 

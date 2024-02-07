@@ -93,6 +93,47 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         currentLastReadOrderID = maxCellOrderID
     }
 
+    func heightOfPresentedContent() -> CGFloat {
+        guard
+            let lastReadOrderID =
+                persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.lastReadOrderID,
+            let viewModels = cellViewModels as? [FeedEntriesCellViewModel]
+        else {
+            return 0
+        }
+
+        let filtered = viewModels.filter {
+            $0.orderID < 10
+        }
+        print("Filtered count: \(filtered.count)")
+
+        let mapped = filtered.compactMap {
+            $0.fillableCell as? UIView
+        }
+        print("Mapped count: \(mapped.count)")
+
+        let totalCellHeight = mapped.reduce(CGFloat(0)) { height, view in
+            height + view.bounds.height
+        }
+
+//        let totalCellHeight = viewModels
+//            .filter {
+//                $0.orderID < 3
+//            }
+//            .compactMap {
+//                $0.fillableCell as? UIView
+//            }
+//            .reduce(CGFloat(0)) { height, view in
+//                height + view.bounds.height
+//            }
+
+        guard let headerHeight = headerViewModel?.view?.bounds.height else {
+            return 0
+        }
+
+        return totalCellHeight + headerHeight
+    }
+
     // MARK: Private methods
 
     private func configureCellViewModels(context: FeedEntriesContext) {
