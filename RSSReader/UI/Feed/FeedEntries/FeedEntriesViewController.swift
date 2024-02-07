@@ -24,6 +24,7 @@ class FeedEntriesViewController: FMTablePageViewController {
     // MARK: Private properties
 
     private let initialLastSeenOrderID: Int64
+    private let persistenceManager: FeedPersistenceManager
 
     private var currentViewModel: FeedEntriesViewModel? {
         viewModel as? FeedEntriesViewModel
@@ -32,7 +33,8 @@ class FeedEntriesViewController: FMTablePageViewController {
     // MARK: Initialization
 
     init(context: FeedEntriesContext) {
-        initialLastSeenOrderID = context.lastReadOrderID
+        initialLastSeenOrderID = context.lastReadOrderID > 0 ? context.lastReadOrderID : 1
+        persistenceManager = context.feedPersistenceManager
         super.init()
     }
     
@@ -62,8 +64,18 @@ class FeedEntriesViewController: FMTablePageViewController {
     /// load views that it doesn't need (e. g. views at first indices) and will load views that it needs (last ones,
     /// if all content of feed wasn't seen by the user before).
     ///
-    private func scrollTableToLastSeenEntry() {
-        
+    private func scrollTableToLastSeenEntry(animated: Bool = false) {
+        guard let entriesCount = persistenceManager.fetchedResultsController.fetchedObjects?.count else {
+            return
+        }
+        tableView.scrollToRow(
+            at: IndexPath(
+                row: entriesCount - Int(initialLastSeenOrderID),
+                section: 0
+            ),
+            at: .top,
+            animated: animated
+        )
     }
     
     /// Sets initial content inset for table view.
@@ -77,7 +89,7 @@ class FeedEntriesViewController: FMTablePageViewController {
     /// must be scrolled more presicely.
     ///
     private func setTableContentInset() {
-
+        
     }
     
     private func animateEntriesWithSkeleton() {
@@ -91,6 +103,7 @@ class FeedEntriesViewController: FMTablePageViewController {
         })
     }
 
+    @available(*, deprecated, message: "Remove.")
     private func setStartingTableViewContentInset() {
         print(tableView.frame)
         guard let contentHeight = currentViewModel?.heightOfPresentedContent() else {
