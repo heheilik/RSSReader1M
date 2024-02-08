@@ -31,9 +31,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private let persistenceManager: FeedPersistenceManager
 
-    private var currentLastReadOrderID: Int64
-    private var unseenEntriesAmount: Int64
-
     private var downloadedImage: UIImage? {
         didSet {
             for cellViewModel in self.cellViewModels {
@@ -61,13 +58,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ) {
         self.feedImageService = feedImageService
         persistenceManager = context.feedPersistenceManager
-        currentLastReadOrderID = context.lastReadOrderID
-
-        guard let entriesAmount = persistenceManager.fetchedResultsController.fetchedObjects?.count else {
-            fatalError("No entries fetched.")
-            // TODO: Improve safety
-        }
-        unseenEntriesAmount = Int64(entriesAmount) -  context.lastReadOrderID
 
         super.init()
         configureCellViewModels(context: context)
@@ -75,63 +65,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
         let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
         self.downloadImageIfPossible(imageURL: imageURL)
-    }
-
-    // MARK: Internal methods
-
-    func updateVisibleCellsViewModelsList(with viewModels: [FeedEntriesCellViewModel]) {
-        let maxCellOrderID = viewModels.reduce(currentLastReadOrderID) { maxOrderID, viewModel in
-            max(maxOrderID, viewModel.orderID)
-        }
-
-        let difference = maxCellOrderID - currentLastReadOrderID
-        if difference > 0 {
-            unseenEntriesAmount -= difference
-            updateHeader(unseenEntriesAmount: unseenEntriesAmount)
-        }
-
-        currentLastReadOrderID = maxCellOrderID
-    }
-
-    func heightOfPresentedContent() -> CGFloat {
-        guard
-            let lastReadOrderID =
-                persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.lastReadOrderID,
-            let viewModels = cellViewModels as? [FeedEntriesCellViewModel]
-        else {
-            return 0
-        }
-
-        let filtered = viewModels.filter {
-            $0.orderID < 10
-        }
-        print("Filtered count: \(filtered.count)")
-
-        let mapped = filtered.compactMap {
-            $0.fillableCell as? UIView
-        }
-        print("Mapped count: \(mapped.count)")
-
-        let totalCellHeight = mapped.reduce(CGFloat(0)) { height, view in
-            height + view.bounds.height
-        }
-
-//        let totalCellHeight = viewModels
-//            .filter {
-//                $0.orderID < 3
-//            }
-//            .compactMap {
-//                $0.fillableCell as? UIView
-//            }
-//            .reduce(CGFloat(0)) { height, view in
-//                height + view.bounds.height
-//            }
-
-        guard let headerHeight = headerViewModel?.view?.bounds.height else {
-            return 0
-        }
-
-        return totalCellHeight + headerHeight
     }
 
     // MARK: Private methods
@@ -145,6 +78,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
                 return nil
             }
 
+            // TODO: Move to function
             var dateString: String? = nil
             if let date = entry.date {
                 dateString = dateFormatter.string(from: date)
@@ -163,7 +97,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     }
 
     private func configureHeader() {
-        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "\(unseenEntriesAmount) new entries.")
+        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "test")
     }
 
     private func updateHeader(unseenEntriesAmount: Int64) {
