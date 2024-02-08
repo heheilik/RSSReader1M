@@ -10,8 +10,14 @@ import Foundation
 import UIKit
 
 class FeedEntriesViewController: FMTablePageViewController {
-    
-    // MARK: Internal methods
+
+    // MARK: Internal properties
+
+    override var tableViewStyle: UITableView.Style {
+        .plain
+    }
+
+    // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
