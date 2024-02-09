@@ -266,7 +266,6 @@ class FeedUpdateManager {
         let expressionDescription = NSExpressionDescription()
         expressionDescription.name = key
         expressionDescription.expression = maxFuncExpression
-        expressionDescription.resultType = .integer64
 
         // Creating predicate
         let predicate = NSPredicate(
