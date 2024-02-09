@@ -266,6 +266,11 @@ class FeedUpdateManager {
         let expressionDescription = NSExpressionDescription()
         expressionDescription.name = key
         expressionDescription.expression = maxFuncExpression
+        if #available(iOS 15, *) {
+            expressionDescription.resultType = .integer64
+        } else {
+            expressionDescription.expressionResultType = .integer64AttributeType
+        }
 
         // Creating predicate
         let predicate = NSPredicate(
