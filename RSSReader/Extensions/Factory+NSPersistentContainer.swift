@@ -22,6 +22,18 @@ extension Container {
                     fatalError("Unable to load persistent stores: \(error)")
                 }
             }
+
+            // testing new model
+            do {
+                let model = try NSMappingModel.inferredMappingModel(
+                    forSourceModel: persistentContainer.managedObjectModel,
+                    destinationModel: persistentContainer.managedObjectModel
+                )
+                print(model)
+            } catch {
+                print(error)
+            }
+
             return persistentContainer
         }.singleton
     }
