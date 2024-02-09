@@ -245,7 +245,7 @@ extension FeedEntriesCell: FMAnimatable {
     func startAnimation() {
         layoutIfNeeded()
         showAnimatedGradientSkeleton(
-            usingGradient: SkeletonGradient(colors: [.systemCyan, .systemGreen]),
+            usingGradient: SkeletonGradient(colors: [.systemBlue, .systemGreen]),
             animation: SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight),
             transition: .none
         )
