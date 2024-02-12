@@ -70,7 +70,7 @@ class FeedUpdateManager {
     }
 
     // MARK: Internal methods
-    
+
     func update() async {
         // Acquiring data
         print("Acquiring data...")
@@ -139,7 +139,7 @@ class FeedUpdateManager {
             return true
         }
     }
-    
+
     /// Downloads feed from web and checks if it's type is RSS.
     private func downloadRSSFeed() async -> Result<RSSFeed, UpdateError> {
         let feed = await feedService.prepareFeed(at: url)
@@ -186,20 +186,10 @@ class FeedUpdateManager {
         }
 
         if let existingManagedFeed = feedPersistenceManager.fetchedResultsController.fetchedObjects?.first?.feed {
-            // Acquiring data needed to format entries
-            guard
-                let feedURL = existingManagedFeed.url,
-                let greatestOrderIDAvailable = await fetchGreatestOrderID(for: feedURL)
-            else {
-                return false
-            }
-            print("    Greatest Order ID: \(greatestOrderIDAvailable)")
-
             // Formatting downloaded entries
             let newFormattedManagedFeedEntries = formattedDownloadEntries(
                 context: feedPersistenceManager.fetchedResultsController.managedObjectContext,
-                items: downloadedFeedEntries,
-                greatestOrderIDAvailable: greatestOrderIDAvailable
+                items: downloadedFeedEntries
             )
             print("    Downloaded \(newFormattedManagedFeedEntries.count) new feed entries.")
 
@@ -207,7 +197,7 @@ class FeedUpdateManager {
             existingManagedFeed.addToEntries(NSSet(array: newFormattedManagedFeedEntries))
         } else {
             print("    Downloaded totally new feed.")
-            
+
             // Creating new feed
             let newManagedFeed = ManagedFeed(
                 context: feedPersistenceManager.fetchedResultsController.managedObjectContext
@@ -236,61 +226,58 @@ class FeedUpdateManager {
     @MainActor
     private func formattedDownloadEntries(
         context: NSManagedObjectContext,
-        items: [RSSFeedItem],
-        greatestOrderIDAvailable: Int64
+        items: [RSSFeedItem]
     ) -> [ManagedFeedEntry] {
-        var currentOrderID = greatestOrderIDAvailable + 1
         return items
             .sorted(by: Self.newFeedComparatorClosure)
             .compactMap { item in
                 let managedFeedEntry = ManagedFeedEntry(context: context)
-                guard managedFeedEntry.fill(with: item, orderID: currentOrderID) else {
+                guard managedFeedEntry.fill(with: item) else {
                     return nil
                 }
-                print("      Order ID set: \(currentOrderID)")
-                currentOrderID += 1
                 return managedFeedEntry
             }
     }
 
-    @MainActor
-    private func fetchGreatestOrderID(for url: URL) async -> Int64? {
-        // Creating expression that calculates max for keyPath
-        let maxFuncExpression = NSExpression(
-            forFunction: "max:",
-            arguments: [NSExpression(forKeyPath: #keyPath(ManagedFeedEntry.orderID))]
-        )
-
-        // Creating a description for returned object
-        let key = "orderID"
-        let expressionDescription = NSExpressionDescription()
-        expressionDescription.name = key
-        expressionDescription.expression = maxFuncExpression
-        if #available(iOS 15, *) {
-            expressionDescription.resultType = .integer64
-        } else {
-            expressionDescription.expressionResultType = .integer64AttributeType
-        }
-
-        // Creating predicate
-        let predicate = NSPredicate(
-            format: "\(#keyPath(ManagedFeedEntry.feed.url)) == %@",
-            argumentArray: [url]
-        )
-        print("      Feed URL: \(url)")
-
-        // Creating fetch request
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ManagedFeedEntry.fetchRequest()
-        fetchRequest.predicate = predicate
-        fetchRequest.propertiesToFetch = [expressionDescription]
-        fetchRequest.resultType = .dictionaryResultType
-
-        // Running fetch and returning result
-        do {
-            let result = try feedPersistenceManager.fetchedResultsController.managedObjectContext.fetch(fetchRequest)
-            return (result as? [[String: Int64]])?.first?[key]
-        } catch {
-            return nil
-        }
-    }
+    //    @MainActor
+    //    private func fetchGreatestOrderID(for url: URL) async -> Int64? {
+    //        // Creating expression that calculates max for keyPath
+    //        let maxFuncExpression = NSExpression(
+    //            forFunction: "max:",
+    //            arguments: [NSExpression(forKeyPath: #keyPath(ManagedFeedEntry.orderID))]
+    //        )
+    //
+    //        // Creating a description for returned object
+    //        let key = "orderID"
+    //        let expressionDescription = NSExpressionDescription()
+    //        expressionDescription.name = key
+    //        expressionDescription.expression = maxFuncExpression
+    //        if #available(iOS 15, *) {
+    //            expressionDescription.resultType = .integer64
+    //        } else {
+    //            expressionDescription.expressionResultType = .integer64AttributeType
+    //        }
+    //
+    //        // Creating predicate
+    //        let predicate = NSPredicate(
+    //            format: "\(#keyPath(ManagedFeedEntry.feed.url)) == %@",
+    //            argumentArray: [url]
+    //        )
+    //        print("      Feed URL: \(url)")
+    //
+    //        // Creating fetch request
+    //        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ManagedFeedEntry.fetchRequest()
+    //        fetchRequest.predicate = predicate
+    //        fetchRequest.propertiesToFetch = [expressionDescription]
+    //        fetchRequest.resultType = .dictionaryResultType
+    //
+    //        // Running fetch and returning result
+    //        do {
+    //            let result = try feedPersistenceManager.fetchedResultsController.managedObjectContext.fetch(fetchRequest)
+    //            return (result as? [[String: Int64]])?.first?[key]
+    //        } catch {
+    //            return nil
+    //        }
+    //    }
+    //}
 }
