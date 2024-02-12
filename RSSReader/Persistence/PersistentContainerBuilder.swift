@@ -35,9 +35,6 @@ class PersistentContainerBuilder {
         let storeDescription = persistentStoreDescription(for: databasePath)
         addStore(to: persistentContainer, using: storeDescription)
 
-        // temporary
-        testMappingModel(for: persistentContainer)
-
         return persistentContainer
     }
 
@@ -76,18 +73,6 @@ class PersistentContainerBuilder {
             if let error {
                 fatalError("Unable to load persistent stores: \(error)")
             }
-        }
-    }
-
-    private func testMappingModel(for persistentContainer: NSPersistentContainer) {
-        do {
-            let model = try NSMappingModel.inferredMappingModel(
-                forSourceModel: persistentContainer.managedObjectModel,
-                destinationModel: persistentContainer.managedObjectModel
-            )
-            print(model)
-        } catch {
-            print(error)
         }
     }
 }

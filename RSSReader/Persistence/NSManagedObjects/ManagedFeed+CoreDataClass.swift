@@ -53,5 +53,4 @@ public class ManagedFeed: NSManagedObject {
         print(imageURLString)
         return URL(string: feedURLString + imageURLString)
     }
-
 }

@@ -238,46 +238,4 @@ class FeedUpdateManager {
                 return managedFeedEntry
             }
     }
-
-    //    @MainActor
-    //    private func fetchGreatestOrderID(for url: URL) async -> Int64? {
-    //        // Creating expression that calculates max for keyPath
-    //        let maxFuncExpression = NSExpression(
-    //            forFunction: "max:",
-    //            arguments: [NSExpression(forKeyPath: #keyPath(ManagedFeedEntry.orderID))]
-    //        )
-    //
-    //        // Creating a description for returned object
-    //        let key = "orderID"
-    //        let expressionDescription = NSExpressionDescription()
-    //        expressionDescription.name = key
-    //        expressionDescription.expression = maxFuncExpression
-    //        if #available(iOS 15, *) {
-    //            expressionDescription.resultType = .integer64
-    //        } else {
-    //            expressionDescription.expressionResultType = .integer64AttributeType
-    //        }
-    //
-    //        // Creating predicate
-    //        let predicate = NSPredicate(
-    //            format: "\(#keyPath(ManagedFeedEntry.feed.url)) == %@",
-    //            argumentArray: [url]
-    //        )
-    //        print("      Feed URL: \(url)")
-    //
-    //        // Creating fetch request
-    //        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ManagedFeedEntry.fetchRequest()
-    //        fetchRequest.predicate = predicate
-    //        fetchRequest.propertiesToFetch = [expressionDescription]
-    //        fetchRequest.resultType = .dictionaryResultType
-    //
-    //        // Running fetch and returning result
-    //        do {
-    //            let result = try feedPersistenceManager.fetchedResultsController.managedObjectContext.fetch(fetchRequest)
-    //            return (result as? [[String: Int64]])?.first?[key]
-    //        } catch {
-    //            return nil
-    //        }
-    //    }
-    //}
 }
