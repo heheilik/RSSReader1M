@@ -72,7 +72,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     // MARK: Internal methods
 
     @discardableResult
-    func saveToCoreData() -> Bool {
+    func saveFeedToCoreData() -> Bool {
         let context = persistenceManager.fetchedResultsController.managedObjectContext
         if context.hasChanges {
             do {

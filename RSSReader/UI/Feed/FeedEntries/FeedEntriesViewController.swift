@@ -39,6 +39,6 @@ class FeedEntriesViewController: FMTablePageViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        currentViewModel?.saveToCoreData()
+        currentViewModel?.saveFeedToCoreData()
     }
 }

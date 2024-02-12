@@ -21,13 +21,13 @@ class FeedEntriesViewModel: FMTablePageViewModel {
 
     // MARK: Internal methods
 
-    func saveToCoreData() {
+    func saveFeedToCoreData() {
         dataSource.sectionViewModels
             .compactMap {
                 $0 as? FeedEntriesSectionViewModel
             }
             .forEach {
-                $0.saveToCoreData()
+                $0.saveFeedToCoreData()
             }
     }
 
