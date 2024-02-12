@@ -42,12 +42,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         }
     }
 
-    private let dateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter
-    }()
-
     private static let errorImage = UIImage(systemName: "photo")!
 
     // MARK: Initialization
@@ -76,16 +70,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             guard let self else {
                 return nil
             }
-
-            var dateString: String? = nil
-            if let date = entry.date {
-                dateString = dateFormatter.string(from: date)
-            }
-
             return FeedEntriesCellViewModel(
-                title: entry.title,
-                description: entry.entryDescription,
-                date: dateString,
+                managedObject: entry,
                 image: image,
                 delegate: self,
                 isAnimatedAtStart: false
