@@ -7,10 +7,16 @@
 
 import ALNavigation
 import Combine
+import CoreData
+import Factory
 import Foundation
 import FMArchitecture
 import SwipeCellKit
 import UIKit
+
+protocol FeedEntriesCellViewModelDelegate: AnyObject {
+    func readStatusChanged(isRead: Bool)
+}
 
 class FeedEntriesCellViewModel: FMCellViewModel {
 
@@ -65,25 +71,56 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         return [action]
     }
 
+    // MARK: Private properties
+
+    private let managedObject: ManagedFeedEntry
+
+    private var isReadSubscriber: AnyCancellable?
+
+    @Injected(\.entryDateFormatter) private static var dateFormatter
+
+    private weak var currentDelegate: FeedEntriesCellViewModelDelegate? {
+        delegate as? FeedEntriesCellViewModelDelegate
+    }
+
     // MARK: Initialization
 
     init(
-        title: String?,
-        description: String?,
-        date: String?,
+        managedObject: ManagedFeedEntry,
         image: UIImage,
         delegate: FMCellViewModelDelegate,
         isAnimatedAtStart: Bool
     ) {
-        self.title = title
-        self.description = description
-        self.date = date
+        self.managedObject = managedObject
+        self.title = managedObject.title
+        self.description = managedObject.entryDescription
+        self.isRead = managedObject.isRead
+
+        if let date = managedObject.date {
+            self.date = Self.dateFormatter.string(from: date)
+        } else {
+            self.date = nil
+        }
+
         self.image = image
+
         super.init(
             cellIdentifier: FeedEntriesCell.cellIdentifier,
             delegate: delegate
         )
         isAnimation = isAnimatedAtStart
+        bindReadStatus()
+    }
+
+    // MARK: Private methods
+
+    private func bindReadStatus() {
+        isReadSubscriber = $isRead.sink { [weak self] newValue in
+            if self?.managedObject.isRead != newValue {
+                self?.managedObject.isRead = newValue
+                self?.currentDelegate?.readStatusChanged(isRead: newValue)
+            }
+        }
     }
 }
 

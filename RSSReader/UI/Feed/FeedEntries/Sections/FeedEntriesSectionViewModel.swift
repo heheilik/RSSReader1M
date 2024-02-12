@@ -18,7 +18,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ]}
 
     override var registeredHeaderFooterTypes: [FMHeaderFooterView.Type] {[
-        UnseenEntriesAmountTableViewHeader.self
+        UnreadEntriesAmountTableViewHeader.self
     ]}
 
     var image: UIImage {
@@ -42,12 +42,12 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         }
     }
 
-    private let dateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter
-    }()
-
+    private var unreadEntriesCount: Int {
+        didSet {
+            updateHeader(unreadEntriesCount: unreadEntriesCount)
+        }
+    }
+    
     private static let errorImage = UIImage(systemName: "photo")!
 
     // MARK: Initialization
@@ -58,12 +58,31 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ) {
         self.feedImageService = feedImageService
         persistenceManager = context.feedPersistenceManager
+        unreadEntriesCount = context.unreadEntriesCount
+
         super.init()
+
         configureCellViewModels(context: context)
         configureHeader()
 
         let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
         self.downloadImageIfPossible(imageURL: imageURL)
+    }
+
+    // MARK: Internal methods
+
+    @discardableResult
+    func saveFeedToCoreData() -> Bool {
+        let context = persistenceManager.fetchedResultsController.managedObjectContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print(error)
+                return false
+            }
+        }
+        return true
     }
 
     // MARK: Private methods
@@ -76,16 +95,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             guard let self else {
                 return nil
             }
-
-            var dateString: String? = nil
-            if let date = entry.date {
-                dateString = dateFormatter.string(from: date)
-            }
-
             return FeedEntriesCellViewModel(
-                title: entry.title,
-                description: entry.entryDescription,
-                date: dateString,
+                managedObject: entry,
                 image: image,
                 delegate: self,
                 isAnimatedAtStart: false
@@ -94,7 +105,11 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     }
 
     private func configureHeader() {
-        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "0 new entries.")
+        headerViewModel = UnreadEntriesAmountHeaderViewModel(unreadEntriesCount: self.unreadEntriesCount)
+    }
+
+    private func updateHeader(unreadEntriesCount: Int) {
+        (headerViewModel as? UnreadEntriesAmountHeaderViewModel)?.unreadEntriesCount = unreadEntriesCount
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {
@@ -121,3 +136,11 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 // MARK: - FMAnimatable
 
 extension FeedEntriesSectionViewModel: FMAnimatable { }
+
+// MARK: - FeedEntriesCellViewModelDelegate
+
+extension FeedEntriesSectionViewModel: FeedEntriesCellViewModelDelegate {
+    func readStatusChanged(isRead: Bool) {
+        unreadEntriesCount += isRead ? -1 : 1
+    }
+}

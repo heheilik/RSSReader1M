@@ -13,10 +13,6 @@ import UIKit
 
 class FeedEntriesCell: FMSwipeTableViewCell {
 
-    private weak var currentViewModel: FeedEntriesCellViewModel? {
-        return viewModel as? FeedEntriesCellViewModel
-    }
-
     // MARK: UI
 
     private let titleLabel = {
@@ -69,6 +65,10 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     // MARK: Private properties
 
     private var readStatusObserver: AnyCancellable?
+
+    private weak var currentViewModel: FeedEntriesCellViewModel? {
+        return viewModel as? FeedEntriesCellViewModel
+    }
 
     // MARK: Internal methods
 

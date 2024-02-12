@@ -1,5 +1,5 @@
 //
-//  UnseenEntriesAmountTableViewHeader.swift
+//  UnreadEntriesAmountTableViewHeader.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 5.02.24.
@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class UnseenEntriesAmountTableViewHeader: FMHeaderFooterView {
+class UnreadEntriesAmountTableViewHeader: FMHeaderFooterView {
 
     // MARK: Constants
 
@@ -24,8 +24,8 @@ class UnseenEntriesAmountTableViewHeader: FMHeaderFooterView {
 
     // MARK: Private properties
 
-    private weak var currentViewModel: UnseenEntriesAmountHeaderViewModel? {
-        viewModel as? UnseenEntriesAmountHeaderViewModel
+    private weak var currentViewModel: UnreadEntriesAmountHeaderViewModel? {
+        viewModel as? UnreadEntriesAmountHeaderViewModel
     }
 
     // MARK: Lifecycle
