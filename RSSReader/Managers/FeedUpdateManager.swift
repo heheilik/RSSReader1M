@@ -90,6 +90,12 @@ class FeedUpdateManager {
             return
         }
 
+        // Getting unread entries count
+        guard let unreadEntriesCount = await fetchUnreadEntriesCount(for: url) else {
+            return
+        }
+        self.unreadEntriesCount = unreadEntriesCount
+
         // Updating fetchedResultsController
         print("Updating fetchedResultsController...")
         await MainActor.run { [weak self] in
@@ -239,5 +245,54 @@ class FeedUpdateManager {
                 }
                 return managedFeedEntry
             }
+    }
+
+    @MainActor
+    private func fetchUnreadEntriesCount(for url: URL) async -> Int? {
+        // creating expression
+        let countExpression = NSExpression(
+            forFunction: "count:",
+            arguments: [NSExpression(forKeyPath: #keyPath(ManagedFeedEntry.isRead))]
+        )
+
+        // creating expression description
+        let key = "count"
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = key
+        expressionDescription.expression = countExpression
+        if #available(iOS 15, *) {
+            expressionDescription.resultType = .integer64
+        } else {
+            expressionDescription.expressionResultType = .integer64AttributeType
+        }
+
+        // creating fetch predicate
+        let predicate = NSPredicate(
+            format: "%K == %@ AND %K == %@",
+            argumentArray: [
+                #keyPath(ManagedFeedEntry.feed.url),
+                url,
+                #keyPath(ManagedFeedEntry.isRead),
+                false
+            ]
+        )
+
+        // creating fetch request
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ManagedFeedEntry.fetchRequest()
+        fetchRequest.predicate = predicate
+        fetchRequest.propertiesToFetch = [expressionDescription]
+        fetchRequest.resultType = .dictionaryResultType
+
+        // running fetch and acquiring result
+        do {
+            let result = try feedPersistenceManager.fetchedResultsController.managedObjectContext.fetch(fetchRequest)
+            guard let int64Result = (result as? [[String: Int64]])?.first?[key] else {
+                return nil
+            }
+            return Int(int64Result)
+        } catch {
+            print(error)
+            return nil
+        }
     }
 }
