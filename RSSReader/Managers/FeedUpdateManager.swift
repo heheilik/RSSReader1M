@@ -40,7 +40,7 @@ class FeedUpdateManager {
 
     var error: UpdateError?
 
-    var unreadEntriesCount: Int?
+    private(set) var unreadEntriesCount: Int?
 
     // MARK: Private properties
 
