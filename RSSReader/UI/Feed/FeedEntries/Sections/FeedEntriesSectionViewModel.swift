@@ -18,7 +18,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ]}
 
     override var registeredHeaderFooterTypes: [FMHeaderFooterView.Type] {[
-        UnseenEntriesAmountTableViewHeader.self
+        UnreadEntriesAmountTableViewHeader.self
     ]}
 
     var image: UIImage {
@@ -105,15 +105,11 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     }
 
     private func configureHeader() {
-        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "\(self.unreadEntriesCount) new entries.")
+        headerViewModel = UnreadEntriesAmountHeaderViewModel(unreadEntriesCount: self.unreadEntriesCount)
     }
 
     private func updateHeader(unreadEntriesCount: Int) {
-        guard let headerViewModel = headerViewModel as? UnseenEntriesAmountHeaderViewModel else {
-            return
-        }
-        headerViewModel.text = "\(unreadEntriesCount) new entries."
-        headerViewModel.view?.fill(viewModel: headerViewModel)
+        (headerViewModel as? UnreadEntriesAmountHeaderViewModel)?.unreadEntriesCount = unreadEntriesCount
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {
