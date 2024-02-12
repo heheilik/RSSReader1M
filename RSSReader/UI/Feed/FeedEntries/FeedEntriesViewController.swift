@@ -17,6 +17,12 @@ class FeedEntriesViewController: FMTablePageViewController {
         .plain
     }
 
+    // MARK: Private properties
+
+    private var currentViewModel: FeedEntriesViewModel? {
+        viewModel as? FeedEntriesViewModel
+    }
+
     // MARK: Lifecycle
 
     override func viewDidLoad() {
@@ -29,5 +35,10 @@ class FeedEntriesViewController: FMTablePageViewController {
                 ($0 as? FMAnimatable)?.stopAnimation()
             }
         })
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        currentViewModel?.saveToCoreData()
     }
 }

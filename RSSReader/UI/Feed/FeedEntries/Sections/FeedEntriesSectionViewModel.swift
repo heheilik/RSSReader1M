@@ -60,6 +60,22 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         self.downloadImageIfPossible(imageURL: imageURL)
     }
 
+    // MARK: Internal methods
+
+    @discardableResult
+    func saveToCoreData() -> Bool {
+        let context = persistenceManager.fetchedResultsController.managedObjectContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print(error)
+                return false
+            }
+        }
+        return true
+    }
+
     // MARK: Private methods
 
     private func configureCellViewModels(context: FeedEntriesContext) {

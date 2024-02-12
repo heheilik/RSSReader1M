@@ -19,6 +19,18 @@ class FeedEntriesViewModel: FMTablePageViewModel {
         updateSectionViewModels(with: context)
     }
 
+    // MARK: Internal methods
+
+    func saveToCoreData() {
+        dataSource.sectionViewModels
+            .compactMap {
+                $0 as? FeedEntriesSectionViewModel
+            }
+            .forEach {
+                $0.saveToCoreData()
+            }
+    }
+
     // MARK: Private methods
 
     private func updateSectionViewModels(with context: FeedEntriesContext) {

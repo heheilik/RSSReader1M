@@ -71,6 +71,8 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     private let managedObject: ManagedFeedEntry
 
+    private var isReadSubscriber: AnyCancellable?
+
     @Injected(\.entryDateFormatter) private static var dateFormatter
 
     // MARK: Initialization
@@ -99,6 +101,15 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             delegate: delegate
         )
         isAnimation = isAnimatedAtStart
+        bindReadStatus()
+    }
+
+    // MARK: Private methods
+
+    private func bindReadStatus() {
+        isReadSubscriber = $isRead.sink { [weak self] newValue in
+            self?.managedObject.isRead = newValue
+        }
     }
 }
 
