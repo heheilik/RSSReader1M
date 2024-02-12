@@ -29,7 +29,6 @@ class FeedPersistenceManager {
         let fetchRequest = ManagedFeedEntry.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "FALSEPREDICATE")
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(keyPath: \ManagedFeedEntry.orderID, ascending: false),
             NSSortDescriptor(keyPath: \ManagedFeedEntry.date, ascending: false)
         ]
         return fetchRequest

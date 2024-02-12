@@ -9,20 +9,13 @@ import CoreData
 import Factory
 import Foundation
 
-private enum ModelNames {
-    static let feed = "FeedModel"
-}
-
 extension Container {
     var feedModelPersistentContainer: Factory<NSPersistentContainer> {
         self {
-            let persistentContainer = NSPersistentContainer(name: ModelNames.feed)
-            persistentContainer.loadPersistentStores { _, error in
-                if let error {
-                    fatalError("Unable to load persistent stores: \(error)")
-                }
+            guard let container = PersistentContainerBuilder.shared.newPersistentContainer(for: .feed) else {
+                fatalError("Failed to load persistent store.")
             }
-            return persistentContainer
+            return container
         }.singleton
     }
 }

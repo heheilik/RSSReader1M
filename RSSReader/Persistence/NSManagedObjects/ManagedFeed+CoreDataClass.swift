@@ -2,7 +2,7 @@
 //  ManagedFeed+CoreDataClass.swift
 //  RSSReader
 //
-//  Created by Heorhi Heilik on 31.01.24.
+//  Created by Heorhi Heilik on 12.02.24.
 //
 
 import CoreData
@@ -25,19 +25,14 @@ public class ManagedFeed: NSManagedObject {
         guard let items = rssFeed.items?.sorted(by: FeedUpdateManager.newFeedComparatorClosure) else {
             return false
         }
-        lastReadOrderID = 0
-        var currentOrderID: Int64 = 1
         for item in items {
             let managedFeedEntry = ManagedFeedEntry(context: context)
-            guard managedFeedEntry.fill(
-                with: item,
-                orderID: currentOrderID
-            ) else {
+            guard managedFeedEntry.fill(with: item) else {
                 return false
             }
             addToEntries(managedFeedEntry)
-            currentOrderID += 1
         }
+
         return true
     }
 

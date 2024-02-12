@@ -2,7 +2,7 @@
 //  ManagedFeedEntry+CoreDataClass.swift
 //  RSSReader
 //
-//  Created by Heorhi Heilik on 31.01.24.
+//  Created by Heorhi Heilik on 12.02.24.
 //
 
 import CoreData
@@ -14,7 +14,7 @@ public class ManagedFeedEntry: NSManagedObject {
 
     // MARK: Internal methods
 
-    func fill(with rssFeedItem: RSSFeedItem, orderID: Int64) -> Bool {
+    func fill(with rssFeedItem: RSSFeedItem) -> Bool {
         guard let title = rssFeedItem.title else {
             return false
         }
@@ -22,7 +22,7 @@ public class ManagedFeedEntry: NSManagedObject {
 
         entryDescription = rssFeedItem.description
         date = rssFeedItem.pubDate
-        self.orderID = orderID
+        isRead = false
 
         return true
     }
