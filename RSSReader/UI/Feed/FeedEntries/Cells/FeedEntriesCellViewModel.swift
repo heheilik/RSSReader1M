@@ -14,6 +14,10 @@ import FMArchitecture
 import SwipeCellKit
 import UIKit
 
+protocol FeedEntriesCellViewModelDelegate: AnyObject {
+    func readStatusChanged(isRead: Bool)
+}
+
 class FeedEntriesCellViewModel: FMCellViewModel {
 
     // MARK: Constants
@@ -75,6 +79,10 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     @Injected(\.entryDateFormatter) private static var dateFormatter
 
+    private weak var currentDelegate: FeedEntriesCellViewModelDelegate? {
+        delegate as? FeedEntriesCellViewModelDelegate
+    }
+
     // MARK: Initialization
 
     init(
@@ -108,7 +116,10 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     private func bindReadStatus() {
         isReadSubscriber = $isRead.sink { [weak self] newValue in
-            self?.managedObject.isRead = newValue
+            if self?.managedObject.isRead != newValue {
+                self?.managedObject.isRead = newValue
+                self?.currentDelegate?.readStatusChanged(isRead: newValue)
+            }
         }
     }
 }

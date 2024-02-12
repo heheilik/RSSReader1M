@@ -76,7 +76,8 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
                     animated: true,
                     context: FeedEntriesContext(
                         feedName: feedSource.name,
-                        feedPersistenceManager: feedUpdateManager.feedPersistenceManager
+                        feedPersistenceManager: feedUpdateManager.feedPersistenceManager,
+                        unreadEntriesCount: feedUpdateManager.unreadEntriesCount ?? 0
                     )
                 )
             }

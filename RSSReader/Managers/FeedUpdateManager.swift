@@ -40,6 +40,8 @@ class FeedUpdateManager {
 
     var error: UpdateError?
 
+    var unreadEntriesCount: Int?
+
     // MARK: Private properties
 
     private let feedService: FeedService

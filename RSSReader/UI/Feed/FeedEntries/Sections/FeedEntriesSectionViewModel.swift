@@ -42,6 +42,12 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         }
     }
 
+    private var unreadEntriesCount: Int {
+        didSet {
+            updateHeader(unreadEntriesCount: unreadEntriesCount)
+        }
+    }
+    
     private static let errorImage = UIImage(systemName: "photo")!
 
     // MARK: Initialization
@@ -52,7 +58,10 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ) {
         self.feedImageService = feedImageService
         persistenceManager = context.feedPersistenceManager
+        unreadEntriesCount = context.unreadEntriesCount
+
         super.init()
+
         configureCellViewModels(context: context)
         configureHeader()
 
@@ -96,7 +105,15 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     }
 
     private func configureHeader() {
-        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "0 new entries.")
+        headerViewModel = UnseenEntriesAmountHeaderViewModel(text: "\(self.unreadEntriesCount) new entries.")
+    }
+
+    private func updateHeader(unreadEntriesCount: Int) {
+        guard let headerViewModel = headerViewModel as? UnseenEntriesAmountHeaderViewModel else {
+            return
+        }
+        headerViewModel.text = "\(unreadEntriesCount) new entries."
+        headerViewModel.view?.fill(viewModel: headerViewModel)
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {
@@ -123,3 +140,11 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 // MARK: - FMAnimatable
 
 extension FeedEntriesSectionViewModel: FMAnimatable { }
+
+// MARK: - FeedEntriesCellViewModelDelegate
+
+extension FeedEntriesSectionViewModel: FeedEntriesCellViewModelDelegate {
+    func readStatusChanged(isRead: Bool) {
+        unreadEntriesCount += isRead ? -1 : 1
+    }
+}

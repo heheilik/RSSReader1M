@@ -12,7 +12,7 @@ class UnseenEntriesAmountHeaderViewModel: FMHeaderFooterViewModel {
 
     // MARK: Internal properties
 
-    let text: String
+    var text: String
 
     // MARK: Initialization
 
