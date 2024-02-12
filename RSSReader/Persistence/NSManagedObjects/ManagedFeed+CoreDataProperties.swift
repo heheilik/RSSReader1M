@@ -37,6 +37,6 @@ extension ManagedFeed {
 
 }
 
-extension ManagedFeed : Identifiable {
+extension ManagedFeed: Identifiable {
 
 }

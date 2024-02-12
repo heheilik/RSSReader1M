@@ -22,6 +22,6 @@ extension ManagedFeedEntry {
 
 }
 
-extension ManagedFeedEntry : Identifiable {
+extension ManagedFeedEntry: Identifiable {
 
 }
