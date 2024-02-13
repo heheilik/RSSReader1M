@@ -75,8 +75,9 @@ class FeedPersistenceManager {
 
     // MARK: Internal methods
 
-    @MainActor
-    func fetchControllerData() async -> Bool {
+    /// Must be called on main thread.
+    @discardableResult
+    func fetchControllerData() -> Bool {
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -85,8 +86,9 @@ class FeedPersistenceManager {
         return true
     }
 
-    @MainActor
-    func saveControllerData() async -> Bool {
+    /// Must be called on main thread.
+    @discardableResult
+    func saveControllerData() -> Bool {
         do {
             try Self.persistentContainer.viewContext.save()
         } catch {
@@ -116,7 +118,9 @@ class FeedPersistenceManager {
             }
         }
 
-        _ = await saveControllerData()
+        _ = await MainActor.run {
+            saveControllerData()
+        }
 
         // TODO: perform fetch if needed
     }
