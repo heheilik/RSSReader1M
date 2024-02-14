@@ -57,44 +57,44 @@ class FeedSourcesViewController: FMTablePageViewController {
 
     // MARK: Private methods
 
-    private func presentAlertFor(error: FeedUpdateManager.UpdateError, animated: Bool = true) {
-        let alert = {
-            let alert = UIAlertController(
-                title: "",
-                message: nil,
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(
-                title: "OK",
-                style: .default
-            ))
-            return alert
-        }()
+//    private func presentAlertFor(error: FeedUpdateManager.UpdateError, animated: Bool = true) {
+//        let alert = {
+//            let alert = UIAlertController(
+//                title: "",
+//                message: nil,
+//                preferredStyle: .alert
+//            )
+//            alert.addAction(UIAlertAction(
+//                title: "OK",
+//                style: .default
+//            ))
+//            return alert
+//        }()
+//
+//        let representation = alertRepresentation(for: error)
+//
+//        alert.title = representation.title
+//        alert.message = representation.message
+//
+//        present(alert, animated: animated)
+//    }
 
-        let representation = alertRepresentation(for: error)
-
-        alert.title = representation.title
-        alert.message = representation.message
-
-        present(alert, animated: animated)
-    }
-
-    private func alertRepresentation(for error: FeedUpdateManager.UpdateError) -> (title: String, message: String) {
-        switch error {
-        case .feedNotDownloaded:
-            return (title: "feedNotDownloaded", message: "")
-        case .wrongFeedType:
-            return (title: "wrongFeedType", message: "")
-        case .parsingToManagedError:
-            return (title: "parsingToManagedError", message: "")
-        case .fetchError:
-            return (title: "fetchError", message: "")
-        case .saveError:
-            return (title: "saveError", message: "")
-        case .controllerUpdatingError:
-            return (title: "controllerUpdatingError", message: "")
-        }
-    }
+//    private func alertRepresentation(for error: FeedUpdateManager.UpdateError) -> (title: String, message: String) {
+//        switch error {
+//        case .feedNotDownloaded:
+//            return (title: "feedNotDownloaded", message: "")
+//        case .wrongFeedType:
+//            return (title: "wrongFeedType", message: "")
+//        case .parsingToManagedError:
+//            return (title: "parsingToManagedError", message: "")
+//        case .fetchError:
+//            return (title: "fetchError", message: "")
+//        case .saveError:
+//            return (title: "saveError", message: "")
+//        case .controllerUpdatingError:
+//            return (title: "controllerUpdatingError", message: "")
+//        }
+//    }
 }
 
 // MARK: - FeedUpdateDelegate
@@ -114,8 +114,8 @@ extension FeedSourcesViewController: FeedSourcesViewModelDelegate {
         if let delegate = delegate as? FeedSourcesTableViewDelegate {
             delegate.cellsAreSelectable = true
         }
-        if let error {
-            presentAlertFor(error: error)
-        }
+//        if let error {
+//            presentAlertFor(error: error)
+//        }
     }
 }

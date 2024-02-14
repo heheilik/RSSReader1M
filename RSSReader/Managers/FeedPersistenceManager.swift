@@ -15,6 +15,7 @@ class FeedPersistenceManager {
     // MARK: Internal properties
 
     let fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
+    let url: URL
 
     // MARK: Private properties
 
@@ -25,6 +26,8 @@ class FeedPersistenceManager {
     // MARK: Initialization
 
     init(url: URL) {
+        self.url = url
+
         let context = Self.persistentContainer.newBackgroundContext()
         controllerContext = context
         fetchedResultsController = NSFetchedResultsController(
@@ -33,6 +36,7 @@ class FeedPersistenceManager {
             sectionNameKeyPath: nil,
             cacheName: nil
         )
+
         try? fetchedResultsController.performFetch()
     }
 
