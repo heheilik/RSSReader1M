@@ -72,8 +72,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     // MARK: Internal methods
 
     @discardableResult
-    func saveFeedToCoreData() -> Bool {
-        persistenceManager.saveControllerData()
+    func saveFeedToCoreData() async -> Bool {
+        await persistenceManager.saveControllerData()
     }
 
     // MARK: Private methods

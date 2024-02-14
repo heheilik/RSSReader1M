@@ -26,8 +26,10 @@ class FeedEntriesViewModel: FMTablePageViewModel {
             .compactMap {
                 $0 as? FeedEntriesSectionViewModel
             }
-            .forEach {
-                $0.saveFeedToCoreData()
+            .forEach { sectionViewModel in
+                Task {
+                    await sectionViewModel.saveFeedToCoreData()
+                }
             }
     }
 

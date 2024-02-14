@@ -18,14 +18,18 @@ class FeedPersistenceManager {
 
     // MARK: Private properties
 
+    private let controllerContext: NSManagedObjectContext
+
     @Injected(\.feedModelPersistentContainer) private static var persistentContainer
 
     // MARK: Initialization
 
     init(url: URL) {
+        let context = Self.persistentContainer.newBackgroundContext()
+        controllerContext = context
         fetchedResultsController = NSFetchedResultsController(
             fetchRequest: Self.newControllerFetchRequest(for: url),
-            managedObjectContext: Self.persistentContainer.viewContext,
+            managedObjectContext: context,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
@@ -34,30 +38,50 @@ class FeedPersistenceManager {
 
     // MARK: Internal methods
 
-    /// Must be called on main thread.
+    /// Can be called from any thread.
     @discardableResult
-    func fetchControllerData() -> Bool {
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            return false
+    func fetchControllerData() async -> Bool {
+        var succeeded = false
+        controllerContext.performAndWait {
+            do {
+                try fetchedResultsController.performFetch()
+            } catch {
+                return
+            }
+            succeeded = true
         }
-        return true
+        return succeeded
     }
 
-    /// Must be called on main thread.
+    /// Can be called from any thread.
     @discardableResult
-    func saveControllerData() -> Bool {
-        do {
-            try Self.persistentContainer.viewContext.save()
-        } catch {
+    func saveControllerData() async -> Bool {
+        var succeeded = false
+        controllerContext.performAndWait {
+            do {
+                try controllerContext.save()
+            } catch {
+                succeeded = false
+            }
+        }
+        guard succeeded else {
             return false
         }
-        return true
+
+        succeeded = await MainActor.run {
+            do {
+                try Self.persistentContainer.viewContext.save()
+            } catch {
+                return false
+            }
+            return true
+        }
+        return succeeded
     }
 
     func insert(feed downloadedFeed: RSSFeed, downloadedAt url: URL) async {
-        let context = Self.persistentContainer.newBackgroundContext()
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.parent = controllerContext
         context.mergePolicy = NSMergePolicy.rollback
         
         context.performAndWait {
@@ -77,13 +101,10 @@ class FeedPersistenceManager {
             }
         }
 
-        _ = await MainActor.run {
-            saveControllerData()
-        }
-
-        // TODO: perform fetch if needed
+        await saveControllerData()
     }
 
+    // TODO: Rewrite to use concurrency
     @MainActor
     func fetchUnreadEntriesCount(for url: URL) async -> Int? {
         // creating expression
