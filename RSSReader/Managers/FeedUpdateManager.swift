@@ -13,6 +13,7 @@ class FeedUpdateManager {
     // MARK: Constants
 
     enum UpdateError: Error {
+        case workInProgress
         case downloadFailed
         case wrongFeedType
     }
@@ -40,6 +41,10 @@ class FeedUpdateManager {
     // MARK: Internal methods
 
     func updateFeed() async -> Result<Void, UpdateError> {
+        guard !workInProgress else {
+            return .failure(.workInProgress)
+        }
+
         error = nil
         workInProgress = true
         defer {
