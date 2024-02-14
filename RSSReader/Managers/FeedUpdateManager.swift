@@ -53,7 +53,7 @@ class FeedUpdateManager {
 
     convenience init(url: URL) {
         let feedService = FeedService()
-        let feedPersistenceManager = FeedPersistenceManager(activeURL: url)
+        let feedPersistenceManager = FeedPersistenceManager(url: url)
         self.init(
             url: url,
             feedService: feedService,

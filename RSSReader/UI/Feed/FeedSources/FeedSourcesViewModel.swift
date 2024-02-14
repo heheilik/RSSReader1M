@@ -57,7 +57,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
         delegate?.updateStarted()
 
         // fetching corresponding data
-        let persistenceManager = FeedPersistenceManager(activeURL: feedSource.url)
+        let persistenceManager = FeedPersistenceManager(url: feedSource.url)
         persistenceManager.fetchControllerData()
 
         // sending message that update has ended

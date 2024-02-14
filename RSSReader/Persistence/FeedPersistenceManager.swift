@@ -12,12 +12,6 @@ import Foundation
 
 class FeedPersistenceManager {
 
-    // MARK: Constants
-
-    private enum SubstitutableVariables {
-        static let url = "url"
-    }
-
     // MARK: Internal properties
 
     let fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
@@ -26,50 +20,15 @@ class FeedPersistenceManager {
 
     @Injected(\.feedModelPersistentContainer) private static var persistentContainer
 
-    private static let falseFetchRequest = {
-        let fetchRequest = ManagedFeedEntry.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "FALSEPREDICATE")
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(keyPath: \ManagedFeedEntry.date, ascending: false)
-        ]
-        return fetchRequest
-    }()
-
     // MARK: Initialization
 
-    convenience init() {
-        let fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: Self.falseFetchRequest,
+    init(url: URL) {
+        fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: Self.newControllerFetchRequest(for: url),
             managedObjectContext: Self.persistentContainer.viewContext,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
-        self.init(
-            fetchedResultsController: fetchedResultsController
-        )
-    }
-
-    convenience init(activeURL: URL) {
-        let fetchRequest = Self.falseFetchRequest
-        fetchRequest.predicate = Self.newPredicateTemplate().withSubstitutionVariables([
-            SubstitutableVariables.url: activeURL
-        ])
-
-        let fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: Self.persistentContainer.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        self.init(
-            fetchedResultsController: fetchedResultsController
-        )
-    }
-
-    init(
-        fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
-    ) {
-        self.fetchedResultsController = fetchedResultsController
         try? fetchedResultsController.performFetch()
     }
 
@@ -226,8 +185,19 @@ class FeedPersistenceManager {
         )
         return try? context.fetch(fetchRequest).first
     }
-
-    private static func newPredicateTemplate() -> NSPredicate {
-        NSPredicate(format: "\(#keyPath(ManagedFeedEntry.feed.url)) == $\(SubstitutableVariables.url)")
+    
+    private static func newControllerFetchRequest(for url: URL) -> NSFetchRequest<ManagedFeedEntry> {
+        let fetchRequest = ManagedFeedEntry.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "%K == %@",
+            argumentArray: [
+                #keyPath(ManagedFeedEntry.feed.url),
+                url
+            ]
+        )
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(keyPath: \ManagedFeedEntry.date, ascending: false)
+        ]
+        return fetchRequest
     }
 }
