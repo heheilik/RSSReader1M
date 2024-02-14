@@ -10,6 +10,11 @@ import Foundation
 import FMArchitecture
 import UIKit
 
+protocol FeedEntriesSectionViewModelDelegate: AnyObject {
+    func beginTableUpdates()
+    func endTableUpdates()
+}
+
 class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     // MARK: Internal properties
@@ -53,6 +58,10 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     
     private static let errorImage = UIImage(systemName: "photo")!
 
+    private weak var currentDelegate: FeedEntriesSectionViewModelDelegate? {
+        delegate as? FeedEntriesSectionViewModelDelegate
+    }
+
     // MARK: Initialization
 
     init(
@@ -93,6 +102,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         addedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
     ) {
+        print("add   : \(indexPath.row), title: \(object.title ?? "nil")")
         cellViewModels.insert(
             FeedEntriesCellViewModel(
                 managedObject: object,
@@ -108,14 +118,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             with: .fade,
             completion: nil
         )
-//        addCells(from: [
-//            FeedEntriesCellViewModel(
-//                managedObject: object,
-//                image: image,
-//                delegate: self,
-//                isAnimatedAtStart: false
-//            )
-//        ])
     }
 
     func fetchedResultsController(
@@ -123,10 +125,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         removedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
     ) {
-//        guard let cellViewModel = cellModel(at: indexPath.row) else {
-//            assertionFailure("Cell that will be removed must be present at that indexPath.")
-//            return
-//        }
+        print("remove : \(indexPath.row), title: \(object.title ?? "nil")")
         cellViewModels.remove(at: indexPath.row)
         dataManipulator?.cellsDeleted(
             at: IndexSet(integer: indexPath.row),
@@ -134,7 +133,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             with: .fade,
             completion: nil
         )
-//        removeCells([cellViewModel])
     }
 
     func fetchedResultsController(
@@ -143,6 +141,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         from oldIndexPath: IndexPath,
         to newIndexPath: IndexPath
     ) {
+        print("move   : \(oldIndexPath.row) -> \(newIndexPath.row), title: \(object.title ?? "nil")")
+        
         // removing
         cellViewModels.remove(at: oldIndexPath.row)
         dataManipulator?.cellsDeleted(
@@ -168,11 +168,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             with: .fade,
             completion: nil
         )
-//        guard let cellViewModel = cellModel(at: oldIndexPath.row) else {
-//            return
-//        }
-//        removeCells([cellViewModel])
-//        addCells(from: [])
     }
 
     func fetchedResultsController(
@@ -180,6 +175,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         updatedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
     ) {
+        print("update : \(indexPath.row), title: \(object.title ?? "nil")")
         let cellViewModel = FeedEntriesCellViewModel(
             managedObject: object,
             image: image,
@@ -187,6 +183,16 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             isAnimatedAtStart: false
         )
         refresh(cellModels: [cellViewModel])
+    }
+
+    func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("--- Updates started ---")
+        currentDelegate?.beginTableUpdates()
+    }
+
+    func fetchedResultsControllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("--- Updates ended ---")
+        currentDelegate?.endTableUpdates()
     }
 
     // MARK: Private methods

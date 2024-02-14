@@ -15,6 +15,18 @@ class FeedEntriesFetchedResultsControllerDelegate: NSObject {
 // MARK: - NSFetchedResultsControllerDelegate
 
 extension FeedEntriesFetchedResultsControllerDelegate: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        DispatchQueue.main.async {
+            self.sectionViewModel?.fetchedResultsControllerWillChangeContent(controller)
+        }
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        DispatchQueue.main.async {
+            self.sectionViewModel?.fetchedResultsControllerDidChangeContent(controller)
+        }
+    }
+
     func controller(
         _ controller: NSFetchedResultsController<NSFetchRequestResult>,
         didChange anObject: Any,
