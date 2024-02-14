@@ -39,7 +39,7 @@ class FeedUpdateManager {
 
     // MARK: Internal methods
 
-    func updateFeed(url: URL) async -> Result<Void, UpdateError> {
+    func updateFeed() async -> Result<Void, UpdateError> {
         error = nil
         workInProgress = true
         defer {
