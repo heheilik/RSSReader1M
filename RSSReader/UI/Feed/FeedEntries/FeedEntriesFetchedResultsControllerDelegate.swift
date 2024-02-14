@@ -53,48 +53,9 @@ extension FeedEntriesFetchedResultsControllerDelegate: NSFetchedResultsControlle
                 )
             }
 
-        case .delete:
-            guard let indexPath else {
-                assertionFailure("This method must provide an indexPath.", file: #file, line: #line)
-                return
-            }
-            DispatchQueue.main.async {
-                self.sectionViewModel?.fetchedResultsController(
-                    controller,
-                    removedObject: object,
-                    at: indexPath
-                )
-            }
-
-        case .move:
-            guard
-                let oldIndexPath = indexPath,
-                let newIndexPath
-            else {
-                assertionFailure("This method must provide an indexPath.", file: #file, line: #line)
-                return
-            }
-            DispatchQueue.main.async {
-                self.sectionViewModel?.fetchedResultsController(
-                    controller,
-                    movedObject: object,
-                    from: oldIndexPath,
-                    to: newIndexPath
-                )
-            }
-
-        case .update:
-            guard let indexPath else {
-                assertionFailure("This method must provide an indexPath.", file: #file, line: #line)
-                return
-            }
-            DispatchQueue.main.async {
-                self.sectionViewModel?.fetchedResultsController(
-                    controller,
-                    updatedObject: object,
-                    at: indexPath
-                )
-            }
+        case .delete, .move, .update:
+            assertionFailure("Stored cells must not be modified.")
+            return
 
         @unknown default:
             assertionFailure("Unexpected case.", file: #file, line: #line)
