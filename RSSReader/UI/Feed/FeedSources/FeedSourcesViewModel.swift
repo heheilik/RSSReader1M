@@ -57,6 +57,10 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
         Task {
             let persistenceManager = FeedPersistenceManager(url: feedSource.url)
             await persistenceManager.fetchControllerData()
+            guard let unreadEntriesCount = await persistenceManager.fetchUnreadEntriesCount(for: feedSource.url) else {
+                assertionFailure("No problems must happen here.")
+                return
+            }
 
             // TODO: add error handling
             await MainActor.run {
@@ -67,7 +71,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
                     context: FeedEntriesContext(
                         feedName: feedSource.name,
                         feedPersistenceManager: persistenceManager,
-                        unreadEntriesCount: -1
+                        unreadEntriesCount: unreadEntriesCount
                     )
                 )
             }
