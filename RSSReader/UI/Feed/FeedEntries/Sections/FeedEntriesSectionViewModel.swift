@@ -86,7 +86,9 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         configureCellViewModels(context: context)
         configureHeader()
 
-        startFeedUpdate()
+        Task {
+            await updateFeed()
+        }
 
         let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
         self.downloadImageIfPossible(imageURL: imageURL)
@@ -145,6 +147,16 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         }
     }
 
+    func updateFeed() async {
+        let result = await updateManager.updateFeed()
+        switch result {
+        case let .failure(error):
+            print(error)
+        case .success():
+            break
+        }
+    }
+
     // MARK: Private methods
 
     private func configureCellViewModels(context: FeedEntriesContext) {
@@ -170,18 +182,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private func updateHeader(unreadEntriesCount: Int) {
         (headerViewModel as? UnreadEntriesAmountHeaderViewModel)?.unreadEntriesCount = unreadEntriesCount
-    }
-
-    private func startFeedUpdate() {
-        Task {
-            let result = await updateManager.updateFeed()
-            switch result {
-            case let .failure(error):
-                print(error)
-            case .success():
-                break
-            }
-        }
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {

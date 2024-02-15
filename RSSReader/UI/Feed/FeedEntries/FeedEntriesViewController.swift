@@ -11,6 +11,10 @@ import UIKit
 
 class FeedEntriesViewController: FMTablePageViewController {
 
+    // MARK: UI
+
+    private let refreshControl = UIRefreshControl()
+
     // MARK: Internal properties
 
     override var tableViewStyle: UITableView.Style {
@@ -24,6 +28,16 @@ class FeedEntriesViewController: FMTablePageViewController {
     }
 
     // MARK: Lifecycle
+
+    override func configureViews() {
+        super.configureViews()
+        refreshControl.addTarget(
+            self,
+            action: #selector(onRefresh),
+            for: .valueChanged
+        )
+        tableView.refreshControl = refreshControl
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +55,13 @@ class FeedEntriesViewController: FMTablePageViewController {
         super.viewWillDisappear(animated)
         currentViewModel?.saveFeedToCoreData()
     }
+
+    // MARK: Private methods
+
+    @objc
+    private func onRefresh() {
+        currentViewModel?.refresh()
+    }
 }
 
 // MARK: - FeedEntriesViewModelDelegate
@@ -52,5 +73,9 @@ extension FeedEntriesViewController: FeedEntriesViewModelDelegate {
 
     func endTableUpdates() {
         tableView.endUpdates()
+    }
+
+    func endRefresh() {
+        refreshControl.endRefreshing()
     }
 }
