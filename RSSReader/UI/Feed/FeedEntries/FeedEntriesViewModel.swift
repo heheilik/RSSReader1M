@@ -10,7 +10,16 @@ import FMArchitecture
 import Foundation
 import SkeletonView
 
+protocol FeedEntriesViewModelDelegate: AnyObject {
+    func beginTableUpdates()
+    func endTableUpdates()
+}
+
 class FeedEntriesViewModel: FMTablePageViewModel {
+
+    // MARK: Internal properties
+
+    weak var delegate: FeedEntriesViewModelDelegate?
 
     // MARK: Initialization
 
@@ -26,8 +35,10 @@ class FeedEntriesViewModel: FMTablePageViewModel {
             .compactMap {
                 $0 as? FeedEntriesSectionViewModel
             }
-            .forEach {
-                $0.saveFeedToCoreData()
+            .forEach { sectionViewModel in
+                Task {
+                    await sectionViewModel.saveFeedToCoreData()
+                }
             }
     }
 
@@ -37,5 +48,17 @@ class FeedEntriesViewModel: FMTablePageViewModel {
         dataSource.update(with: [
             FeedEntriesSectionViewModel(context: context)
         ])
+    }
+}
+
+// MARK: - FeedEntriesSectionViewModelDelegate
+
+extension FeedEntriesViewModel: FeedEntriesSectionViewModelDelegate {
+    func beginTableUpdates() {
+        delegate?.beginTableUpdates()
+    }
+
+    func endTableUpdates() {
+        delegate?.endTableUpdates()
     }
 }

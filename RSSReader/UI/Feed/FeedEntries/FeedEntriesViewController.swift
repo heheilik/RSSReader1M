@@ -42,3 +42,15 @@ class FeedEntriesViewController: FMTablePageViewController {
         currentViewModel?.saveFeedToCoreData()
     }
 }
+
+// MARK: - FeedEntriesViewModelDelegate
+
+extension FeedEntriesViewController: FeedEntriesViewModelDelegate {
+    func beginTableUpdates() {
+        tableView.beginUpdates()
+    }
+
+    func endTableUpdates() {
+        tableView.endUpdates()
+    }
+}

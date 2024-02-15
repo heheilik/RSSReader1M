@@ -53,31 +53,21 @@ class FeedSourcesViewModel: FMTablePageViewModel {
 
 extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
     func didSelect(cellWithData feedSource: FeedSource) {
-        let feedUpdateManager = FeedUpdateManager(url: feedSource.url)
         delegate?.updateStarted()
+        Task {
+            let persistenceManager = FeedPersistenceManager(url: feedSource.url)
+            await persistenceManager.fetchControllerData()
 
-        Task { [weak self] in
-            guard let self = self else {
-                return
-            }
-
-            await feedUpdateManager.update()
-            guard feedUpdateManager.error == nil else {
-                _ = await MainActor.run {
-                    self.delegate?.updateCompleted(withError: feedUpdateManager.error)
-                }
-                return
-            }
-
-            _ = await MainActor.run {
-                self.delegate?.updateCompleted(withError: nil)
+            // TODO: add error handling
+            await MainActor.run {
+                delegate?.updateCompleted(withError: nil)
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.feedEntries.rawValue,
                     animated: true,
                     context: FeedEntriesContext(
                         feedName: feedSource.name,
-                        feedPersistenceManager: feedUpdateManager.feedPersistenceManager,
-                        unreadEntriesCount: feedUpdateManager.unreadEntriesCount ?? 0
+                        feedPersistenceManager: persistenceManager,
+                        unreadEntriesCount: -1
                     )
                 )
             }

@@ -112,6 +112,15 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         bindReadStatus()
     }
 
+    // MARK: Internal methods
+
+    override func isEqual(to viewModel: FMCellViewModel) -> Bool {
+        guard let viewModel = viewModel as? FeedEntriesCellViewModel else {
+            return false
+        }
+        return managedObject.objectID == viewModel.managedObject.objectID
+    }
+
     // MARK: Private methods
 
     private func bindReadStatus() {

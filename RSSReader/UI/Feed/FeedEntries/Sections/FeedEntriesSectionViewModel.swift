@@ -5,9 +5,15 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
+import CoreData
 import Foundation
 import FMArchitecture
 import UIKit
+
+protocol FeedEntriesSectionViewModelDelegate: AnyObject {
+    func beginTableUpdates()
+    func endTableUpdates()
+}
 
 class FeedEntriesSectionViewModel: FMSectionViewModel {
 
@@ -30,6 +36,10 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     private let feedImageService: FeedImageService
 
     private let persistenceManager: FeedPersistenceManager
+    private let updateManager: FeedUpdateManager
+    private let fetchedResultsControllerDelegate: FeedEntriesFetchedResultsControllerDelegate
+
+    private var cellUpdateManager = FeedEntriesCellUpdateContainer()
 
     private var downloadedImage: UIImage? {
         didSet {
@@ -47,8 +57,12 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             updateHeader(unreadEntriesCount: unreadEntriesCount)
         }
     }
-    
+
     private static let errorImage = UIImage(systemName: "photo")!
+
+    private weak var currentDelegate: FeedEntriesSectionViewModelDelegate? {
+        delegate as? FeedEntriesSectionViewModelDelegate
+    }
 
     // MARK: Initialization
 
@@ -57,13 +71,22 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         feedImageService: FeedImageService = FeedImageService()
     ) {
         self.feedImageService = feedImageService
+
         persistenceManager = context.feedPersistenceManager
+        updateManager = FeedUpdateManager(persistenceManager: context.feedPersistenceManager)
+        fetchedResultsControllerDelegate = FeedEntriesFetchedResultsControllerDelegate()
+
         unreadEntriesCount = context.unreadEntriesCount
 
         super.init()
 
+        fetchedResultsControllerDelegate.sectionViewModel = self
+        persistenceManager.fetchedResultsController.delegate = fetchedResultsControllerDelegate
+
         configureCellViewModels(context: context)
         configureHeader()
+
+        startFeedUpdate()
 
         let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
         self.downloadImageIfPossible(imageURL: imageURL)
@@ -72,17 +95,43 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     // MARK: Internal methods
 
     @discardableResult
-    func saveFeedToCoreData() -> Bool {
-        let context = persistenceManager.fetchedResultsController.managedObjectContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                print(error)
-                return false
-            }
+    func saveFeedToCoreData() async -> Bool {
+        await persistenceManager.saveControllerData()
+    }
+
+    func fetchedResultsController(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        addedObject object: ManagedFeedEntry,
+        at indexPath: IndexPath
+    ) {
+        print("add   : \(indexPath.row), title: \(object.title ?? "nil")")
+        cellUpdateManager.add(
+            viewModel: FeedEntriesCellViewModel(
+                managedObject: object,
+                image: image,
+                delegate: self,
+                isAnimatedAtStart: false
+            ),
+            index: indexPath.row
+        )
+    }
+
+    func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        currentDelegate?.beginTableUpdates()
+    }
+
+    func fetchedResultsControllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        cellUpdateManager.ordered.forEach {
+            cellViewModels.insert($0.viewModel, at: $0.index)
         }
-        return true
+        dataManipulator?.cellsAdded(
+            at: cellUpdateManager.indexSet,
+            on: self,
+            with: .top,
+            completion: nil
+        )
+        currentDelegate?.endTableUpdates()
+        cellUpdateManager.removeAll()
     }
 
     // MARK: Private methods
@@ -110,6 +159,18 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private func updateHeader(unreadEntriesCount: Int) {
         (headerViewModel as? UnreadEntriesAmountHeaderViewModel)?.unreadEntriesCount = unreadEntriesCount
+    }
+
+    private func startFeedUpdate() {
+        Task {
+            let result = await updateManager.updateFeed()
+            switch result {
+            case let .failure(error):
+                print(error)
+            case .success():
+                break
+            }
+        }
     }
 
     private func downloadImageIfPossible(imageURL: URL?) {

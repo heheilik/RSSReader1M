@@ -82,6 +82,7 @@ struct FeedPageFactory: PageFactoryProtocol {
             context: context
         )
         viewController.viewModel = viewModel
+        viewModel.delegate = viewController
 
         viewController.navigationItem.title = context.feedName
         return viewController
