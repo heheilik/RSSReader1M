@@ -39,6 +39,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     private let updateManager: FeedUpdateManager
     private let fetchedResultsControllerDelegate: FeedEntriesFetchedResultsControllerDelegate
 
+    private var cellUpdater = FeedEntriesCellUpdater()
+
     private var downloadedImage: UIImage? {
         didSet {
             for cellViewModel in self.cellViewModels {
@@ -55,7 +57,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             updateHeader(unreadEntriesCount: unreadEntriesCount)
         }
     }
-    
+
     private static let errorImage = UIImage(systemName: "photo")!
 
     private weak var currentDelegate: FeedEntriesSectionViewModelDelegate? {
@@ -103,31 +105,36 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         at indexPath: IndexPath
     ) {
         print("add   : \(indexPath.row), title: \(object.title ?? "nil")")
-        cellViewModels.insert(
-            FeedEntriesCellViewModel(
+        cellUpdater.add(
+            viewModel: FeedEntriesCellViewModel(
                 managedObject: object,
                 image: image,
                 delegate: self,
                 isAnimatedAtStart: false
             ),
-            at: indexPath.row
-        )
-        dataManipulator?.cellsAdded(
-            at: IndexSet(integer: indexPath.row),
-            on: self,
-            with: .fade,
-            completion: nil
+            index: indexPath.row
         )
     }
 
     func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("--- Updates started ---")
         currentDelegate?.beginTableUpdates()
+        cellUpdater.reset()
     }
 
     func fetchedResultsControllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("--- Updates ended ---")
+        cellUpdater.ordered.forEach {
+            cellViewModels.insert($0.viewModel, at: $0.index)
+        }
+        dataManipulator?.cellsAdded(
+            at: cellUpdater.indexSet,
+            on: self,
+            with: .top,
+            completion: nil
+        )
         currentDelegate?.endTableUpdates()
+        cellUpdater.reset()
     }
 
     // MARK: Private methods
