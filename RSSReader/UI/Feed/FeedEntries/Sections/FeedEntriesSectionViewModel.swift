@@ -118,6 +118,21 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         )
     }
 
+    func fetchedResultsController(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        updatedObject object: ManagedFeedEntry,
+        at indexPath: IndexPath
+    ) {
+        print("update: \(indexPath.row), title: \(object.title ?? "nil")")
+        let cellViewModel = FeedEntriesCellViewModel(
+            managedObject: object,
+            image: image,
+            delegate: self,
+            isAnimatedAtStart: false
+        )
+        refreshCells([cellViewModel])
+    }
+
     func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         currentDelegate?.beginTableUpdates()
     }

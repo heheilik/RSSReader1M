@@ -53,8 +53,21 @@ extension FeedEntriesFetchedResultsControllerDelegate: NSFetchedResultsControlle
                 )
             }
 
-        case .delete, .move, .update:
-            assertionFailure("Stored cells must not be modified.")
+        case .update:
+            guard let indexPath else {
+                assertionFailure("This method must provide an indexPath.", file: #file, line: #line)
+                return
+            }
+            DispatchQueue.main.async {
+                self.sectionViewModel?.fetchedResultsController(
+                    controller,
+                    updatedObject: object,
+                    at: indexPath
+                )
+            }
+
+        case .delete, .move:
+            assertionFailure("Stored cells must not be moved or removed.")
             return
 
         @unknown default:
