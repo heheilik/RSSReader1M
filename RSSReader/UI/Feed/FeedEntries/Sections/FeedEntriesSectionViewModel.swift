@@ -132,6 +132,17 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         )
         currentDelegate?.endTableUpdates()
         cellUpdateManager.removeAll()
+
+        Task {
+            guard
+                let unreadEntriesCount = await persistenceManager.fetchUnreadEntriesCount(for: persistenceManager.url)
+            else {
+                return
+            }
+            async let _ = MainActor.run {
+                self.updateHeader(unreadEntriesCount: unreadEntriesCount)
+            }
+        }
     }
 
     // MARK: Private methods
