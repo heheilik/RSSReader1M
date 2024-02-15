@@ -1,5 +1,5 @@
 //
-//  FeedEntriesCellUpdateManager.swift
+//  FeedEntriesCellUpdateContainer.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 15.02.24.
@@ -7,22 +7,21 @@
 
 import Foundation
 
-class FeedEntriesCellUpdateManager {
+class FeedEntriesCellUpdateContainer {
 
     // MARK: Internal properties
 
     private(set) var cellViewModels: [(viewModel: FeedEntriesCellViewModel, index: Int)] = []
 
     var ordered: [(viewModel: FeedEntriesCellViewModel, index: Int)] {
-        cellViewModels.sorted { $0.1 < $1.1 }
+        cellViewModels.sorted { $0.index < $1.index }
     }
 
     var indexSet: IndexSet {
         var set = IndexSet()
         cellViewModels.forEach {
-            set.update(with: $0.1)
+            set.update(with: $0.index)
         }
-        print(set)
         return set
     }
 
@@ -32,7 +31,7 @@ class FeedEntriesCellUpdateManager {
         cellViewModels.append((viewModel: viewModel, index: index))
     }
 
-    func reset() {
+    func removeAll() {
         cellViewModels = []
     }
 }

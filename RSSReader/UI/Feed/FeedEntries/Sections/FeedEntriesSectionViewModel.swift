@@ -39,7 +39,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     private let updateManager: FeedUpdateManager
     private let fetchedResultsControllerDelegate: FeedEntriesFetchedResultsControllerDelegate
 
-    private var cellUpdateManager = FeedEntriesCellUpdateManager()
+    private var cellUpdateManager = FeedEntriesCellUpdateContainer()
 
     private var downloadedImage: UIImage? {
         didSet {
@@ -118,7 +118,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         currentDelegate?.beginTableUpdates()
-        cellUpdateManager.reset()
     }
 
     func fetchedResultsControllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -132,7 +131,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             completion: nil
         )
         currentDelegate?.endTableUpdates()
-        cellUpdateManager.reset()
+        cellUpdateManager.removeAll()
     }
 
     // MARK: Private methods
