@@ -36,8 +36,6 @@ class FeedPersistenceManager {
             sectionNameKeyPath: nil,
             cacheName: nil
         )
-
-        try? fetchedResultsController.performFetch()
     }
 
     // MARK: Internal methods
@@ -108,8 +106,6 @@ class FeedPersistenceManager {
         await saveControllerData()
     }
 
-    // TODO: Rewrite to use concurrency
-    @MainActor
     func fetchUnreadEntriesCount(for url: URL) async -> Int? {
         // creating expression
         let countExpression = NSExpression(
@@ -146,16 +142,14 @@ class FeedPersistenceManager {
         fetchRequest.resultType = .dictionaryResultType
 
         // running fetch and acquiring result
-        do {
-            let result = try fetchedResultsController.managedObjectContext.fetch(fetchRequest)
-            guard let int64Result = (result as? [[String: Int64]])?.first?[key] else {
-                return nil
-            }
-            return Int(int64Result)
-        } catch {
-            print(error)
+        var result: [[String: Int64]]?
+        controllerContext.performAndWait {
+            result = try? fetchedResultsController.managedObjectContext.fetch(fetchRequest) as? [[String: Int64]]
+        }
+        guard let count = result?.first?[key] else {
             return nil
         }
+        return Int(count)
     }
 
     // MARK: Private methods
