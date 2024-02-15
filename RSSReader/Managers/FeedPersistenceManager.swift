@@ -36,8 +36,6 @@ class FeedPersistenceManager {
             sectionNameKeyPath: nil,
             cacheName: nil
         )
-
-        try? fetchedResultsController.performFetch()
     }
 
     // MARK: Internal methods
