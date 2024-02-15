@@ -1,5 +1,5 @@
 //
-//  FeedEntriesCellUpdater.swift
+//  FeedEntriesCellUpdateManager.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 15.02.24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FeedEntriesCellUpdater {
+class FeedEntriesCellUpdateManager {
 
     // MARK: Internal properties
 

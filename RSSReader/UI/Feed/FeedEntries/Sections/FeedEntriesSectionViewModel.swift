@@ -39,7 +39,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     private let updateManager: FeedUpdateManager
     private let fetchedResultsControllerDelegate: FeedEntriesFetchedResultsControllerDelegate
 
-    private var cellUpdater = FeedEntriesCellUpdater()
+    private var cellUpdateManager = FeedEntriesCellUpdateManager()
 
     private var downloadedImage: UIImage? {
         didSet {
@@ -105,7 +105,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         at indexPath: IndexPath
     ) {
         print("add   : \(indexPath.row), title: \(object.title ?? "nil")")
-        cellUpdater.add(
+        cellUpdateManager.add(
             viewModel: FeedEntriesCellViewModel(
                 managedObject: object,
                 image: image,
@@ -117,24 +117,22 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     }
 
     func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("--- Updates started ---")
         currentDelegate?.beginTableUpdates()
-        cellUpdater.reset()
+        cellUpdateManager.reset()
     }
 
     func fetchedResultsControllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("--- Updates ended ---")
-        cellUpdater.ordered.forEach {
+        cellUpdateManager.ordered.forEach {
             cellViewModels.insert($0.viewModel, at: $0.index)
         }
         dataManipulator?.cellsAdded(
-            at: cellUpdater.indexSet,
+            at: cellUpdateManager.indexSet,
             on: self,
             with: .top,
             completion: nil
         )
         currentDelegate?.endTableUpdates()
-        cellUpdater.reset()
+        cellUpdateManager.reset()
     }
 
     // MARK: Private methods
