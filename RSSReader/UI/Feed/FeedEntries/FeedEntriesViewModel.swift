@@ -13,6 +13,7 @@ import SkeletonView
 protocol FeedEntriesViewModelDelegate: AnyObject {
     func beginTableUpdates()
     func endTableUpdates()
+    func endRefresh()
 }
 
 class FeedEntriesViewModel: FMTablePageViewModel {
@@ -20,6 +21,12 @@ class FeedEntriesViewModel: FMTablePageViewModel {
     // MARK: Internal properties
 
     weak var delegate: FeedEntriesViewModelDelegate?
+
+    // MARK: Private properties
+
+    private var feedEntriesSectionViewModels: [FeedEntriesSectionViewModel] {
+        dataSource.sectionViewModels.compactMap { $0 as? FeedEntriesSectionViewModel }
+    }
 
     // MARK: Initialization
 
@@ -31,15 +38,22 @@ class FeedEntriesViewModel: FMTablePageViewModel {
     // MARK: Internal methods
 
     func saveFeedToCoreData() {
-        dataSource.sectionViewModels
-            .compactMap {
-                $0 as? FeedEntriesSectionViewModel
+        feedEntriesSectionViewModels.forEach { sectionViewModel in
+            Task {
+                await sectionViewModel.saveFeedToCoreData()
             }
-            .forEach { sectionViewModel in
-                Task {
-                    await sectionViewModel.saveFeedToCoreData()
+        }
+    }
+
+    func refresh() {
+        feedEntriesSectionViewModels.forEach { sectionViewModel in
+            Task {
+                await sectionViewModel.updateFeed()
+                async let _ = MainActor.run {
+                    delegate?.endRefresh()
                 }
             }
+        }
     }
 
     // MARK: Private methods
