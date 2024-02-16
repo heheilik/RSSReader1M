@@ -15,7 +15,7 @@ import UIKit
 
 protocol FeedEntriesCellViewModelDelegate: AnyObject {
     func readStatusChanged(isRead: Bool)
-    func pushDetailsController(title: String, description: String?, date: String?, managedObject: NSManagedObject)
+    func pushDetailsController(title: String, description: String?, date: String?, managedObject: ManagedFeedEntry)
 }
 
 class FeedEntriesCellViewModel: FMCellViewModel {

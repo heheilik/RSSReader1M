@@ -11,6 +11,17 @@ import UIKit
 
 class FeedDetailsViewController: FMPageViewController {
 
+    // MARK: Constants
+
+    private enum UIString {
+        static let navigationBarTitle = "Подробности"
+    }
+
+    private enum Image {
+        static let star = UIImage(systemName: "star")!.withTintColor(.black).withRenderingMode(.alwaysOriginal)
+        static let starFill = UIImage(systemName: "star.fill")!.withTintColor(.orange).withRenderingMode(.alwaysOriginal)
+    }
+
     // MARK: UI
 
     private let feedImage: UIImageView = {
@@ -40,6 +51,13 @@ class FeedDetailsViewController: FMPageViewController {
         return label
     }()
 
+    private lazy var favouriteBarButton = UIBarButtonItem(
+        image: Image.star,
+        style: .plain,
+        target: self,
+        action: #selector(favouriteButtonTouchUpInside)
+    )
+
     // MARK: Private properties
 
     private var currentViewModel: FeedDetailsViewModel? {
@@ -48,9 +66,14 @@ class FeedDetailsViewController: FMPageViewController {
 
     // MARK: Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.title = "Подробности"
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        currentViewModel?.saveToDatabase()
     }
 
     override func addSubviews() {
@@ -82,15 +105,34 @@ class FeedDetailsViewController: FMPageViewController {
     }
 
     override func bind() {
-        guard let viewModel = currentViewModel else {
-            fatalError("Wrong viewModel provided.")
+        guard let currentViewModel else {
+            assertionFailure("Wrong viewModel provided.")
+            return
         }
 
-        titleLabel.text = viewModel.title ?? ""
-        descriptionLabel.text = viewModel.description ?? ""
-        dateLabel.text = viewModel.date ?? ""
-        feedImage.image = viewModel.image
+        titleLabel.text = currentViewModel.title
+        descriptionLabel.text = currentViewModel.description ?? ""
+        dateLabel.text = currentViewModel.date ?? ""
+        feedImage.image = currentViewModel.image
+
+        favouriteBarButton.image = currentViewModel.isFavourite ? Image.starFill : Image.star
 
         view.layoutIfNeeded()
+    }
+
+    // MARK: Private methods
+
+    private func configureNavigationBar() {
+        navigationItem.title = UIString.navigationBarTitle
+        navigationItem.rightBarButtonItem = favouriteBarButton
+    }
+
+    @objc
+    private func favouriteButtonTouchUpInside() {
+        guard let currentViewModel else {
+            return
+        }
+        currentViewModel.isFavourite = !currentViewModel.isFavourite
+        favouriteBarButton.image = currentViewModel.isFavourite ? Image.starFill : Image.star
     }
 }

@@ -245,7 +245,7 @@ extension FeedEntriesSectionViewModel: FeedEntriesCellViewModelDelegate {
         title: String,
         description: String?,
         date: String?,
-        managedObject: NSManagedObject
+        managedObject: ManagedFeedEntry
     ) {
         Router.shared.push(
             FeedPageFactory.NavigationPath.feedDetails.rawValue,

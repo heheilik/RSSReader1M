@@ -19,9 +19,15 @@ class FeedDetailsViewModel: FMPageViewModel {
     let date: String?
     let image: UIImage?
 
+    var isFavourite: Bool {
+        didSet {
+            saveFavouriteStatusToContext()
+        }
+    }
+
     // MARK: Private properties
 
-    private let managedObject: NSManagedObject
+    private let managedObject: ManagedFeedEntry
     private let persistenceManager: FeedPersistenceManager
 
     // MARK: Initialization
@@ -35,6 +41,40 @@ class FeedDetailsViewModel: FMPageViewModel {
         managedObject = context.managedObject
         persistenceManager = context.persistenceManager
 
+        isFavourite = false
+
         super.init()
+
+        updateFavouriteStatusWithStorage()
+    }
+
+    // MARK: Internal methods
+
+    func saveToDatabase() {
+        Task {
+            await persistenceManager.saveControllerData()
+        }
+    }
+
+    // MARK: Private methods
+
+    private func updateFavouriteStatusWithStorage() {
+        guard let context = managedObject.managedObjectContext else {
+            assertionFailure("Object must exist in some context.")
+            return
+        }
+        context.performAndWait {
+            self.isFavourite = managedObject.isFavourite
+        }
+    }
+
+    private func saveFavouriteStatusToContext() {
+        guard let context = managedObject.managedObjectContext else {
+            assertionFailure("Object must exist in some context.")
+            return
+        }
+        context.performAndWait {
+            managedObject.isFavourite = self.isFavourite
+        }
     }
 }
