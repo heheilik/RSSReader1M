@@ -5,7 +5,6 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
-import ALNavigation
 import Combine
 import CoreData
 import Factory
@@ -16,6 +15,7 @@ import UIKit
 
 protocol FeedEntriesCellViewModelDelegate: AnyObject {
     func readStatusChanged(isRead: Bool)
+    func pushDetailsController(title: String, description: String?, date: String?, managedObject: NSManagedObject)
 }
 
 class FeedEntriesCellViewModel: FMCellViewModel {
@@ -229,15 +229,11 @@ extension FeedEntriesCellViewModel: FMSelectableCellModel {
             return
         }
         isRead = true
-        Router.shared.push(
-            FeedPageFactory.NavigationPath.feedDetails.rawValue,
-            animated: true,
-            context: FeedDetailsContext(
-                title: title,
-                description: description,
-                date: date,
-                image: image
-            )
+        currentDelegate?.pushDetailsController(
+            title: title,
+            description: description,
+            date: date,
+            managedObject: managedObject
         )
     }
 }

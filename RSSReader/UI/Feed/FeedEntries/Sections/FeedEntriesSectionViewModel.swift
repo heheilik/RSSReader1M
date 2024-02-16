@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
+import ALNavigation
 import CoreData
 import Foundation
 import FMArchitecture
@@ -238,5 +239,25 @@ extension FeedEntriesSectionViewModel: FMAnimatable { }
 extension FeedEntriesSectionViewModel: FeedEntriesCellViewModelDelegate {
     func readStatusChanged(isRead: Bool) {
         unreadEntriesCount += isRead ? -1 : 1
+    }
+
+    func pushDetailsController(
+        title: String,
+        description: String?,
+        date: String?,
+        managedObject: NSManagedObject
+    ) {
+        Router.shared.push(
+            FeedPageFactory.NavigationPath.feedDetails.rawValue,
+            animated: true,
+            context: FeedDetailsContext(
+                title: title,
+                description: description,
+                date: date,
+                image: image,
+                persistenceManager: persistenceManager,
+                managedObject: managedObject
+            )
+        )
     }
 }

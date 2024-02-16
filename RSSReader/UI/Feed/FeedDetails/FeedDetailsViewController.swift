@@ -11,10 +11,6 @@ import UIKit
 
 class FeedDetailsViewController: FMPageViewController {
 
-    private var currentViewModel: FeedDetailsViewModel? {
-        viewModel as? FeedDetailsViewModel
-    }
-
     // MARK: UI
 
     private let feedImage: UIImageView = {
@@ -44,14 +40,18 @@ class FeedDetailsViewController: FMPageViewController {
         return label
     }()
 
+    // MARK: Private properties
+
+    private var currentViewModel: FeedDetailsViewModel? {
+        viewModel as? FeedDetailsViewModel
+    }
+
     // MARK: Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Подробности"
     }
-
-    // MARK: Internal methods
 
     override func addSubviews() {
         view.addSubview(feedImage)
@@ -85,13 +85,12 @@ class FeedDetailsViewController: FMPageViewController {
         guard let viewModel = currentViewModel else {
             fatalError("Wrong viewModel provided.")
         }
-        feedImage.image = viewModel.context.image
-        titleLabel.text = viewModel.context.title ?? ""
-        descriptionLabel.text = viewModel.context.description ?? ""
-        dateLabel.text = viewModel.context.date ?? ""
+
+        titleLabel.text = viewModel.title ?? ""
+        descriptionLabel.text = viewModel.description ?? ""
+        dateLabel.text = viewModel.date ?? ""
+        feedImage.image = viewModel.image
 
         view.layoutIfNeeded()
-
     }
-
 }

@@ -5,17 +5,36 @@
 //  Created by Heorhi Heilik on 1.11.23.
 //
 
+import CoreData
 import FMArchitecture
 import Foundation
 import UIKit
 
 class FeedDetailsViewModel: FMPageViewModel {
 
-    let context: FeedDetailsContext
+    // MARK: Internal properties
+
+    let title: String
+    let description: String?
+    let date: String?
+    let image: UIImage?
+
+    // MARK: Private properties
+
+    private let managedObject: NSManagedObject
+    private let persistenceManager: FeedPersistenceManager
+
+    // MARK: Initialization
 
     init(context: FeedDetailsContext) {
-        self.context = context
+        title = context.title
+        description = context.description
+        date = context.date
+        image = context.image
+
+        managedObject = context.managedObject
+        persistenceManager = context.persistenceManager
+
         super.init()
     }
-
 }
