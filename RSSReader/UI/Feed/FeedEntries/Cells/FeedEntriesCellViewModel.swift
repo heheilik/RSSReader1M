@@ -50,6 +50,15 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         }
     }
 
+    var isFavourite: Bool {
+        get {
+            managedObject.isFavourite
+        }
+        set {
+            managedObject.isFavourite = newValue
+        }
+    }
+
     override var rightSwipeAction: [SwipeAction]? {
         guard !isAnimation else {
             return nil

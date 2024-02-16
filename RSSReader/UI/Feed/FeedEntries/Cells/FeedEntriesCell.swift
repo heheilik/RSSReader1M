@@ -62,6 +62,12 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         return image
     }()
 
+    private let favouriteStatusView = {
+        let view = UIImageView(image: UIImage(named: "star.circle.fill")!)
+        view.isHidden = true
+        return view
+    }()
+
     // MARK: Private properties
 
     private var readStatusObserver: AnyCancellable?
@@ -70,7 +76,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         return viewModel as? FeedEntriesCellViewModel
     }
 
-    // MARK: Internal methods
+    // MARK: Lifecycle
 
     override func configureViews() {
         isSkeletonable = true
@@ -88,6 +94,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
     override func addSubviews() {
         contentView.addSubview(feedImage)
+        contentView.addSubview(favouriteStatusView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(readStatusView)
         contentView.addSubview(descriptionLabel)
@@ -121,6 +128,11 @@ class FeedEntriesCell: FMSwipeTableViewCell {
             $0.width.equalTo(64)
             $0.height.equalTo(feedImage.snp.width)
         }
+        favouriteStatusView.snp.makeConstraints {
+            $0.centerX.equalTo(feedImage.snp.trailing)
+            $0.centerY.equalTo(feedImage.snp.top)
+        }
+
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalTo(feedImage.snp.trailing).offset(16)
@@ -180,6 +192,12 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         }
 
         resizeDescriptionIfNeeded()
+    }
+
+    // MARK: Internal methods
+
+    func changeFavouriteStatus(isFavourite: Bool) {
+        favouriteStatusView.isHidden = !isFavourite
     }
 
     // MARK: Private methods
