@@ -71,6 +71,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     // MARK: Private properties
 
     private var readStatusObserver: AnyCancellable?
+    private var favouriteStatusObserver: AnyCancellable?
 
     private weak var currentViewModel: FeedEntriesCellViewModel? {
         return viewModel as? FeedEntriesCellViewModel
@@ -183,13 +184,22 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         feedImage.image = viewModel.image
 
         changeReadStatus(isRead: viewModel.isRead)
+        changeFavouriteStatus(isFavourite: viewModel.isFavourite)
 
-        readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main).sink { [weak self] isRead in
-            guard let self = self else {
-                return
+        readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main)
+            .sink { [weak self] isRead in
+                guard let self = self else {
+                    return
+                }
+                self.changeReadStatus(isRead: isRead)
             }
-            self.changeReadStatus(isRead: isRead)
-        }
+        favouriteStatusObserver = currentViewModel?.$isFavourite.receive(on: RunLoop.main)
+            .sink { [weak self] isFavourite in
+                guard let self = self else {
+                    return
+                }
+                self.changeFavouriteStatus(isFavourite: isFavourite)
+            }
 
         resizeDescriptionIfNeeded()
     }

@@ -25,11 +25,15 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     private enum UIStrings {
         static let isRead = "Прочитано"
         static let isUnread = "Непрочитано"
+        static let makeFavourite = "Добавить в\nизбранное"
+        static let makeNotFavourite = "Удалить из\nизбранного"
     }
 
     private enum Images {
         static let message = UIImage(systemName: "message")!
         static let messageWithBadge = UIImage(systemName: "message.badge")!
+        static let star = UIImage(systemName: "star.fill")!
+        static let starCrossed = UIImage(systemName: "star.slash.fill")!
     }
 
     // MARK: Internal properties
@@ -41,6 +45,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     var descriptionShownFull = false
     
     @Published var isRead = false
+    @Published var isFavourite = false
 
     weak var image: UIImage? {
         didSet {
@@ -50,21 +55,12 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         }
     }
 
-    var isFavourite: Bool {
-        get {
-            managedObject.isFavourite
-        }
-        set {
-            managedObject.isFavourite = newValue
-        }
-    }
-
     override var rightSwipeAction: [SwipeAction]? {
         guard !isAnimation else {
             return nil
         }
 
-        let action = SwipeAction(
+        let readAction = SwipeAction(
             style: .default,
             title: isRead ? UIStrings.isUnread : UIStrings.isRead
         ) { [weak self] _, _ in
@@ -73,11 +69,26 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             }
             self.isRead = !self.isRead
         }
-        action.configure(
+        readAction.configure(
             with: isRead ? Images.messageWithBadge : Images.message,
             backgroundColor: .systemBlue
         )
-        return [action]
+
+        let favouriteAction = SwipeAction(
+            style: .default,
+            title: isFavourite ? UIStrings.makeNotFavourite : UIStrings.makeFavourite
+        ) { [weak self ] _, _ in
+            guard let self = self else {
+                return
+            }
+            self.isFavourite = !self.isFavourite
+        }
+        favouriteAction.configure(
+            with: isFavourite ? Images.starCrossed : Images.star,
+            backgroundColor: .orange
+        )
+
+        return [readAction, favouriteAction]
     }
 
     // MARK: Private properties
@@ -85,6 +96,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     private let managedObject: ManagedFeedEntry
 
     private var isReadSubscriber: AnyCancellable?
+    private var isFavouriteSubscriber: AnyCancellable?
 
     @Injected(\.entryDateFormatter) private static var dateFormatter
 
@@ -104,6 +116,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         self.title = managedObject.title
         self.description = managedObject.entryDescription
         self.isRead = managedObject.isRead
+        self.isFavourite = managedObject.isFavourite
 
         if let date = managedObject.date {
             self.date = Self.dateFormatter.string(from: date)
@@ -118,7 +131,9 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             delegate: delegate
         )
         isAnimation = isAnimatedAtStart
+
         bindReadStatus()
+        bindFavouriteStatus()
     }
 
     // MARK: Internal methods
@@ -137,6 +152,14 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             if self?.managedObject.isRead != newValue {
                 self?.managedObject.isRead = newValue
                 self?.currentDelegate?.readStatusChanged(isRead: newValue)
+            }
+        }
+    }
+
+    private func bindFavouriteStatus() {
+        isFavouriteSubscriber = $isFavourite.sink { [weak self] newValue in
+            if self?.managedObject.isFavourite != newValue {
+                self?.managedObject.isFavourite = newValue
             }
         }
     }
