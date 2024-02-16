@@ -2,7 +2,7 @@
 //  ManagedFeedEntry+CoreDataProperties.swift
 //  RSSReader
 //
-//  Created by Heorhi Heilik on 12.02.24.
+//  Created by Heorhi Heilik on 16.02.24.
 //
 
 import Foundation
@@ -16,6 +16,7 @@ extension ManagedFeedEntry {
 
     @NSManaged public var date: Date?
     @NSManaged public var entryDescription: String?
+    @NSManaged public var isFavourite: Bool
     @NSManaged public var isRead: Bool
     @NSManaged public var title: String?
     @NSManaged public var feed: ManagedFeed?
