@@ -90,8 +90,12 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             await updateFeed()
         }
 
-        let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
-        self.downloadImageIfPossible(imageURL: imageURL)
+        let controller = persistenceManager.fetchedResultsController
+        controller.managedObjectContext.perform { [weak self] in
+            self?.downloadImageIfPossible(
+                imageURL: controller.fetchedObjects?.first?.feed?.imageURL
+            )
+        }
     }
 
     // MARK: Internal methods
@@ -106,14 +110,17 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         addedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
     ) {
-        print("add   : \(indexPath.row), title: \(object.title ?? "nil")")
+        guard let viewModel = FeedEntriesCellViewModel(
+            managedObject: object,
+            image: image,
+            delegate: self,
+            isAnimatedAtStart: false
+        ) else {
+            assertionFailure("Model must be created here.")
+            return
+        }
         cellUpdateManager.add(
-            viewModel: FeedEntriesCellViewModel(
-                managedObject: object,
-                image: image,
-                delegate: self,
-                isAnimatedAtStart: false
-            ),
+            viewModel: viewModel,
             index: indexPath.row
         )
     }
@@ -123,13 +130,15 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         updatedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
     ) {
-        print("update: \(indexPath.row), title: \(object.title ?? "nil")")
-        let cellViewModel = FeedEntriesCellViewModel(
+        guard let cellViewModel = FeedEntriesCellViewModel(
             managedObject: object,
             image: image,
             delegate: self,
             isAnimatedAtStart: false
-        )
+        ) else {
+            assertionFailure("Model must be created here.")
+            return
+        }
         refreshCells([cellViewModel])
     }
 

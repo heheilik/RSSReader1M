@@ -38,7 +38,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     // MARK: Internal properties
 
-    let title: String?
+    let title: String
     let description: String?
     let date: String?
 
@@ -105,24 +105,64 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     }
 
     // MARK: Initialization
-
-    init(
+    
+    /// Designated initializer.
+    ///
+    /// - Parameters:
+    ///   - managedObject: Managed object that represents current entry. Must exist in some context.
+    ///   - image: Image of the source that this entry belongs to.
+    ///   - delegate: View model delegate.
+    ///   - isAnimatedAtStart: Defines whether skeleton animation is shown at start.
+    ///
+    /// Despite initializer is optional, `nil` mustn't be returned from here. Each case when `nil` is returned
+    /// triggers an `assertionFailure(_:)`.
+    init?(
         managedObject: ManagedFeedEntry,
         image: UIImage,
         delegate: FMCellViewModelDelegate,
         isAnimatedAtStart: Bool
     ) {
         self.managedObject = managedObject
-        self.title = managedObject.title
-        self.description = managedObject.entryDescription
-        self.isRead = managedObject.isRead
-        self.isFavourite = managedObject.isFavourite
 
-        if let date = managedObject.date {
-            self.date = Self.dateFormatter.string(from: date)
-        } else {
-            self.date = nil
+        guard let context = managedObject.managedObjectContext else {
+            assertionFailure("Managed object must exist in some context.")
+            return nil
         }
+
+        var title: String?
+        var description: String?
+        var isRead: Bool?
+        var isFavourite: Bool?
+        var date: String?
+
+        context.performAndWait {
+            title = managedObject.title
+            description = managedObject.entryDescription
+
+            isRead = managedObject.isRead
+            isFavourite = managedObject.isFavourite
+
+            if let strongDate = managedObject.date {
+                date = Self.dateFormatter.string(from: strongDate)
+            } else {
+                date = nil
+            }
+        }
+
+        guard
+            let title,
+            let isRead,
+            let isFavourite
+        else {
+            assertionFailure("Title, read status and favourite status must be retrieved from model.")
+            return nil
+        }
+
+        self.title = title
+        self.description = description
+        self.isRead = isRead
+        self.isFavourite = isFavourite
+        self.date = date
 
         self.image = image
 
@@ -149,17 +189,33 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     private func bindReadStatus() {
         isReadSubscriber = $isRead.sink { [weak self] newValue in
-            if self?.managedObject.isRead != newValue {
-                self?.managedObject.isRead = newValue
-                self?.currentDelegate?.readStatusChanged(isRead: newValue)
+            guard
+                let self = self,
+                let context = self.managedObject.managedObjectContext
+            else {
+                return
+            }
+            context.performAndWait {
+                if self.managedObject.isRead != newValue {
+                    self.managedObject.isRead = newValue
+                    self.currentDelegate?.readStatusChanged(isRead: newValue)
+                }
             }
         }
     }
 
     private func bindFavouriteStatus() {
         isFavouriteSubscriber = $isFavourite.sink { [weak self] newValue in
-            if self?.managedObject.isFavourite != newValue {
-                self?.managedObject.isFavourite = newValue
+            guard
+                let self = self,
+                let context = self.managedObject.managedObjectContext
+            else {
+                return
+            }
+            context.performAndWait {
+                if newValue != self.managedObject.isFavourite {
+                    self.managedObject.isFavourite = newValue
+                }
             }
         }
     }
