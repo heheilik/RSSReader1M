@@ -45,7 +45,7 @@ class FeedDetailsViewModel: FMPageViewModel {
 
         super.init()
 
-        updateFavouriteStatusWithStorage()
+        loadFavouriteStatusFromStorage()
     }
 
     // MARK: Internal methods
@@ -58,7 +58,7 @@ class FeedDetailsViewModel: FMPageViewModel {
 
     // MARK: Private methods
 
-    private func updateFavouriteStatusWithStorage() {
+    private func loadFavouriteStatusFromStorage() {
         guard let context = managedObject.managedObjectContext else {
             assertionFailure("Object must exist in some context.")
             return
