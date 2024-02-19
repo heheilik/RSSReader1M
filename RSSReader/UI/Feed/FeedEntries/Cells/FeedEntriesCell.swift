@@ -13,6 +13,14 @@ import UIKit
 
 class FeedEntriesCell: FMSwipeTableViewCell {
 
+    // MARK: Constants
+
+    private enum Image {
+        static let chevronUp = UIImage(systemName: "chevron.up")!
+        static let chevronDown = UIImage(systemName: "chevron.down")!
+        static let favouriteStatus = UIImage(named: "star.circle.fill")!
+    }
+
     // MARK: UI
 
     private let titleLabel = {
@@ -40,7 +48,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
     private let descriptionSizeToggleButton = {
         let button = UIButton(type: .custom)
-        button.setImage(chevronDownImage, for: .normal)
+        button.setImage(Image.chevronDown, for: .normal)
         return button
     }()
 
@@ -52,9 +60,6 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         return view
     }()
 
-    private static let chevronUpImage = UIImage(systemName: "chevron.up")!
-    private static let chevronDownImage = UIImage(systemName: "chevron.down")!
-
     private let feedImage = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
@@ -63,7 +68,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     }()
 
     private let favouriteStatusView = {
-        let view = UIImageView(image: UIImage(named: "star.circle.fill")!)
+        let view = UIImageView(image: Image.favouriteStatus)
         view.isHidden = true
         return view
     }()
@@ -233,11 +238,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     }
 
     private func arrowImageFor(numberOfLines: Int) -> UIImage {
-        if numberOfLines == 1 {
-            return FeedEntriesCell.chevronDownImage
-        } else {
-            return FeedEntriesCell.chevronUpImage
-        }
+        numberOfLines == 1 ? Image.chevronDown : Image.chevronUp
     }
 
     private func changeReadStatus(isRead: Bool) {
