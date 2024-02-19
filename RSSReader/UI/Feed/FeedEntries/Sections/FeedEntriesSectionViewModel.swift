@@ -27,7 +27,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     // MARK: Internal properties
 
     override var registeredCellTypes: [FMTableViewCellProtocol.Type] {[
-        FeedEntriesCell.self
+        FeedEntryTableViewCell.self
     ]}
 
     override var registeredHeaderFooterTypes: [FMHeaderFooterView.Type] {[
@@ -48,12 +48,12 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private var cellUpdateManager = FeedEntriesCellUpdateContainer()
 
-    private var selectedViewModel: FeedEntriesCellViewModel?
+    private var selectedViewModel: FeedEntryCellViewModel?
 
     private var downloadedImage: UIImage? {
         didSet {
             for cellViewModel in self.cellViewModels {
-                guard let viewModel = cellViewModel as? FeedEntriesCellViewModel else {
+                guard let viewModel = cellViewModel as? FeedEntryCellViewModel else {
                     continue
                 }
                 viewModel.image = image
@@ -117,7 +117,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         addedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
     ) {
-        guard let viewModel = FeedEntriesCellViewModel(
+        guard let viewModel = FeedEntryCellViewModel(
             managedObject: object,
             image: image,
             delegate: self,
@@ -180,7 +180,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     func updateOnAppear() {
         guard
             let cellViewModel = selectedViewModel,
-            let cell = cellViewModel.fillableCell as? FeedEntriesCell
+            let cell = cellViewModel.fillableCell as? FeedEntryTableViewCell
         else {
             return
         }
@@ -198,7 +198,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             guard let self else {
                 return nil
             }
-            return FeedEntriesCellViewModel(
+            return FeedEntryCellViewModel(
                 managedObject: entry,
                 image: image,
                 delegate: self,
@@ -240,14 +240,14 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
 extension FeedEntriesSectionViewModel: FMAnimatable { }
 
-// MARK: - FeedEntriesCellViewModelDelegate
+// MARK: - FeedEntryCellViewModelDelegate
 
-extension FeedEntriesSectionViewModel: FeedEntriesCellViewModelDelegate {
+extension FeedEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
     func readStatusChanged(isRead: Bool) {
         unreadEntriesCount += isRead ? -1 : 1
     }
 
-    func didSelect(cellViewModel: FeedEntriesCellViewModel) {
+    func didSelect(cellViewModel: FeedEntryCellViewModel) {
         selectedViewModel = cellViewModel
         Router.shared.push(
             FeedPageFactory.NavigationPath.feedDetails.rawValue,

@@ -11,9 +11,9 @@ class FeedEntriesCellUpdateContainer {
 
     // MARK: Internal properties
 
-    private(set) var cellViewModels: [(viewModel: FeedEntriesCellViewModel, index: Int)] = []
+    private(set) var cellViewModels: [(viewModel: FeedEntryCellViewModel, index: Int)] = []
 
-    var ordered: [(viewModel: FeedEntriesCellViewModel, index: Int)] {
+    var ordered: [(viewModel: FeedEntryCellViewModel, index: Int)] {
         cellViewModels.sorted { $0.index < $1.index }
     }
 
@@ -27,7 +27,7 @@ class FeedEntriesCellUpdateContainer {
 
     // MARK: Internal methods
 
-    func add(viewModel: FeedEntriesCellViewModel, index: Int) {
+    func add(viewModel: FeedEntryCellViewModel, index: Int) {
         cellViewModels.append((viewModel: viewModel, index: index))
     }
 
