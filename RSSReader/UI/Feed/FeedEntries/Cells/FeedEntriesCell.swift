@@ -250,6 +250,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         descriptionLabel.text = " "
         dateLabel.text = " "
         readStatusView.isHidden = true
+        favouriteStatusView.isHidden = true
         descriptionSizeToggleButton.isHidden = true
     }
 
