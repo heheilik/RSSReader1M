@@ -11,8 +11,8 @@ import Foundation
 import FeedKit
 
 protocol FeedSourcesViewModelDelegate: AnyObject {
-    func updateStarted()
-    func updateCompleted(withError error: FeedUpdateManager.UpdateError?)
+    func fetchStarted()
+    func fetchFinished(_ result: Result<Void, Error>)
 }
 
 class FeedSourcesViewModel: FMTablePageViewModel {
@@ -40,12 +40,12 @@ class FeedSourcesViewModel: FMTablePageViewModel {
     // MARK: Internal methods
 
     func showFavouriteEntries() {
-        delegate?.updateStarted()
+        delegate?.fetchStarted()
         Task {
             let persistenceManager = FavouriteEntriesPersistenceManager()
             await persistenceManager.fetchControllerData()
             await MainActor.run {
-                delegate?.updateCompleted(withError: nil)
+                delegate?.fetchFinished(.success)
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.favouriteEntries.rawValue,
                     animated: true,
@@ -71,7 +71,7 @@ class FeedSourcesViewModel: FMTablePageViewModel {
 
 extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
     func didSelect(cellWithData feedSource: FeedSource) {
-        delegate?.updateStarted()
+        delegate?.fetchStarted()
         Task {
             let persistenceManager = SingleFeedPersistenceManager(url: feedSource.url)
             await persistenceManager.fetchControllerData()
@@ -82,7 +82,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
             // TODO: add error handling
             await MainActor.run {
-                delegate?.updateCompleted(withError: nil)
+                delegate?.fetchFinished(.success)
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.feedEntries.rawValue,
                     animated: true,

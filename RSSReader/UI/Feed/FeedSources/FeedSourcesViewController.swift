@@ -83,7 +83,7 @@ class FeedSourcesViewController: FMTablePageViewController {
 // MARK: - FeedUpdateDelegate
 
 extension FeedSourcesViewController: FeedSourcesViewModelDelegate {
-    func updateStarted() {
+    func fetchStarted() {
         progressAnimation.isHidden = false
         progressAnimation.play()
         if let delegate = delegate as? FeedSourcesTableViewDelegate {
@@ -91,7 +91,7 @@ extension FeedSourcesViewController: FeedSourcesViewModelDelegate {
         }
     }
 
-    func updateCompleted(withError error: FeedUpdateManager.UpdateError?) {
+    func fetchFinished(_ result: Result<Void, Error>) {
         progressAnimation.stop()
         progressAnimation.isHidden = true
         if let delegate = delegate as? FeedSourcesTableViewDelegate {
