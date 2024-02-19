@@ -56,6 +56,10 @@ class FeedEntriesViewModel: FMTablePageViewModel {
         }
     }
 
+    func updateOnAppear() {
+        feedEntriesSectionViewModels.forEach { $0.updateOnAppear() }
+    }
+
     // MARK: Private methods
 
     private func updateSectionViewModels(with context: FeedEntriesContext) {

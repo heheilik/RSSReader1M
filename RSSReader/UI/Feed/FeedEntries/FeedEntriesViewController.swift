@@ -51,6 +51,11 @@ class FeedEntriesViewController: FMTablePageViewController {
         })
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        currentViewModel?.updateOnAppear()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         currentViewModel?.saveFeedToCoreData()

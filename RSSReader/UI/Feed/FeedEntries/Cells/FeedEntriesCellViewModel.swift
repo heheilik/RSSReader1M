@@ -15,7 +15,7 @@ import UIKit
 
 protocol FeedEntriesCellViewModelDelegate: AnyObject {
     func readStatusChanged(isRead: Bool)
-    func pushDetailsController(title: String, description: String?, date: String?, managedObject: ManagedFeedEntry)
+    func didSelect(cellViewModel: FeedEntriesCellViewModel)
 }
 
 class FeedEntriesCellViewModel: FMCellViewModel {
@@ -42,15 +42,39 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     let description: String?
     let date: String?
 
+    let managedObject: ManagedFeedEntry
+
     var descriptionShownFull = false
     
     @Published var isRead = false
-    @Published var isFavourite = false
 
     weak var image: UIImage? {
         didSet {
             DispatchQueue.main.async {
                 self.fillableCell?.fill(viewModel: self)
+            }
+        }
+    }
+
+    var isFavourite: Bool {
+        get {
+            guard let context = managedObject.managedObjectContext else {
+                assertionFailure("Object must exist in some context.")
+                return false
+            }
+            var isFavourite = false
+            context.performAndWait {
+                isFavourite = managedObject.isFavourite
+            }
+            return isFavourite
+        }
+        set {
+            guard let context = managedObject.managedObjectContext else {
+                assertionFailure("Object must exist in some context.")
+                return
+            }
+            context.performAndWait {
+                managedObject.isFavourite = newValue
             }
         }
     }
@@ -82,6 +106,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
                 return
             }
             self.isFavourite = !self.isFavourite
+            (self.fillableCell as? FeedEntriesCell)?.changeFavouriteStatus(isFavourite: self.isFavourite)
         }
         favouriteAction.configure(
             with: isFavourite ? Images.starCrossed : Images.star,
@@ -93,10 +118,8 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     // MARK: Private properties
 
-    private let managedObject: ManagedFeedEntry
 
     private var isReadSubscriber: AnyCancellable?
-    private var isFavouriteSubscriber: AnyCancellable?
 
     @Injected(\.entryDateFormatter) private static var dateFormatter
 
@@ -132,7 +155,6 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         var title: String?
         var description: String?
         var isRead: Bool?
-        var isFavourite: Bool?
         var date: String?
 
         context.performAndWait {
@@ -140,7 +162,6 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             description = managedObject.entryDescription
 
             isRead = managedObject.isRead
-            isFavourite = managedObject.isFavourite
 
             if let strongDate = managedObject.date {
                 date = Self.dateFormatter.string(from: strongDate)
@@ -151,8 +172,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
         guard
             let title,
-            let isRead,
-            let isFavourite
+            let isRead
         else {
             assertionFailure("Title, read status and favourite status must be retrieved from model.")
             return nil
@@ -161,7 +181,6 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         self.title = title
         self.description = description
         self.isRead = isRead
-        self.isFavourite = isFavourite
         self.date = date
 
         self.image = image
@@ -173,7 +192,6 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         isAnimation = isAnimatedAtStart
 
         bindReadStatus()
-        bindFavouriteStatus()
     }
 
     // MARK: Internal methods
@@ -203,22 +221,6 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             }
         }
     }
-
-    private func bindFavouriteStatus() {
-        isFavouriteSubscriber = $isFavourite.sink { [weak self] newValue in
-            guard
-                let self = self,
-                let context = self.managedObject.managedObjectContext
-            else {
-                return
-            }
-            context.performAndWait {
-                if newValue != self.managedObject.isFavourite {
-                    self.managedObject.isFavourite = newValue
-                }
-            }
-        }
-    }
 }
 
 // MARK: - FMSelectableCellModel
@@ -228,13 +230,10 @@ extension FeedEntriesCellViewModel: FMSelectableCellModel {
         guard !isAnimation else {
             return
         }
-        isRead = true
-        currentDelegate?.pushDetailsController(
-            title: title,
-            description: description,
-            date: date,
-            managedObject: managedObject
-        )
+        if isRead != true {
+            isRead = true
+        }
+        currentDelegate?.didSelect(cellViewModel: self)
     }
 }
 

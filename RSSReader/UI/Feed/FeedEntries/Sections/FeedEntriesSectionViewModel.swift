@@ -42,6 +42,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private var cellUpdateManager = FeedEntriesCellUpdateContainer()
 
+    private var selectedViewModel: FeedEntriesCellViewModel?
+
     private var downloadedImage: UIImage? {
         didSet {
             for cellViewModel in self.cellViewModels {
@@ -130,18 +132,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         _ controller: NSFetchedResultsController<NSFetchRequestResult>,
         updatedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
-    ) {
-        guard let cellViewModel = FeedEntriesCellViewModel(
-            managedObject: object,
-            image: image,
-            delegate: self,
-            isAnimatedAtStart: false
-        ) else {
-            assertionFailure("Model must be created here.")
-            return
-        }
-        refreshCells([cellViewModel])
-    }
+    ) { }
 
     func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         currentDelegate?.beginTableUpdates()
@@ -180,6 +171,17 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         case .success():
             break
         }
+    }
+
+    func updateOnAppear() {
+        guard
+            let cellViewModel = selectedViewModel,
+            let cell = cellViewModel.fillableCell as? FeedEntriesCell
+        else {
+            return
+        }
+        cell.changeFavouriteStatus(isFavourite: cellViewModel.isFavourite)
+        selectedViewModel = nil
     }
 
     // MARK: Private methods
@@ -241,22 +243,18 @@ extension FeedEntriesSectionViewModel: FeedEntriesCellViewModelDelegate {
         unreadEntriesCount += isRead ? -1 : 1
     }
 
-    func pushDetailsController(
-        title: String,
-        description: String?,
-        date: String?,
-        managedObject: ManagedFeedEntry
-    ) {
+    func didSelect(cellViewModel: FeedEntriesCellViewModel) {
+        selectedViewModel = cellViewModel
         Router.shared.push(
             FeedPageFactory.NavigationPath.feedDetails.rawValue,
             animated: true,
             context: FeedDetailsContext(
-                title: title,
-                description: description,
-                date: date,
+                title: cellViewModel.title,
+                description: cellViewModel.description,
+                date: cellViewModel.date,
                 image: image,
                 persistenceManager: persistenceManager,
-                managedObject: managedObject
+                managedObject: cellViewModel.managedObject
             )
         )
     }

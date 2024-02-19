@@ -71,7 +71,6 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     // MARK: Private properties
 
     private var readStatusObserver: AnyCancellable?
-    private var favouriteStatusObserver: AnyCancellable?
 
     private weak var currentViewModel: FeedEntriesCellViewModel? {
         return viewModel as? FeedEntriesCellViewModel
@@ -192,13 +191,6 @@ class FeedEntriesCell: FMSwipeTableViewCell {
                     return
                 }
                 self.changeReadStatus(isRead: isRead)
-            }
-        favouriteStatusObserver = currentViewModel?.$isFavourite.receive(on: RunLoop.main)
-            .sink { [weak self] isFavourite in
-                guard let self = self else {
-                    return
-                }
-                self.changeFavouriteStatus(isFavourite: isFavourite)
             }
 
         resizeDescriptionIfNeeded()
