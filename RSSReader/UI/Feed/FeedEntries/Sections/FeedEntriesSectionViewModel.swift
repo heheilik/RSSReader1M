@@ -18,6 +18,12 @@ protocol FeedEntriesSectionViewModelDelegate: AnyObject {
 
 class FeedEntriesSectionViewModel: FMSectionViewModel {
 
+    // MARK: Constants
+
+    private enum Image {
+        static let error = UIImage(systemName: "photo")!
+    }
+
     // MARK: Internal properties
 
     override var registeredCellTypes: [FMTableViewCellProtocol.Type] {[
@@ -29,7 +35,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ]}
 
     var image: UIImage {
-        downloadedImage ?? Self.errorImage
+        downloadedImage ?? Image.error
     }
 
     // MARK: Private properties
@@ -60,8 +66,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             updateHeader(unreadEntriesCount: unreadEntriesCount)
         }
     }
-
-    private static let errorImage = UIImage(systemName: "photo")!
 
     private weak var currentDelegate: FeedEntriesSectionViewModelDelegate? {
         delegate as? FeedEntriesSectionViewModelDelegate
