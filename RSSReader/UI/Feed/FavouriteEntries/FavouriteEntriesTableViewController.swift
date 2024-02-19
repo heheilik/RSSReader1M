@@ -7,7 +7,30 @@
 
 import FMArchitecture
 import Foundation
+import UIKit
 
 class FavouriteEntriesTableViewController: FMTablePageViewController {
 
+    // MARK: Constants
+
+    private enum UIString {
+        static let navigationBarTitle = "Избранное"
+    }
+
+    // MARK: Internal properties
+
+    override var tableViewStyle: UITableView.Style { .plain }
+
+    // MARK: Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar()
+    }
+
+    // MARK: Private methods
+
+    private func configureNavigationBar() {
+        navigationItem.title = UIString.navigationBarTitle
+    }
 }
