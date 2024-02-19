@@ -59,7 +59,18 @@ struct FeedPageFactory: PageFactoryProtocol {
     private func newFavouriteEntriesTableViewController(
         context: FavouriteEntriesContext
     ) -> FavouriteEntriesTableViewController {
-        fatalError("Not implemented.", file: #file, line: #line)
+        let viewController = FavouriteEntriesTableViewController()
+
+        let dataSource = FMTableViewDataSource(tableView: viewController.tableView)
+        viewController.dataSource = dataSource
+
+        let viewModel = FavouriteEntriesTableViewModel(
+            context: context,
+            dataSource: dataSource
+        )
+        viewController.viewModel = viewModel
+
+        return viewController
     }
 
     private func newFeedDetailsViewController(context: FeedDetailsContext) -> FeedDetailsViewController {

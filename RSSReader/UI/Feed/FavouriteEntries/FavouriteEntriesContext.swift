@@ -9,5 +9,5 @@ import ALNavigation
 import Foundation
 
 struct FavouriteEntriesContext: PageContext {
-    
+    let persistenceManager: FavouriteEntriesPersistenceManager
 }

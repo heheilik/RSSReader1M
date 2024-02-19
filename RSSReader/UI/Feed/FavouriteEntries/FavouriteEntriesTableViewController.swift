@@ -9,5 +9,5 @@ import FMArchitecture
 import Foundation
 
 class FavouriteEntriesTableViewController: FMTablePageViewController {
-    
+
 }

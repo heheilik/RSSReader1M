@@ -200,10 +200,10 @@
 		5D1A5CC72B833C1D00B7C248 /* FavouriteEntries */ = {
 			isa = PBXGroup;
 			children = (
-				5D1A5CD22B8340F300B7C248 /* Sections */,
-				5D1A5CC82B833C3800B7C248 /* FavouriteEntriesTableViewController.swift */,
 				5D1A5CCC2B833CD200B7C248 /* FavouriteEntriesContext.swift */,
+				5D1A5CC82B833C3800B7C248 /* FavouriteEntriesTableViewController.swift */,
 				5D1A5CCA2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift */,
+				5D1A5CD22B8340F300B7C248 /* Sections */,
 			);
 			path = FavouriteEntries;
 			sourceTree = "<group>";
