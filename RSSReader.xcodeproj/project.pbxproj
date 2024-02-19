@@ -18,6 +18,9 @@
 		5D14F0E82B0F7DB900F57B14 /* FeedEntriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */; };
 		5D14F0FF2B0F97D800F57B14 /* MockFeedImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D14F0FE2B0F97D800F57B14 /* MockFeedImageService.swift */; };
 		5D17A5772B7DE26A00C5728A /* FeedEntriesCellUpdateContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D17A5762B7DE26A00C5728A /* FeedEntriesCellUpdateContainer.swift */; };
+		5D1A5CC92B833C3800B7C248 /* FavouriteEntriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5CC82B833C3800B7C248 /* FavouriteEntriesTableViewController.swift */; };
+		5D1A5CCB2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5CCA2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift */; };
+		5D1A5CCD2B833CD200B7C248 /* FavouriteEntriesContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5CCC2B833CD200B7C248 /* FavouriteEntriesContext.swift */; };
 		5D1F56EB2B6CDA500029ACAF /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D1F56EA2B6CDA500029ACAF /* loading.json */; };
 		5D3FA95C2B70AFA200CA8374 /* UnreadEntriesAmountTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D3FA95B2B70AFA200CA8374 /* UnreadEntriesAmountTableViewHeader.swift */; };
 		5D3FA95E2B70B12A00CA8374 /* UnreadEntriesAmountHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D3FA95D2B70B12A00CA8374 /* UnreadEntriesAmountHeaderViewModel.swift */; };
@@ -84,6 +87,9 @@
 		5D14F0E72B0F7DB900F57B14 /* FeedEntriesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEntriesTests.swift; sourceTree = "<group>"; };
 		5D14F0FE2B0F97D800F57B14 /* MockFeedImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedImageService.swift; sourceTree = "<group>"; };
 		5D17A5762B7DE26A00C5728A /* FeedEntriesCellUpdateContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEntriesCellUpdateContainer.swift; sourceTree = "<group>"; };
+		5D1A5CC82B833C3800B7C248 /* FavouriteEntriesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteEntriesTableViewController.swift; sourceTree = "<group>"; };
+		5D1A5CCA2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteEntriesTableViewModel.swift; sourceTree = "<group>"; };
+		5D1A5CCC2B833CD200B7C248 /* FavouriteEntriesContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteEntriesContext.swift; sourceTree = "<group>"; };
 		5D1F56EA2B6CDA500029ACAF /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		5D3FA95B2B70AFA200CA8374 /* UnreadEntriesAmountTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadEntriesAmountTableViewHeader.swift; sourceTree = "<group>"; };
 		5D3FA95D2B70B12A00CA8374 /* UnreadEntriesAmountHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadEntriesAmountHeaderViewModel.swift; sourceTree = "<group>"; };
@@ -187,9 +193,20 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		5D1A5CC72B833C1D00B7C248 /* FavouriteEntries */ = {
+			isa = PBXGroup;
+			children = (
+				5D1A5CC82B833C3800B7C248 /* FavouriteEntriesTableViewController.swift */,
+				5D1A5CCC2B833CD200B7C248 /* FavouriteEntriesContext.swift */,
+				5D1A5CCA2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift */,
+			);
+			path = FavouriteEntries;
+			sourceTree = "<group>";
+		};
 		5D8841862AF1018A00A3951E /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				5D1A5CC72B833C1D00B7C248 /* FavouriteEntries */,
 				5D93DB512AF29A0F0069672B /* FeedDetails */,
 				5DE6B4132AEF9E8200F22F84 /* FeedEntries */,
 				5DE6B40E2AEF9B0700F22F84 /* FeedPageFactory.swift */,
@@ -523,6 +540,7 @@
 				5D4912AC2B761EBF0070A3D6 /* PersistentContainerBuilder.swift in Sources */,
 				5DD6D1082B7CA0670022D0C8 /* Result+SuccessCase.swift in Sources */,
 				5D0382B82B79FDCB00FC20CA /* Factory+EntryDateFormatter.swift in Sources */,
+				5D1A5CCD2B833CD200B7C248 /* FavouriteEntriesContext.swift in Sources */,
 				5D3FA95C2B70AFA200CA8374 /* UnreadEntriesAmountTableViewHeader.swift in Sources */,
 				5DE6B41B2AEF9FDF00F22F84 /* FeedEntriesCellViewModel.swift in Sources */,
 				5DD6D10B2B7CA4660022D0C8 /* FeedEntriesFetchedResultsControllerDelegate.swift in Sources */,
@@ -531,6 +549,7 @@
 				5D0382B52B79EE4000FC20CA /* ManagedFeed+CoreDataProperties.swift in Sources */,
 				5D0382B42B79EE4000FC20CA /* ManagedFeedEntry+CoreDataProperties.swift in Sources */,
 				5DFBB24D2B6BC3E700A2541F /* Factory+NSPersistentContainer.swift in Sources */,
+				5D1A5CCB2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift in Sources */,
 				5DB4326A2B6A203A008F30D3 /* FeedModel.xcdatamodeld in Sources */,
 				5DD6D1062B7C9B4A0022D0C8 /* FeedUpdateManager.swift in Sources */,
 				5DFD964E2AE8FC9C00DEBF9A /* FeedSourcesViewController.swift in Sources */,
@@ -542,6 +561,7 @@
 				5DE6B4152AEF9E9800F22F84 /* FeedEntriesViewController.swift in Sources */,
 				5DFD964A2AE8FC9C00DEBF9A /* AppDelegate.swift in Sources */,
 				5DB432742B6A29E2008F30D3 /* FeedPersistenceManager.swift in Sources */,
+				5D1A5CC92B833C3800B7C248 /* FavouriteEntriesTableViewController.swift in Sources */,
 				5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */,
 				5DE6B4172AEF9EDA00F22F84 /* FeedEntriesViewModel.swift in Sources */,
 				5DC03A772AF1020B00EA2965 /* FeedSourceCellViewModel.swift in Sources */,
