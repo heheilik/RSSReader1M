@@ -11,6 +11,6 @@ import FeedKit
 
 struct FeedEntriesContext: PageContext {
     let feedName: String
-    let feedPersistenceManager: FeedPersistenceManager
+    let feedPersistenceManager: SingleFeedPersistenceManager
     let unreadEntriesCount: Int
 }

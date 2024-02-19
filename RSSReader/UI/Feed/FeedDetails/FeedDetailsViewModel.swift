@@ -28,7 +28,7 @@ class FeedDetailsViewModel: FMPageViewModel {
     // MARK: Private properties
 
     private let managedObject: ManagedFeedEntry
-    private let persistenceManager: FeedPersistenceManager
+    private let persistenceManager: SingleFeedPersistenceManager
 
     // MARK: Initialization
 

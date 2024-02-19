@@ -55,7 +55,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
     func didSelect(cellWithData feedSource: FeedSource) {
         delegate?.updateStarted()
         Task {
-            let persistenceManager = FeedPersistenceManager(url: feedSource.url)
+            let persistenceManager = SingleFeedPersistenceManager(url: feedSource.url)
             await persistenceManager.fetchControllerData()
             guard let unreadEntriesCount = await persistenceManager.fetchUnreadEntriesCount(for: feedSource.url) else {
                 assertionFailure("No problems must happen here.")

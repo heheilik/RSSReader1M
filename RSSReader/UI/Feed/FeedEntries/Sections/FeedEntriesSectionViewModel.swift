@@ -42,7 +42,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private let feedImageService: FeedImageService
 
-    private let persistenceManager: FeedPersistenceManager
+    private let persistenceManager: SingleFeedPersistenceManager
     private let updateManager: FeedUpdateManager
     private let fetchedResultsControllerDelegate: FeedEntriesFetchedResultsControllerDelegate
 

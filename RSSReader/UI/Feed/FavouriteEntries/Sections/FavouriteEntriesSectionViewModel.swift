@@ -18,11 +18,11 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
 
     // MARK: Private properties
 
-    private var persistenceManager: FeedPersistenceManager
+    private var persistenceManager: SingleFeedPersistenceManager
 
     // MARK: Initialization
 
-    init(persistenceManager: FeedPersistenceManager) {
+    init(persistenceManager: SingleFeedPersistenceManager) {
         self.persistenceManager = persistenceManager
         super.init()
     }

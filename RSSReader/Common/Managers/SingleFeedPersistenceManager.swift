@@ -1,5 +1,5 @@
 //
-//  FeedPersistenceManager.swift
+//  SingleFeedPersistenceManager.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 31.01.24.
@@ -10,7 +10,7 @@ import Factory
 import FeedKit
 import Foundation
 
-class FeedPersistenceManager {
+class SingleFeedPersistenceManager {
 
     // MARK: Internal properties
 
