@@ -18,9 +18,21 @@ class FeedSourcesViewController: FMTablePageViewController {
         static let progressAnimationWidthHeight = 256
     }
 
+    private enum UIString {
+        static let navigationBarTitle = "Источники"
+        static let favouritesTitle = "Избранное"
+    }
+
     // MARK: UI
 
     private let progressAnimation = LottieAnimationView(name: "loading")
+
+    private lazy var favouritesBarButtonItem = UIBarButtonItem(
+        title: UIString.favouritesTitle,
+        style: .plain,
+        target: self,
+        action: #selector(favouritesBarButtonTouchUpInside)
+    )
 
     // MARK: Private properties
 
@@ -30,13 +42,8 @@ class FeedSourcesViewController: FMTablePageViewController {
 
     // MARK: Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        navigationItem.title = "Источники"
-    }
-
     override func configureViews() {
+        view.backgroundColor = .white
         progressAnimation.loopMode = .loop
         progressAnimation.isHidden = true
         super.configureViews()
@@ -53,6 +60,23 @@ class FeedSourcesViewController: FMTablePageViewController {
             make.centerX.centerY.equalTo(view)
             make.height.width.equalTo(Dimensions.progressAnimationWidthHeight)
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar()
+    }
+
+    // MARK: Private properties
+
+    private func configureNavigationBar() {
+        navigationItem.title = UIString.navigationBarTitle
+        navigationItem.rightBarButtonItem = favouritesBarButtonItem
+    }
+
+    @objc
+    private func favouritesBarButtonTouchUpInside() {
+        currentViewModel?.showFavouriteEntries()
     }
 }
 

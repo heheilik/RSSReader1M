@@ -37,6 +37,24 @@ class FeedSourcesViewModel: FMTablePageViewModel {
         updateSectionViewModels(with: context)
     }
 
+    // MARK: Internal methods
+
+    func showFavouriteEntries() {
+        delegate?.updateStarted()
+        Task {
+            let persistenceManager = FavouriteEntriesPersistenceManager()
+            await persistenceManager.fetchControllerData()
+            await MainActor.run {
+                delegate?.updateCompleted(withError: nil)
+                Router.shared.push(
+                    FeedPageFactory.NavigationPath.favouriteEntries.rawValue,
+                    animated: true,
+                    context: FavouriteEntriesContext(persistenceManager: persistenceManager)
+                )
+            }
+        }
+    }
+
     // MARK: Private methods
 
     private func updateSectionViewModels(with context: FeedSourcesContext) {
