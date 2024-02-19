@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 19.02.24.
 //
 
+import ALNavigation
 import FMArchitecture
 import Foundation
 import UIKit
@@ -57,5 +58,28 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
                 isAnimatedAtStart: false
             )
         })
+    }
+}
+
+// MARK: - FeedEntryCellViewModelDelegate
+
+extension FavouriteEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
+    func readStatusChanged(isRead: Bool) { }
+
+    func didSelect(cellViewModel: FeedEntryCellViewModel) {
+//        selectedViewModel = cellViewModel
+        print("activated")
+        Router.shared.push(
+            FeedPageFactory.NavigationPath.feedDetails.rawValue,
+            animated: true,
+            context: FeedDetailsContext(
+                title: cellViewModel.title,
+                description: cellViewModel.description,
+                date: cellViewModel.date,
+                image: Image.error,
+                persistenceManager: persistenceManager,
+                managedObject: cellViewModel.managedObject
+            )
+        )
     }
 }

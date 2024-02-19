@@ -16,6 +16,6 @@ struct FeedDetailsContext: PageContext {
     let date: String?
     let image: UIImage?
 
-    let persistenceManager: SingleFeedPersistenceManager
+    let persistenceManager: BasePersistenceManager<ManagedFeedEntry>
     let managedObject: ManagedFeedEntry
 }

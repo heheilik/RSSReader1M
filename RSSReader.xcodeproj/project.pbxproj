@@ -367,10 +367,10 @@
 		5DFBB2432B6B97EB00A2541F /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				5D1A5CDC2B8355F000B7C248 /* BasePersistenceManager.swift */,
 				5D1A5CD72B8346DB00B7C248 /* FavouriteEntriesPersistenceManager.swift */,
 				5DD6D1052B7C9B4A0022D0C8 /* FeedUpdateManager.swift */,
 				5DB432732B6A29E2008F30D3 /* SingleFeedPersistenceManager.swift */,
-				5D1A5CDC2B8355F000B7C248 /* BasePersistenceManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";

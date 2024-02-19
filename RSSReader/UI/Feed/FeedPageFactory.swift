@@ -60,6 +60,7 @@ struct FeedPageFactory: PageFactoryProtocol {
         context: FavouriteEntriesContext
     ) -> FavouriteEntriesTableViewController {
         let viewController = FavouriteEntriesTableViewController()
+        viewController.delegate = FMTableViewDelegate()
 
         let dataSource = FMTableViewDataSource(tableView: viewController.tableView)
         viewController.dataSource = dataSource
