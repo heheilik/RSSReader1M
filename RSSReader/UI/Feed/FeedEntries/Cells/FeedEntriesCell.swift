@@ -185,13 +185,12 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         changeReadStatus(isRead: viewModel.isRead)
         changeFavouriteStatus(isFavourite: viewModel.isFavourite)
 
-        readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main)
-            .sink { [weak self] isRead in
-                guard let self = self else {
-                    return
-                }
-                self.changeReadStatus(isRead: isRead)
+        readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main).sink { [weak self] isRead in
+            guard let self = self else {
+                return
             }
+            self.changeReadStatus(isRead: isRead)
+        }
 
         resizeDescriptionIfNeeded()
     }
