@@ -15,6 +15,7 @@ class FavouriteEntriesPersistenceManager: BasePersistenceManager<ManagedFeedEntr
 
     init() {
         super.init(
+            persistentContainer: Container.shared.feedModelPersistentContainer(),
             predicate: NSPredicate(
                 format: "%K == %@",
                 argumentArray: [

@@ -6,8 +6,6 @@
 //
 
 import CoreData
-import Factory
-import Foundation
 
 class BasePersistenceManager<ManagedObject: NSManagedObject> {
 
@@ -16,15 +14,17 @@ class BasePersistenceManager<ManagedObject: NSManagedObject> {
     public let fetchedResultsController: NSFetchedResultsController<ManagedObject>
     public let controllerContext: NSManagedObjectContext
 
-    @Injected(\.feedModelPersistentContainer) public private(set) var persistentContainer
+    public let persistentContainer: NSPersistentContainer
 
     // MARK: Initialization
 
     public init(
+        persistentContainer: NSPersistentContainer,
         predicate: NSPredicate,
         sortDescriptors: [NSSortDescriptor]
     ) {
-        controllerContext = Container.shared.feedModelPersistentContainer().newBackgroundContext()
+        self.persistentContainer = persistentContainer
+        controllerContext = persistentContainer.newBackgroundContext()
 
         let fetchRequest = NSFetchRequest<ManagedObject>()
         fetchRequest.entity = ManagedObject.entity()

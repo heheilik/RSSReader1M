@@ -21,6 +21,7 @@ class SingleFeedPersistenceManager: BasePersistenceManager<ManagedFeedEntry> {
     init(url: URL) {
         self.url = url
         super.init(
+            persistentContainer: Container.shared.feedModelPersistentContainer(),
             predicate: NSPredicate(
                 format: "%K == %@",
                 argumentArray: [
