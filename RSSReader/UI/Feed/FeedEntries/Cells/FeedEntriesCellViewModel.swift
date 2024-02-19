@@ -148,7 +148,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         self.managedObject = managedObject
 
         guard let context = managedObject.managedObjectContext else {
-            assertionFailure("Managed object must exist in some context.")
+            assertionFailure("Object must exist in some context.")
             return nil
         }
 
