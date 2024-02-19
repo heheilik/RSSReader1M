@@ -242,7 +242,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     }
 
     private func changeReadStatus(isRead: Bool) {
-        readStatusView.backgroundColor = isRead ? .white : .systemBlue
+        readStatusView.isHidden = isRead
     }
 
     private func configureAnimatedView() {
@@ -255,7 +255,6 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     }
 
     private func configureNotAnimatedView() {
-        readStatusView.isHidden = false
         descriptionSizeToggleButton.isHidden = false
     }
 }
