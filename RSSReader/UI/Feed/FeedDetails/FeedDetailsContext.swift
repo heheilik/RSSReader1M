@@ -6,14 +6,16 @@
 //
 
 import ALNavigation
+import CoreData
 import Foundation
 import UIKit
 
 struct FeedDetailsContext: PageContext {
-
-    let title: String?
+    let title: String
     let description: String?
     let date: String?
     let image: UIImage?
 
+    let persistenceManager: FeedPersistenceManager
+    let managedObject: ManagedFeedEntry
 }

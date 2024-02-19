@@ -5,7 +5,6 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
-import ALNavigation
 import Combine
 import CoreData
 import Factory
@@ -16,6 +15,7 @@ import UIKit
 
 protocol FeedEntriesCellViewModelDelegate: AnyObject {
     func readStatusChanged(isRead: Bool)
+    func didSelect(cellViewModel: FeedEntriesCellViewModel)
 }
 
 class FeedEntriesCellViewModel: FMCellViewModel {
@@ -25,18 +25,24 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     private enum UIStrings {
         static let isRead = "Прочитано"
         static let isUnread = "Непрочитано"
+        static let makeFavourite = "Добавить в\nизбранное"
+        static let makeNotFavourite = "Удалить из\nизбранного"
     }
 
     private enum Images {
         static let message = UIImage(systemName: "message")!
         static let messageWithBadge = UIImage(systemName: "message.badge")!
+        static let star = UIImage(systemName: "star.fill")!
+        static let starCrossed = UIImage(systemName: "star.slash.fill")!
     }
 
     // MARK: Internal properties
 
-    let title: String?
+    let title: String
     let description: String?
     let date: String?
+
+    let managedObject: ManagedFeedEntry
 
     var descriptionShownFull = false
     
@@ -50,12 +56,35 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         }
     }
 
+    var isFavourite: Bool {
+        get {
+            guard let context = managedObject.managedObjectContext else {
+                assertionFailure("Object must exist in some context.")
+                return false
+            }
+            var isFavourite = false
+            context.performAndWait {
+                isFavourite = managedObject.isFavourite
+            }
+            return isFavourite
+        }
+        set {
+            guard let context = managedObject.managedObjectContext else {
+                assertionFailure("Object must exist in some context.")
+                return
+            }
+            context.performAndWait {
+                managedObject.isFavourite = newValue
+            }
+        }
+    }
+
     override var rightSwipeAction: [SwipeAction]? {
         guard !isAnimation else {
             return nil
         }
 
-        let action = SwipeAction(
+        let readAction = SwipeAction(
             style: .default,
             title: isRead ? UIStrings.isUnread : UIStrings.isRead
         ) { [weak self] _, _ in
@@ -64,16 +93,31 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             }
             self.isRead = !self.isRead
         }
-        action.configure(
+        readAction.configure(
             with: isRead ? Images.messageWithBadge : Images.message,
             backgroundColor: .systemBlue
         )
-        return [action]
+
+        let favouriteAction = SwipeAction(
+            style: .default,
+            title: isFavourite ? UIStrings.makeNotFavourite : UIStrings.makeFavourite
+        ) { [weak self ] _, _ in
+            guard let self = self else {
+                return
+            }
+            self.isFavourite = !self.isFavourite
+            (self.fillableCell as? FeedEntriesCell)?.changeFavouriteStatus(isFavourite: self.isFavourite)
+        }
+        favouriteAction.configure(
+            with: isFavourite ? Images.starCrossed : Images.star,
+            backgroundColor: .orange
+        )
+
+        return [readAction, favouriteAction]
     }
 
     // MARK: Private properties
 
-    private let managedObject: ManagedFeedEntry
 
     private var isReadSubscriber: AnyCancellable?
 
@@ -84,23 +128,60 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     }
 
     // MARK: Initialization
-
-    init(
+    
+    /// Designated initializer.
+    ///
+    /// - Parameters:
+    ///   - managedObject: Managed object that represents current entry. Must exist in some context.
+    ///   - image: Image of the source that this entry belongs to.
+    ///   - delegate: View model delegate.
+    ///   - isAnimatedAtStart: Defines whether skeleton animation is shown at start.
+    ///
+    /// Despite initializer is optional, `nil` mustn't be returned from here. Each case when `nil` is returned
+    /// triggers an `assertionFailure(_:)`.
+    init?(
         managedObject: ManagedFeedEntry,
         image: UIImage,
         delegate: FMCellViewModelDelegate,
         isAnimatedAtStart: Bool
     ) {
         self.managedObject = managedObject
-        self.title = managedObject.title
-        self.description = managedObject.entryDescription
-        self.isRead = managedObject.isRead
 
-        if let date = managedObject.date {
-            self.date = Self.dateFormatter.string(from: date)
-        } else {
-            self.date = nil
+        guard let context = managedObject.managedObjectContext else {
+            assertionFailure("Object must exist in some context.")
+            return nil
         }
+
+        var title: String?
+        var description: String?
+        var isRead: Bool?
+        var date: String?
+
+        context.performAndWait {
+            title = managedObject.title
+            description = managedObject.entryDescription
+
+            isRead = managedObject.isRead
+
+            if let strongDate = managedObject.date {
+                date = Self.dateFormatter.string(from: strongDate)
+            } else {
+                date = nil
+            }
+        }
+
+        guard
+            let title,
+            let isRead
+        else {
+            assertionFailure("Title, read status and favourite status must be retrieved from model.")
+            return nil
+        }
+
+        self.title = title
+        self.description = description
+        self.isRead = isRead
+        self.date = date
 
         self.image = image
 
@@ -109,6 +190,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             delegate: delegate
         )
         isAnimation = isAnimatedAtStart
+
         bindReadStatus()
     }
 
@@ -125,9 +207,17 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     private func bindReadStatus() {
         isReadSubscriber = $isRead.sink { [weak self] newValue in
-            if self?.managedObject.isRead != newValue {
-                self?.managedObject.isRead = newValue
-                self?.currentDelegate?.readStatusChanged(isRead: newValue)
+            guard
+                let self = self,
+                let context = self.managedObject.managedObjectContext
+            else {
+                return
+            }
+            context.performAndWait {
+                if self.managedObject.isRead != newValue {
+                    self.managedObject.isRead = newValue
+                    self.currentDelegate?.readStatusChanged(isRead: newValue)
+                }
             }
         }
     }
@@ -140,17 +230,10 @@ extension FeedEntriesCellViewModel: FMSelectableCellModel {
         guard !isAnimation else {
             return
         }
-        isRead = true
-        Router.shared.push(
-            FeedPageFactory.NavigationPath.feedDetails.rawValue,
-            animated: true,
-            context: FeedDetailsContext(
-                title: title,
-                description: description,
-                date: date,
-                image: image
-            )
-        )
+        if isRead != true {
+            isRead = true
+        }
+        currentDelegate?.didSelect(cellViewModel: self)
     }
 }
 

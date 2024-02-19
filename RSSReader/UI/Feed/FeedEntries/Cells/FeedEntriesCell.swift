@@ -13,6 +13,14 @@ import UIKit
 
 class FeedEntriesCell: FMSwipeTableViewCell {
 
+    // MARK: Constants
+
+    private enum Image {
+        static let chevronUp = UIImage(systemName: "chevron.up")!
+        static let chevronDown = UIImage(systemName: "chevron.down")!
+        static let favouriteStatus = UIImage(named: "star.circle.fill")!
+    }
+
     // MARK: UI
 
     private let titleLabel = {
@@ -40,7 +48,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
     private let descriptionSizeToggleButton = {
         let button = UIButton(type: .custom)
-        button.setImage(chevronDownImage, for: .normal)
+        button.setImage(Image.chevronDown, for: .normal)
         return button
     }()
 
@@ -52,14 +60,17 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         return view
     }()
 
-    private static let chevronUpImage = UIImage(systemName: "chevron.up")!
-    private static let chevronDownImage = UIImage(systemName: "chevron.down")!
-
     private let feedImage = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
         image.isSkeletonable = true
         return image
+    }()
+
+    private let favouriteStatusView = {
+        let view = UIImageView(image: Image.favouriteStatus)
+        view.isHidden = true
+        return view
     }()
 
     // MARK: Private properties
@@ -70,7 +81,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         return viewModel as? FeedEntriesCellViewModel
     }
 
-    // MARK: Internal methods
+    // MARK: Lifecycle
 
     override func configureViews() {
         isSkeletonable = true
@@ -88,6 +99,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
     override func addSubviews() {
         contentView.addSubview(feedImage)
+        contentView.addSubview(favouriteStatusView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(readStatusView)
         contentView.addSubview(descriptionLabel)
@@ -121,6 +133,11 @@ class FeedEntriesCell: FMSwipeTableViewCell {
             $0.width.equalTo(64)
             $0.height.equalTo(feedImage.snp.width)
         }
+        favouriteStatusView.snp.makeConstraints {
+            $0.centerX.equalTo(feedImage.snp.trailing)
+            $0.centerY.equalTo(feedImage.snp.top)
+        }
+
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalTo(feedImage.snp.trailing).offset(16)
@@ -171,6 +188,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         feedImage.image = viewModel.image
 
         changeReadStatus(isRead: viewModel.isRead)
+        changeFavouriteStatus(isFavourite: viewModel.isFavourite)
 
         readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main).sink { [weak self] isRead in
             guard let self = self else {
@@ -180,6 +198,12 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         }
 
         resizeDescriptionIfNeeded()
+    }
+
+    // MARK: Internal methods
+
+    func changeFavouriteStatus(isFavourite: Bool) {
+        favouriteStatusView.isHidden = !isFavourite
     }
 
     // MARK: Private methods
@@ -214,15 +238,11 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     }
 
     private func arrowImageFor(numberOfLines: Int) -> UIImage {
-        if numberOfLines == 1 {
-            return FeedEntriesCell.chevronDownImage
-        } else {
-            return FeedEntriesCell.chevronUpImage
-        }
+        numberOfLines == 1 ? Image.chevronDown : Image.chevronUp
     }
 
     private func changeReadStatus(isRead: Bool) {
-        readStatusView.backgroundColor = isRead ? .white : .systemBlue
+        readStatusView.isHidden = isRead
     }
 
     private func configureAnimatedView() {
@@ -230,11 +250,11 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         descriptionLabel.text = " "
         dateLabel.text = " "
         readStatusView.isHidden = true
+        favouriteStatusView.isHidden = true
         descriptionSizeToggleButton.isHidden = true
     }
 
     private func configureNotAnimatedView() {
-        readStatusView.isHidden = false
         descriptionSizeToggleButton.isHidden = false
     }
 }

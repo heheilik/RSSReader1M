@@ -5,6 +5,7 @@
 //  Created by Heorhi Heilik on 30.10.23.
 //
 
+import ALNavigation
 import CoreData
 import Foundation
 import FMArchitecture
@@ -17,6 +18,12 @@ protocol FeedEntriesSectionViewModelDelegate: AnyObject {
 
 class FeedEntriesSectionViewModel: FMSectionViewModel {
 
+    // MARK: Constants
+
+    private enum Image {
+        static let error = UIImage(systemName: "photo")!
+    }
+
     // MARK: Internal properties
 
     override var registeredCellTypes: [FMTableViewCellProtocol.Type] {[
@@ -28,7 +35,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     ]}
 
     var image: UIImage {
-        downloadedImage ?? Self.errorImage
+        downloadedImage ?? Image.error
     }
 
     // MARK: Private properties
@@ -40,6 +47,8 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     private let fetchedResultsControllerDelegate: FeedEntriesFetchedResultsControllerDelegate
 
     private var cellUpdateManager = FeedEntriesCellUpdateContainer()
+
+    private var selectedViewModel: FeedEntriesCellViewModel?
 
     private var downloadedImage: UIImage? {
         didSet {
@@ -57,8 +66,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             updateHeader(unreadEntriesCount: unreadEntriesCount)
         }
     }
-
-    private static let errorImage = UIImage(systemName: "photo")!
 
     private weak var currentDelegate: FeedEntriesSectionViewModelDelegate? {
         delegate as? FeedEntriesSectionViewModelDelegate
@@ -90,8 +97,12 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
             await updateFeed()
         }
 
-        let imageURL = persistenceManager.fetchedResultsController.fetchedObjects?.first?.feed?.imageURL
-        self.downloadImageIfPossible(imageURL: imageURL)
+        let controller = persistenceManager.fetchedResultsController
+        controller.managedObjectContext.perform { [weak self] in
+            self?.downloadImageIfPossible(
+                imageURL: controller.fetchedObjects?.first?.feed?.imageURL
+            )
+        }
     }
 
     // MARK: Internal methods
@@ -106,14 +117,17 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         addedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
     ) {
-        print("add   : \(indexPath.row), title: \(object.title ?? "nil")")
+        guard let viewModel = FeedEntriesCellViewModel(
+            managedObject: object,
+            image: image,
+            delegate: self,
+            isAnimatedAtStart: false
+        ) else {
+            assertionFailure("Model must be created here.")
+            return
+        }
         cellUpdateManager.add(
-            viewModel: FeedEntriesCellViewModel(
-                managedObject: object,
-                image: image,
-                delegate: self,
-                isAnimatedAtStart: false
-            ),
+            viewModel: viewModel,
             index: indexPath.row
         )
     }
@@ -122,16 +136,7 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         _ controller: NSFetchedResultsController<NSFetchRequestResult>,
         updatedObject object: ManagedFeedEntry,
         at indexPath: IndexPath
-    ) {
-        print("update: \(indexPath.row), title: \(object.title ?? "nil")")
-        let cellViewModel = FeedEntriesCellViewModel(
-            managedObject: object,
-            image: image,
-            delegate: self,
-            isAnimatedAtStart: false
-        )
-        refreshCells([cellViewModel])
-    }
+    ) { }
 
     func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         currentDelegate?.beginTableUpdates()
@@ -170,6 +175,17 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
         case .success():
             break
         }
+    }
+
+    func updateOnAppear() {
+        guard
+            let cellViewModel = selectedViewModel,
+            let cell = cellViewModel.fillableCell as? FeedEntriesCell
+        else {
+            return
+        }
+        cell.changeFavouriteStatus(isFavourite: cellViewModel.isFavourite)
+        selectedViewModel = nil
     }
 
     // MARK: Private methods
@@ -229,5 +245,21 @@ extension FeedEntriesSectionViewModel: FMAnimatable { }
 extension FeedEntriesSectionViewModel: FeedEntriesCellViewModelDelegate {
     func readStatusChanged(isRead: Bool) {
         unreadEntriesCount += isRead ? -1 : 1
+    }
+
+    func didSelect(cellViewModel: FeedEntriesCellViewModel) {
+        selectedViewModel = cellViewModel
+        Router.shared.push(
+            FeedPageFactory.NavigationPath.feedDetails.rawValue,
+            animated: true,
+            context: FeedDetailsContext(
+                title: cellViewModel.title,
+                description: cellViewModel.description,
+                date: cellViewModel.date,
+                image: image,
+                persistenceManager: persistenceManager,
+                managedObject: cellViewModel.managedObject
+            )
+        )
     }
 }
