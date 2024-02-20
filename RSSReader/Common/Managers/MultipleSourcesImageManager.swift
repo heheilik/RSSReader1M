@@ -142,7 +142,9 @@ class MultipleSourcesImageManager {
             await setErrorState(for: url)
             return
         }
-        await setDownloadedImage(image, for: url)
+
+        let cellsWithUpdatedImageIndices = await setDownloadedImage(image, for: url)
+        delegate?.imageLoaded(image, forCellsAt: cellsWithUpdatedImageIndices)
     }
 
     /// Sets error state for image.
@@ -157,19 +159,18 @@ class MultipleSourcesImageManager {
         }
     }
     
-    /// Saves downloaded image in class property and notifies cells that download finished and image is present.
+    /// Saves downloaded image in object property.
     /// Performs on private queue.
     /// - Parameter image: Downloaded image.
     /// - Parameter url: URL of downloaded image.
-    private func setDownloadedImage(_ image: UIImage, for url: URL) async {
+    /// - Returns: Set of indices of cells that need to be notified.
+    private func setDownloadedImage(_ image: UIImage, for url: URL) async -> Set<Int> {
+        var cellsIndices: Set<Int>?
         serialQueue.sync {
             imageState[url] = .ready
             imageStorage[url] = image
-
-            guard let cellsIndices = urlToCell[url] else {
-                return
-            }
-            delegate?.imageLoaded(image, forCellsAt: cellsIndices)
+            cellsIndices = urlToCell[url]
         }
+        return cellsIndices ?? []
     }
 }
