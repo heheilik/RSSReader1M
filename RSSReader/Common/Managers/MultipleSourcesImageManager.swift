@@ -17,7 +17,7 @@ class MultipleSourcesImageManager {
 
     // MARK: Constants
 
-    enum ImageState {
+    private enum ImageState {
         case loading
         case ready
     }
