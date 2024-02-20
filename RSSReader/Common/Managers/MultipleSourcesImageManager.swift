@@ -90,17 +90,7 @@ class MultipleSourcesImageManager {
     }
 
     // MARK: Private methods
-    
-    /// Performs all operation on downloading image and saving it in current object.
-    /// - Parameter url: URL of image.
-    private func downloadImage(at url: URL) async {
-        guard let image = await imageService.prepareImage(at: url) else {
-            await setErrorState(for: url)
-            return
-        }
-        await setDownloadedImage(image, for: url)
-    }
-    
+
     /// Checks the data stored for added entry and reacts to it.
     /// Performs on private queue.
     /// - Parameters:
@@ -143,6 +133,16 @@ class MultipleSourcesImageManager {
             }
         }
         return (image, state)
+    }
+    
+    /// Performs all operation on downloading image and saving it in current object.
+    /// - Parameter url: URL of image.
+    private func downloadImage(at url: URL) async {
+        guard let image = await imageService.prepareImage(at: url) else {
+            await setErrorState(for: url)
+            return
+        }
+        await setDownloadedImage(image, for: url)
     }
 
     /// Sets error state for image.
