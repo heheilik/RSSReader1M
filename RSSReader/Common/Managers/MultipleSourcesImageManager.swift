@@ -87,6 +87,7 @@ class MultipleSourcesImageManager {
     }
 
     func removeEntryData(index: Int, url: URL) async {
+        await removeEntryDataFromObject(url: url, index: index)
     }
 
     // MARK: Private methods
@@ -172,5 +173,16 @@ class MultipleSourcesImageManager {
             cellsIndices = urlToCell[url]
         }
         return cellsIndices ?? []
+    }
+    
+    /// Removes data about cell from current object.
+    /// Performs on private queue.
+    /// - Parameters:
+    ///   - url: URL of image of entry.
+    ///   - index: Index of entry.
+    private func removeEntryDataFromObject(url: URL, index: Int) async {
+        serialQueue.sync {
+            _ = urlToCell[url]?.remove(index)
+        }
     }
 }
