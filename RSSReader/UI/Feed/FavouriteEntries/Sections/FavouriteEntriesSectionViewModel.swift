@@ -85,7 +85,7 @@ extension FavouriteEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
                 title: cellViewModel.title,
                 description: cellViewModel.description,
                 date: cellViewModel.date,
-                image: Image.error,
+                image: cellViewModel.image,
                 persistenceManager: persistenceManager,
                 managedObject: cellViewModel.managedObject
             )
