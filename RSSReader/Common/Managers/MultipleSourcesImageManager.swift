@@ -116,10 +116,9 @@ class MultipleSourcesImageManager {
     ///    loading in this case and set state to .loading, so other threads won't do the same thing.
     ///
     private func processEntryData(url: URL, index: Int) async -> (UIImage?, ImageState?) {
-        var state: ImageState?
-        var image: UIImage?
         serialQueue.sync {
-            state = imageState[url]
+            var image: UIImage?
+            let state = imageState[url]
             switch state {
             case .loading:
                 urlToCell[url]?.insert(index)
@@ -132,8 +131,8 @@ class MultipleSourcesImageManager {
                 // Though we're leaving `nil` value in variable `state`, because later we'll start downloading image.
                 imageState[url] = .loading
             }
+            return (image, state)
         }
-        return (image, state)
     }
     
     /// Performs all operation on downloading image and saving it in current object.
@@ -166,13 +165,11 @@ class MultipleSourcesImageManager {
     /// - Parameter url: URL of downloaded image.
     /// - Returns: Set of indices of cells that need to be notified.
     private func setDownloadedImage(_ image: UIImage, for url: URL) async -> Set<Int> {
-        var cellsIndices: Set<Int>?
         serialQueue.sync {
             imageState[url] = .ready
             imageStorage[url] = image
-            cellsIndices = urlToCell[url]
+            return urlToCell[url] ?? []
         }
-        return cellsIndices ?? []
     }
     
     /// Removes data about cell from current object.
