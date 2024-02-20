@@ -121,16 +121,18 @@ class MultipleSourcesImageManager {
             let state = imageState[url]
             switch state {
             case .loading:
-                urlToCell[url]?.insert(index)
+                break
 
             case .ready:
                 image = imageStorage[url]
 
             case nil:
+                urlToCell[url] = []
                 // We're setting state to loading because we've just found that image is not present.
                 // Though we're leaving `nil` value in variable `state`, because later we'll start downloading image.
                 imageState[url] = .loading
             }
+            urlToCell[url]?.insert(index)
             return (image, state)
         }
     }
