@@ -27,17 +27,18 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
     // MARK: Private properties
 
     private var persistenceManager: FavouriteEntriesPersistenceManager
-    private let feedImageService: FeedImageService
+    private let imageManager: MultipleSourcesImageManager
 
     // MARK: Initialization
 
     init(
         context: FavouriteEntriesContext,
-        feedImageService: FeedImageService = FeedImageService()
+        imageManager: MultipleSourcesImageManager = MultipleSourcesImageManager()
     ) {
         self.persistenceManager = context.persistenceManager
-        self.feedImageService = feedImageService
+        self.imageManager = imageManager
         super.init()
+        imageManager.delegate = self
         configureCellViewModels()
     }
 
@@ -47,9 +48,17 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
         guard let managedFeedEntries = persistenceManager.fetchedResultsController.fetchedObjects else {
             return
         }
-        reload(cellModels: managedFeedEntries.compactMap { [weak self] entry in
+        reload(cellModels: managedFeedEntries.enumerated().compactMap { [weak self] (index, entry) in
             guard let self else {
                 return nil
+            }
+            entry.managedObjectContext?.perform {
+                guard let imageURL = entry.feed?.imageURL else {
+                    return
+                }
+                Task {
+                    await self.imageManager.addEntryData(index: index, url: imageURL)
+                }
             }
             return FeedEntryCellViewModel(
                 managedObject: entry,
@@ -81,5 +90,20 @@ extension FavouriteEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
                 managedObject: cellViewModel.managedObject
             )
         )
+    }
+}
+
+// MARK: - MultipleSourcesImageManagerDelegate
+
+extension FavouriteEntriesSectionViewModel: MultipleSourcesImageManagerDelegate {
+    func imageLoaded(_ image: UIImage, forCellAt index: Int) {
+        (cellModel(at: index) as? FeedEntryCellViewModel)?.image = image
+    }
+    
+    func imageLoaded(_ image: UIImage, forCellsAt indices: Set<Int>) {
+        indices
+            .map { cellViewModels[$0] }
+            .compactMap { $0 as? FeedEntryCellViewModel }
+            .forEach { $0.image = image }
     }
 }
