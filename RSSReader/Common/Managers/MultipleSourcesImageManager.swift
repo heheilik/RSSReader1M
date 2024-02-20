@@ -60,37 +60,7 @@ class MultipleSourcesImageManager {
     func addEntryData(index: Int, url: URL) async {
         print("--- \(#function) call (index is \(index)) ---")
 
-        // First of all we need to check if image for url is present.
-        // There will be three scenarios:
-        //
-        //   1. state is nil
-        //      That means that no image is present for this url, and no image is being loaded. We must start the
-        //      loading in this case and set state to .loading, so other threads won't do the same thing.
-        //
-        //   2. state is .loading
-        //      In this case we just need to add index of this cell to set of indices for this URL. When image is
-        //      loaded, cell will be notified automatically.
-        //
-        //   3. state is .ready
-        //      No loading goes on, so we must notify cell ourselves. Calling a delegate and returning.
-
-        var state: ImageState?
-        var image: UIImage?
-        serialQueue.sync {
-            state = imageState[url]
-            switch state {
-            case .loading:
-                urlToCell[url]?.insert(index)
-
-            case .ready:
-                image = imageStorage[url]
-
-            case nil:
-                // We're setting state to loading because we've just found that image is not present.
-                // Though we're leaving `nil` value in variable `state`, because later we'll start downloading image.
-                imageState[url] = .loading
-            }
-        }
+        let (image, state) = await processEntryData(url: url, index: index)
 
         switch state {
         case .loading:
@@ -119,31 +89,83 @@ class MultipleSourcesImageManager {
     func removeEntryData(index: Int, url: URL) async {
     }
 
-    func reset() async {
-        serialQueue.sync {
-            urlToCell.removeAll()
-            imageStorage.removeAll()
-        }
-    }
-
     // MARK: Private methods
-
+    
+    /// Performs all operation on downloading image and saving it in current object.
+    /// - Parameter url: URL of image.
     private func downloadImage(at url: URL) async {
         guard let image = await imageService.prepareImage(at: url) else {
-            serialQueue.sync {
-                // Download failed, so we're setting initial values to state and image.
-                // TODO: Add error state
-                imageState[url] = nil
-                imageStorage[url] = nil
-            }
+            await setErrorState(for: url)
             return
         }
+        await setDownloadedImage(image, for: url)
+    }
+    
+    /// Checks the data stored for added entry and reacts to it.
+    /// Performs on private queue.
+    /// - Parameters:
+    ///   - url: URL of image of added entry.
+    ///   - index: Index of added entry.
+    /// - Returns: Image, if possible, and state of image at the moment of function call.
+    ///
+    /// There are 3 scenarios of image state:
+    ///
+    /// 1. `state` is `.loading`
+    ///
+    ///    In this case we need to add index of this cell to set of indices for this URL.
+    ///    When image is loaded, cells with indices contained by this set will be notified.
+    ///
+    /// 2. `state` is `.ready`
+    ///
+    ///    No loading goes on, so we must notify cell ourselves. Calling a delegate and returning.
+    ///
+    /// 3. `state` is `nil`
+    ///
+    ///    That means that no image is present for this url, and no image is being loaded. We must start the
+    ///    loading in this case and set state to .loading, so other threads won't do the same thing.
+    ///
+    private func processEntryData(url: URL, index: Int) async -> (UIImage?, ImageState?) {
+        var state: ImageState?
+        var image: UIImage?
+        serialQueue.sync {
+            state = imageState[url]
+            switch state {
+            case .loading:
+                urlToCell[url]?.insert(index)
 
-        // Image is downloaded now.
+            case .ready:
+                image = imageStorage[url]
 
+            case nil:
+                // We're setting state to loading because we've just found that image is not present.
+                // Though we're leaving `nil` value in variable `state`, because later we'll start downloading image.
+                imageState[url] = .loading
+            }
+        }
+        return (image, state)
+    }
+
+    /// Sets error state for image.
+    /// Performs on private queue.
+    /// - Parameter url: URL of image to set error state to.
+    private func setErrorState(for url: URL) async {
+        serialQueue.sync {
+            // Download failed, so we're setting initial values to state and image.
+            // TODO: Add error state
+            imageState[url] = nil
+            imageStorage[url] = nil
+        }
+    }
+    
+    /// Saves downloaded image in class property and notifies cells that download finished and image is present.
+    /// Performs on private queue.
+    /// - Parameter image: Downloaded image.
+    /// - Parameter url: URL of downloaded image.
+    private func setDownloadedImage(_ image: UIImage, for url: URL) async {
         serialQueue.sync {
             imageState[url] = .ready
             imageStorage[url] = image
+
             guard let cellsIndices = urlToCell[url] else {
                 return
             }
