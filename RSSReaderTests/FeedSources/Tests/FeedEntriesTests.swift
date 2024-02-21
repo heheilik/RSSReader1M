@@ -44,7 +44,7 @@ class FeedEntriesTests: XCTestCase {
         guard let sectionViewModel = sectionViewModels.first else {
             fatalError("This array must have been checked earlier.")
         }
-        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntryTableViewCell.self }))
+        XCTAssert(sectionViewModel.registeredCellTypes.contains(where: { $0 == FeedEntriesCell.self }))
     }
 
     func testSectionViewModelNoItemsInFeed() {
@@ -166,7 +166,7 @@ class FeedEntriesTests: XCTestCase {
 
         guard
             let cellViewModel = sectionViewModel.cellViewModels.randomElement(),
-            let cellViewModel = cellViewModel as? FeedEntryCellViewModel
+            let cellViewModel = cellViewModel as? FeedEntriesCellViewModel
         else {
             fatalError("Couldn't retrieve cellViewModel from sectionViewModel.")
         }
