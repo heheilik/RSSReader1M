@@ -156,13 +156,27 @@ extension FavouriteEntriesSectionViewModel: NSFetchedResultsControllerDelegate {
             cellUpdateContainer.updatedManagedObjects.forEach { (index, managedFeedEntry) in
                 guard let viewModel = FeedEntryCellViewModel(
                     managedObject: managedFeedEntry,
-                    image: UIImage(),
+                    image: Image.error,
                     delegate: self,
                     isAnimatedAtStart: false
                 ) else {
                     return
                 }
                 self.cellViewModels[index] = viewModel
+
+                Task {
+                    var imageURL: URL?
+                    self.persistenceManager.controllerContext.performAndWait {
+                        imageURL = managedFeedEntry.feed?.imageURL
+                    }
+                    guard
+                        let imageURL,
+                        let image = await self.imageManager.image(for: imageURL)
+                    else {
+                        return
+                    }
+                    viewModel.image = image
+                }
             }
 
             dataManipulator?.cellsUpdated(
