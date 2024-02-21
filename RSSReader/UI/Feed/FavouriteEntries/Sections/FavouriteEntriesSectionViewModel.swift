@@ -57,6 +57,12 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
         configureCellViewModels()
     }
 
+    // MARK: Internal methods
+
+    func saveFeedToCoreData() async {
+        await persistenceManager.saveControllerData()
+    }
+
     // MARK: Private methods
 
     private func configureCellViewModels() {

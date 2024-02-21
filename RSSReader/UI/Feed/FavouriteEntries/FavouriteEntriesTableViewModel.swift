@@ -29,6 +29,18 @@ class FavouriteEntriesTableViewModel: FMTablePageViewModel {
         configureSectionViewModels(context: context)
     }
 
+    // MARK: Internal methods
+
+    func saveFeedToCoreData() {
+        dataSource.sectionViewModels
+            .compactMap { $0 as? FavouriteEntriesSectionViewModel }
+            .forEach { sectionViewModel in
+                Task {
+                    await sectionViewModel.saveFeedToCoreData()
+                }
+            }
+    }
+
     // MARK: Private methods
 
     private func configureSectionViewModels(context: FavouriteEntriesContext) {

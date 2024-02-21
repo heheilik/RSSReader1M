@@ -21,11 +21,22 @@ class FavouriteEntriesTableViewController: FMTablePageViewController {
 
     override var tableViewStyle: UITableView.Style { .plain }
 
+    // MARK: Private properties
+
+    private var currentViewModel: FavouriteEntriesTableViewModel? {
+        viewModel as? FavouriteEntriesTableViewModel
+    }
+
     // MARK: Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        currentViewModel?.saveFeedToCoreData()
     }
 
     // MARK: Private methods
