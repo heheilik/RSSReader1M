@@ -6,9 +6,15 @@
 //
 
 import ALNavigation
+import CoreData
 import FMArchitecture
 import Foundation
 import UIKit
+
+protocol FavouriteEntriesSectionViewModelDelegate: AnyObject {
+    func beginTableUpdates()
+    func endTableUpdates()
+}
 
 class FavouriteEntriesSectionViewModel: FMSectionViewModel {
 
@@ -29,15 +35,20 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
     private var persistenceManager: FavouriteEntriesPersistenceManager
     private let imageManager: MultipleSourcesImageManager
 
+    private weak var currentDelegate: FavouriteEntriesSectionViewModelDelegate? {
+        delegate as? FavouriteEntriesSectionViewModelDelegate
+    }
+
     // MARK: Initialization
 
     init(
         context: FavouriteEntriesContext,
         imageManager: MultipleSourcesImageManager = MultipleSourcesImageManager()
     ) {
-        self.persistenceManager = context.persistenceManager
+        persistenceManager = context.persistenceManager
         self.imageManager = imageManager
         super.init()
+        persistenceManager.fetchedResultsController.delegate = self
         imageManager.delegate = self
         configureCellViewModels()
     }
@@ -104,5 +115,45 @@ extension FavouriteEntriesSectionViewModel: MultipleSourcesImageManagerDelegate 
             .map { cellViewModels[$0] }
             .compactMap { $0 as? FeedEntryCellViewModel }
             .forEach { $0.image = image }
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension FavouriteEntriesSectionViewModel: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        currentDelegate?.beginTableUpdates()
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        currentDelegate?.endTableUpdates()
+    }
+
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
+        switch type {
+        case .update:
+            fatalError("Not implemented.", file: #file, line: #line)
+
+        case .delete:
+            fatalError("Not implemented.", file: #file, line: #line)
+
+        case .insert:
+            assertionFailure("New content must not be inserted.")
+            return
+
+        case .move:
+            assertionFailure("Old content must not be moved.")
+            return
+            
+        @unknown default:
+            assertionFailure("Case is not processed.")
+            return
+        }
     }
 }

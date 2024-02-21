@@ -8,7 +8,16 @@
 import FMArchitecture
 import Foundation
 
+protocol FavouriteEntriesTableViewModelDelegate: AnyObject {
+    func beginTableUpdates()
+    func endTableUpdates()
+}
+
 class FavouriteEntriesTableViewModel: FMTablePageViewModel {
+
+    // MARK: Internal properties
+
+    weak var delegate: FavouriteEntriesTableViewModelDelegate?
 
     // MARK: Initialization
 
@@ -26,5 +35,17 @@ class FavouriteEntriesTableViewModel: FMTablePageViewModel {
         dataSource.update(with: [
             FavouriteEntriesSectionViewModel(context: context)
         ])
+    }
+}
+
+// MARK: - FavouriteEntriesSectionViewModelDelegate
+
+extension FavouriteEntriesTableViewModel: FavouriteEntriesSectionViewModelDelegate {
+    func beginTableUpdates() {
+        delegate?.beginTableUpdates()
+    }
+
+    func endTableUpdates() {
+        delegate?.endTableUpdates()
     }
 }

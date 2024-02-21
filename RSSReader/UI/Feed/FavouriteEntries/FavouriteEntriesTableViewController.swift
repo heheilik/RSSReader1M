@@ -34,3 +34,15 @@ class FavouriteEntriesTableViewController: FMTablePageViewController {
         navigationItem.title = UIString.navigationBarTitle
     }
 }
+
+// MARK: - FavouriteEntriesTableViewModelDelegate
+
+extension FavouriteEntriesTableViewController: FavouriteEntriesTableViewModelDelegate {
+    func beginTableUpdates() {
+        tableView.beginUpdates()
+    }
+
+    func endTableUpdates() {
+        tableView.endUpdates()
+    }
+}
