@@ -14,6 +14,7 @@ import UIKit
 protocol FavouriteEntriesSectionViewModelDelegate: AnyObject {
     func beginTableUpdates()
     func endTableUpdates()
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel)
 }
 
 class FavouriteEntriesSectionViewModel: FMSectionViewModel {
@@ -45,12 +46,13 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
 
     init(
         context: FavouriteEntriesContext,
+        delegate: FMSectionViewModelDelegate? = nil,
         imageManager: MultipleSourcesImageManager = MultipleSourcesImageManager()
     ) {
         persistenceManager = context.persistenceManager
         self.imageManager = imageManager
 
-        super.init()
+        super.init(delegate: delegate)
 
         persistenceManager.fetchedResultsController.delegate = self
         imageManager.delegate = self
@@ -61,6 +63,13 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
 
     func saveFeedToCoreData() async {
         await persistenceManager.saveControllerData()
+    }
+
+    func removeFromFavourites(cellViewModel: FeedEntryCellViewModel) {
+        cellViewModel.isFavourite = !cellViewModel.isFavourite
+        Task {
+            await saveFeedToCoreData()
+        }
     }
 
     // MARK: Private methods
@@ -101,8 +110,14 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
 extension FavouriteEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
     func readStatusChanged(isRead: Bool) { }
 
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel) {
+        guard cellViewModel.isFavourite else {
+            return
+        }
+        currentDelegate?.cellViewModelActivatedFavouriteButton(cellViewModel)
+    }
+
     func didSelect(cellViewModel: FeedEntryCellViewModel) {
-//        selectedViewModel = cellViewModel
         Router.shared.push(
             FeedPageFactory.NavigationPath.feedDetails.rawValue,
             animated: true,

@@ -15,6 +15,10 @@ class FavouriteEntriesTableViewController: FMTablePageViewController {
 
     private enum UIString {
         static let navigationBarTitle = "Избранное"
+        static let removeFromFavouriteAlertTitle = "Убрать из избранного"
+        static let removeFromFavouriteAlertDescription = "Вы действительно хотите убрать новость из избранного?"
+        static let removeFromFavouriteAlertDismiss = "Нет"
+        static let removeFromFavouriteAlertConfirm = "Да"
     }
 
     // MARK: Internal properties
@@ -55,5 +59,31 @@ extension FavouriteEntriesTableViewController: FavouriteEntriesTableViewModelDel
 
     func endTableUpdates() {
         tableView.endUpdates()
+    }
+
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel) {
+        let alert = UIAlertController(
+            title: UIString.removeFromFavouriteAlertTitle,
+            message: UIString.removeFromFavouriteAlertDescription,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: UIString.removeFromFavouriteAlertDismiss,
+                style: .default
+            ) { [weak alert] _ in
+                alert?.dismiss(animated: true)
+            }
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: UIString.removeFromFavouriteAlertConfirm,
+                style: .destructive
+            ) { [weak self, weak alert] _ in
+                self?.currentViewModel?.removeFromFavourites(cellViewModel: cellViewModel)
+                alert?.dismiss(animated: true)
+            }
+        )
+        present(alert, animated: true)
     }
 }

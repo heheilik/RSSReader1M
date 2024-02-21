@@ -11,6 +11,7 @@ import Foundation
 protocol FavouriteEntriesTableViewModelDelegate: AnyObject {
     func beginTableUpdates()
     func endTableUpdates()
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel)
 }
 
 class FavouriteEntriesTableViewModel: FMTablePageViewModel {
@@ -18,6 +19,12 @@ class FavouriteEntriesTableViewModel: FMTablePageViewModel {
     // MARK: Internal properties
 
     weak var delegate: FavouriteEntriesTableViewModelDelegate?
+
+    // MARK: Private properties
+
+    private var favouriteEntriesSectionViewModels: [FavouriteEntriesSectionViewModel] {
+        dataSource.sectionViewModels.compactMap { $0 as? FavouriteEntriesSectionViewModel }
+    }
 
     // MARK: Initialization
 
@@ -32,20 +39,24 @@ class FavouriteEntriesTableViewModel: FMTablePageViewModel {
     // MARK: Internal methods
 
     func saveFeedToCoreData() {
-        dataSource.sectionViewModels
-            .compactMap { $0 as? FavouriteEntriesSectionViewModel }
-            .forEach { sectionViewModel in
-                Task {
-                    await sectionViewModel.saveFeedToCoreData()
-                }
+        favouriteEntriesSectionViewModels.forEach { sectionViewModel in
+            Task {
+                await sectionViewModel.saveFeedToCoreData()
             }
+        }
+    }
+
+    func removeFromFavourites(cellViewModel: FeedEntryCellViewModel) {
+        favouriteEntriesSectionViewModels.forEach { sectionViewModel in
+            sectionViewModel.removeFromFavourites(cellViewModel: cellViewModel)
+        }
     }
 
     // MARK: Private methods
 
     private func configureSectionViewModels(context: FavouriteEntriesContext) {
         dataSource.update(with: [
-            FavouriteEntriesSectionViewModel(context: context)
+            FavouriteEntriesSectionViewModel(context: context, delegate: self)
         ])
     }
 }
@@ -59,5 +70,9 @@ extension FavouriteEntriesTableViewModel: FavouriteEntriesSectionViewModelDelega
 
     func endTableUpdates() {
         delegate?.endTableUpdates()
+    }
+
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel) {
+        delegate?.cellViewModelActivatedFavouriteButton(cellViewModel)
     }
 }

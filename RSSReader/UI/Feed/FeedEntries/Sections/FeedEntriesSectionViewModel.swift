@@ -188,6 +188,10 @@ extension FeedEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
         unreadEntriesCount += isRead ? -1 : 1
     }
 
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel) {
+        cellViewModel.isFavourite = !cellViewModel.isFavourite
+    }
+
     func didSelect(cellViewModel: FeedEntryCellViewModel) {
         selectedViewModel = cellViewModel
         Router.shared.push(

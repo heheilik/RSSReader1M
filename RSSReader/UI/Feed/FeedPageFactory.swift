@@ -70,6 +70,7 @@ struct FeedPageFactory: PageFactoryProtocol {
             dataSource: dataSource
         )
         viewController.viewModel = viewModel
+        viewModel.delegate = viewController
 
         return viewController
     }

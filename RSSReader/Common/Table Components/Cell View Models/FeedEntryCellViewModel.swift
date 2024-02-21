@@ -15,6 +15,7 @@ import UIKit
 
 protocol FeedEntryCellViewModelDelegate: AnyObject {
     func readStatusChanged(isRead: Bool)
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel)
     func didSelect(cellViewModel: FeedEntryCellViewModel)
 }
 
@@ -76,6 +77,7 @@ class FeedEntryCellViewModel: FMCellViewModel {
             context.performAndWait {
                 managedObject.isFavourite = newValue
             }
+            (fillableCell as? FeedEntryTableViewCell)?.changeFavouriteStatus(isFavourite: self.isFavourite)
         }
     }
 
@@ -105,8 +107,7 @@ class FeedEntryCellViewModel: FMCellViewModel {
             guard let self = self else {
                 return
             }
-            self.isFavourite = !self.isFavourite
-            (self.fillableCell as? FeedEntryTableViewCell)?.changeFavouriteStatus(isFavourite: self.isFavourite)
+            currentDelegate?.cellViewModelActivatedFavouriteButton(self)
         }
         favouriteAction.configure(
             with: isFavourite ? Images.starCrossed : Images.star,
