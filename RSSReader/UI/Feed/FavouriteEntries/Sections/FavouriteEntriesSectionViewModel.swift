@@ -77,7 +77,6 @@ extension FavouriteEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
 
     func didSelect(cellViewModel: FeedEntryCellViewModel) {
 //        selectedViewModel = cellViewModel
-        print("activated")
         Router.shared.push(
             FeedPageFactory.NavigationPath.feedDetails.rawValue,
             animated: true,

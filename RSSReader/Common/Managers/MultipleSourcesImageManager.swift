@@ -59,6 +59,9 @@ class MultipleSourcesImageManager {
 
     func addEntryData(index: Int, url: URL) async {
         print("--- \(#function) call (index is \(index)) ---")
+        defer {
+            print("--- \(#function) return (index is \(index)) ---")
+        }
 
         let (image, state) = await processEntryData(url: url, index: index)
 
@@ -82,8 +85,6 @@ class MultipleSourcesImageManager {
         // as a result of our actions.
 
         await downloadImage(at: url)
-
-        print("--- \(#function) return (index is \(index)) ---")
     }
 
     func removeEntryData(index: Int, url: URL) async {
