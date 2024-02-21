@@ -63,6 +63,17 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
             guard let self else {
                 return nil
             }
+            return FeedEntryCellViewModel(
+                managedObject: entry,
+                image: Image.error,
+                delegate: self,
+                isAnimatedAtStart: false
+            )
+        })
+        managedFeedEntries.enumerated().forEach { [weak self] (index, entry) in
+            guard let self else {
+                return
+            }
             entry.managedObjectContext?.perform {
                 guard let imageURL = entry.feed?.imageURL else {
                     return
@@ -71,13 +82,7 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
                     await self.imageManager.addEntryData(index: index, url: imageURL)
                 }
             }
-            return FeedEntryCellViewModel(
-                managedObject: entry,
-                image: Image.error,
-                delegate: self,
-                isAnimatedAtStart: false
-            )
-        })
+        }
     }
 }
 
