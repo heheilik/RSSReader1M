@@ -89,7 +89,7 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
                     return
                 }
                 Task {
-                    await self.imageManager.addEntryData(index: index, url: imageURL)
+                    await self.imageManager.addURL(url: imageURL)
                 }
             }
         }
@@ -121,14 +121,13 @@ extension FavouriteEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
 // MARK: - MultipleSourcesImageManagerDelegate
 
 extension FavouriteEntriesSectionViewModel: MultipleSourcesImageManagerDelegate {
-    func imageLoaded(_ image: UIImage, forCellAt index: Int) {
-        (cellModel(at: index) as? FeedEntryCellViewModel)?.image = image
-    }
-    
-    func imageLoaded(_ image: UIImage, forCellsAt indices: Set<Int>) {
-        indices
-            .compactMap { cellViewModels[safe: $0] as? FeedEntryCellViewModel }
-            .forEach { $0.image = image }
+    func imageLoaded(_ image: UIImage, for url: URL) {
+        persistenceManager.controllerContext.perform { [weak self] in
+            self?.cellViewModels
+                .compactMap { $0 as? FeedEntryCellViewModel }
+                .filter { $0.managedObject.feed?.imageURL == url }
+                .forEach { $0.image = image }
+        }
     }
 }
 
