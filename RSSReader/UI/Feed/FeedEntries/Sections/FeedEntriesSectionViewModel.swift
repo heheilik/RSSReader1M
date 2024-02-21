@@ -44,7 +44,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     private let persistenceManager: SingleFeedPersistenceManager
     private let updateManager: FeedUpdateManager
-    private let fetchedResultsControllerDelegate: FeedEntriesFetchedResultsControllerDelegate
 
     private var cellUpdateManager = FeedEntriesCellUpdateContainer()
 
@@ -81,14 +80,11 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
 
         persistenceManager = context.feedPersistenceManager
         updateManager = FeedUpdateManager(persistenceManager: context.feedPersistenceManager)
-        fetchedResultsControllerDelegate = FeedEntriesFetchedResultsControllerDelegate()
 
         unreadEntriesCount = context.unreadEntriesCount
 
         super.init()
-
-        fetchedResultsControllerDelegate.sectionViewModel = self
-        persistenceManager.fetchedResultsController.delegate = fetchedResultsControllerDelegate
+        persistenceManager.fetchedResultsController.delegate = self
 
         configureCellViewModels(context: context)
         configureHeader()
@@ -110,61 +106,6 @@ class FeedEntriesSectionViewModel: FMSectionViewModel {
     @discardableResult
     func saveFeedToCoreData() async -> Bool {
         await persistenceManager.saveControllerData()
-    }
-
-    func fetchedResultsController(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        addedObject object: ManagedFeedEntry,
-        at indexPath: IndexPath
-    ) {
-        guard let viewModel = FeedEntryCellViewModel(
-            managedObject: object,
-            image: image,
-            delegate: self,
-            isAnimatedAtStart: false
-        ) else {
-            assertionFailure("Model must be created here.")
-            return
-        }
-        cellUpdateManager.add(
-            viewModel: viewModel,
-            index: indexPath.row
-        )
-    }
-
-    func fetchedResultsController(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        updatedObject object: ManagedFeedEntry,
-        at indexPath: IndexPath
-    ) { }
-
-    func fetchedResultsControllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        currentDelegate?.beginTableUpdates()
-    }
-
-    func fetchedResultsControllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        cellUpdateManager.ordered.forEach {
-            cellViewModels.insert($0.viewModel, at: $0.index)
-        }
-        dataManipulator?.cellsAdded(
-            at: cellUpdateManager.indexSet,
-            on: self,
-            with: .top,
-            completion: nil
-        )
-        currentDelegate?.endTableUpdates()
-        cellUpdateManager.removeAll()
-
-        Task {
-            guard
-                let unreadEntriesCount = await persistenceManager.fetchUnreadEntriesCount(for: persistenceManager.url)
-            else {
-                return
-            }
-            async let _ = MainActor.run {
-                self.updateHeader(unreadEntriesCount: unreadEntriesCount)
-            }
-        }
     }
 
     func updateFeed() async {
@@ -254,12 +195,106 @@ extension FeedEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
             animated: true,
             context: FeedDetailsContext(
                 title: cellViewModel.title,
-                description: cellViewModel.description,
+                entryDescription: cellViewModel.entryDescription,
                 date: cellViewModel.date,
                 image: image,
                 persistenceManager: persistenceManager,
                 managedObject: cellViewModel.managedObject
             )
         )
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension FeedEntriesSectionViewModel: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        DispatchQueue.main.async { [weak self] in
+            self?.currentDelegate?.beginTableUpdates()
+        }
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+                return
+            }
+
+            self.cellUpdateManager.ordered.forEach {
+                self.cellViewModels.insert($0.viewModel, at: $0.index)
+            }
+            self.dataManipulator?.cellsAdded(
+                at: cellUpdateManager.indexSet,
+                on: self,
+                with: .top,
+                completion: nil
+            )
+            self.currentDelegate?.endTableUpdates()
+            self.cellUpdateManager.removeAll()
+
+            Task {
+                guard
+                    let unreadEntriesCount = await self.persistenceManager.fetchUnreadEntriesCount(
+                        for: self.persistenceManager.url
+                    )
+                else {
+                    return
+                }
+                async let _ = MainActor.run {
+                    self.updateHeader(unreadEntriesCount: unreadEntriesCount)
+                }
+            }
+        }
+    }
+
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
+        guard let managedFeedEntry = anObject as? ManagedFeedEntry else {
+            assertionFailure("This class works with ManagedFeedEntry only.")
+            return
+        }
+
+        switch type {
+        case .insert:
+            guard let newIndexPath else {
+                assertionFailure("indexPath must not be nil in this case.")
+                return
+            }
+
+            guard let viewModel = FeedEntryCellViewModel(
+                managedObject: managedFeedEntry,
+                image: image,
+                delegate: self,
+                isAnimatedAtStart: false
+            ) else {
+                assertionFailure("Model must be created here.")
+                return
+            }
+
+            cellUpdateManager.add(
+                viewModel: viewModel,
+                index: newIndexPath.row
+            )
+
+        case .update:
+            break
+
+        case .delete:
+            assertionFailure("Old content must not be deleted.")
+            return
+
+        case .move:
+            assertionFailure("Old content must not be moved.")
+            return
+
+        @unknown default:
+            assertionFailure("Case is not processed.")
+            return
+        }
     }
 }
