@@ -281,8 +281,8 @@ extension FeedEntriesSectionViewModel: NSFetchedResultsControllerDelegate {
             }
 
             cellUpdateManager.add(
-                viewModel: viewModel,
-                index: newIndexPath.row
+                index: newIndexPath.row,
+                viewModel: viewModel
             )
 
         case .update:
