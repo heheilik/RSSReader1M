@@ -32,6 +32,7 @@
 		5D93DB532AF29A2A0069672B /* FeedDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */; };
 		5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
 		5D93DB572AF29C4F0069672B /* FeedDetailsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */; };
+		5DA894D32B85C7AE00023CDC /* ALNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA894D22B85C7AE00023CDC /* ALNavigation */; };
 		5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
 		5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB170692B108FE5000689E9 /* MockFeedFactory.swift */; };
 		5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */; };
@@ -62,7 +63,6 @@
 		5DFD96532AE8FC9D00DEBF9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DFD96522AE8FC9D00DEBF9A /* Assets.xcassets */; };
 		5DFD96562AE8FC9D00DEBF9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5DFD96542AE8FC9D00DEBF9A /* LaunchScreen.storyboard */; };
 		5DFD965F2AE8FE1400DEBF9A /* FMArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD965E2AE8FE1400DEBF9A /* FMArchitecture */; };
-		5DFD96622AE8FE2400DEBF9A /* ALNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD96612AE8FE2400DEBF9A /* ALNavigation */; };
 		5DFD96652AE8FE3000DEBF9A /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFD96642AE8FE3000DEBF9A /* FeedKit */; };
 		5DFD966A2AE9001900DEBF9A /* FeedSourcesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD96692AE9001900DEBF9A /* FeedSourcesViewModel.swift */; };
 		5DFD966F2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFD966E2AE9126F00DEBF9A /* FeedSourcesSectionViewModel.swift */; };
@@ -153,10 +153,10 @@
 			files = (
 				5DFD96652AE8FE3000DEBF9A /* FeedKit in Frameworks */,
 				5DFD965F2AE8FE1400DEBF9A /* FMArchitecture in Frameworks */,
-				5DFD96622AE8FE2400DEBF9A /* ALNavigation in Frameworks */,
 				5DFBB2462B6BC2F400A2541F /* Factory in Frameworks */,
 				5DC8203B2B6798A70047AD51 /* Lottie in Frameworks */,
 				5DC8ADAA2B67A81A00CB0519 /* SkeletonView in Frameworks */,
+				5DA894D32B85C7AE00023CDC /* ALNavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,11 +493,11 @@
 			name = RSSReader;
 			packageProductDependencies = (
 				5DFD965E2AE8FE1400DEBF9A /* FMArchitecture */,
-				5DFD96612AE8FE2400DEBF9A /* ALNavigation */,
 				5DFD96642AE8FE3000DEBF9A /* FeedKit */,
 				5DC8203A2B6798A70047AD51 /* Lottie */,
 				5DC8ADA92B67A81A00CB0519 /* SkeletonView */,
 				5DFBB2452B6BC2F400A2541F /* Factory */,
+				5DA894D22B85C7AE00023CDC /* ALNavigation */,
 			);
 			productName = RSSReader;
 			productReference = 5DFD96462AE8FC9C00DEBF9A /* RSSReader.app */;
@@ -533,11 +533,11 @@
 			mainGroup = 5DFD963D2AE8FC9C00DEBF9A;
 			packageReferences = (
 				5DFD965D2AE8FE1400DEBF9A /* XCRemoteSwiftPackageReference "architecture" */,
-				5DFD96602AE8FE2400DEBF9A /* XCRemoteSwiftPackageReference "navigation" */,
 				5DFD96632AE8FE3000DEBF9A /* XCRemoteSwiftPackageReference "FeedKit" */,
 				5DC820392B6798A70047AD51 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				5DC8ADA82B67A81A00CB0519 /* XCRemoteSwiftPackageReference "SkeletonView" */,
 				5DFBB2442B6BC2F400A2541F /* XCRemoteSwiftPackageReference "Factory" */,
+				5DA894D12B85C7AE00023CDC /* XCRemoteSwiftPackageReference "navigation" */,
 			);
 			productRefGroup = 5DFD96472AE8FC9C00DEBF9A /* Products */;
 			projectDirPath = "";
@@ -900,6 +900,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5DA894D12B85C7AE00023CDC /* XCRemoteSwiftPackageReference "navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@gitlab.byvmz.online:ios/frameworks/navigation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.0;
+			};
+		};
 		5DC820392B6798A70047AD51 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -929,15 +937,7 @@
 			repositoryURL = "git@gitlab.byvmz.online:ios/frameworks/architecture.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.8.2;
-			};
-		};
-		5DFD96602AE8FE2400DEBF9A /* XCRemoteSwiftPackageReference "navigation" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@gitlab.byvmz.online:ios/frameworks/navigation.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.0;
+				minimumVersion = 2.10.0;
 			};
 		};
 		5DFD96632AE8FE3000DEBF9A /* XCRemoteSwiftPackageReference "FeedKit" */ = {
@@ -951,6 +951,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5DA894D22B85C7AE00023CDC /* ALNavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DA894D12B85C7AE00023CDC /* XCRemoteSwiftPackageReference "navigation" */;
+			productName = ALNavigation;
+		};
 		5DC8203A2B6798A70047AD51 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5DC820392B6798A70047AD51 /* XCRemoteSwiftPackageReference "lottie-ios" */;
@@ -970,11 +975,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5DFD965D2AE8FE1400DEBF9A /* XCRemoteSwiftPackageReference "architecture" */;
 			productName = FMArchitecture;
-		};
-		5DFD96612AE8FE2400DEBF9A /* ALNavigation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5DFD96602AE8FE2400DEBF9A /* XCRemoteSwiftPackageReference "navigation" */;
-			productName = ALNavigation;
 		};
 		5DFD96642AE8FE3000DEBF9A /* FeedKit */ = {
 			isa = XCSwiftPackageProductDependency;
