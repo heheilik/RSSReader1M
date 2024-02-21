@@ -112,8 +112,7 @@ extension FavouriteEntriesSectionViewModel: MultipleSourcesImageManagerDelegate 
     
     func imageLoaded(_ image: UIImage, forCellsAt indices: Set<Int>) {
         indices
-            .map { cellViewModels[$0] }
-            .compactMap { $0 as? FeedEntryCellViewModel }
+            .compactMap { cellViewModels[safe: $0] as? FeedEntryCellViewModel }
             .forEach { $0.image = image }
     }
 }

@@ -33,6 +33,7 @@
 		5D93DB552AF29A300069672B /* FeedDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */; };
 		5D93DB572AF29C4F0069672B /* FeedDetailsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */; };
 		5DA894D32B85C7AE00023CDC /* ALNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA894D22B85C7AE00023CDC /* ALNavigation */; };
+		5DA894D52B85D4BF00023CDC /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA894D42B85D4BF00023CDC /* Collection+Safe.swift */; };
 		5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
 		5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB170692B108FE5000689E9 /* MockFeedFactory.swift */; };
 		5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */; };
@@ -106,6 +107,7 @@
 		5D93DB522AF29A2A0069672B /* FeedDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewController.swift; sourceTree = "<group>"; };
 		5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewModel.swift; sourceTree = "<group>"; };
 		5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsContext.swift; sourceTree = "<group>"; };
+		5DA894D42B85D4BF00023CDC /* Collection+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Safe.swift"; sourceTree = "<group>"; };
 		5DAEF75D2AEA679D0091436C /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		5DB170692B108FE5000689E9 /* MockFeedFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactory.swift; sourceTree = "<group>"; };
 		5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactoryTests.swift; sourceTree = "<group>"; };
@@ -378,6 +380,7 @@
 		5DFBB2492B6BC39D00A2541F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5DA894D42B85D4BF00023CDC /* Collection+Safe.swift */,
 				5D0382B72B79FDCB00FC20CA /* Factory+EntryDateFormatter.swift */,
 				5DFBB24C2B6BC3E700A2541F /* Factory+NSPersistentContainer.swift */,
 				5DD6D1072B7CA0670022D0C8 /* Result+SuccessCase.swift */,
@@ -596,6 +599,7 @@
 				5D0382B32B79EE4000FC20CA /* ManagedFeed+CoreDataClass.swift in Sources */,
 				5D1A5CD42B83411B00B7C248 /* FavouriteEntriesSectionViewModel.swift in Sources */,
 				5DE81F332AEBB0E9003159C0 /* FeedSourcesTableViewDelegate.swift in Sources */,
+				5DA894D52B85D4BF00023CDC /* Collection+Safe.swift in Sources */,
 				5D0382B52B79EE4000FC20CA /* ManagedFeed+CoreDataProperties.swift in Sources */,
 				5D0382B42B79EE4000FC20CA /* ManagedFeedEntry+CoreDataProperties.swift in Sources */,
 				5DFBB24D2B6BC3E700A2541F /* Factory+NSPersistentContainer.swift in Sources */,
