@@ -83,7 +83,7 @@ extension FavouriteEntriesSectionViewModel: FeedEntryCellViewModelDelegate {
             animated: true,
             context: FeedDetailsContext(
                 title: cellViewModel.title,
-                description: cellViewModel.description,
+                entryDescription: cellViewModel.entryDescription,
                 date: cellViewModel.date,
                 image: cellViewModel.image,
                 persistenceManager: persistenceManager,

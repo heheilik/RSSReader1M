@@ -39,7 +39,7 @@ class FeedEntryCellViewModel: FMCellViewModel {
     // MARK: Internal properties
 
     let title: String
-    let description: String?
+    let entryDescription: String?
     let date: String?
 
     let managedObject: ManagedFeedEntry
@@ -179,7 +179,7 @@ class FeedEntryCellViewModel: FMCellViewModel {
         }
 
         self.title = title
-        self.description = description
+        self.entryDescription = description
         self.isRead = isRead
         self.date = date
 

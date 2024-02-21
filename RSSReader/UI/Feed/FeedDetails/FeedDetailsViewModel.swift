@@ -15,7 +15,7 @@ class FeedDetailsViewModel: FMPageViewModel {
     // MARK: Internal properties
 
     let title: String
-    let description: String?
+    let entryDescription: String?
     let date: String?
     let image: UIImage?
 
@@ -34,7 +34,7 @@ class FeedDetailsViewModel: FMPageViewModel {
 
     init(context: FeedDetailsContext) {
         title = context.title
-        description = context.description
+        entryDescription = context.entryDescription
         date = context.date
         image = context.image
 

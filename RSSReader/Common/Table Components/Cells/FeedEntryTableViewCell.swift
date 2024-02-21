@@ -183,7 +183,7 @@ class FeedEntryTableViewCell: FMSwipeTableViewCell {
         stopAnimation()
 
         titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.description
+        descriptionLabel.text = viewModel.entryDescription
         dateLabel.text = viewModel.date
         feedImage.image = viewModel.image
 
