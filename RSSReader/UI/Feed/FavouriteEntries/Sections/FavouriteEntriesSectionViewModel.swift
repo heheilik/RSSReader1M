@@ -35,6 +35,8 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
     private var persistenceManager: FavouriteEntriesPersistenceManager
     private let imageManager: MultipleSourcesImageManager
 
+    private let cellUpdateContainer = FavouriteEntriesCellUpdateContainer()
+
     private weak var currentDelegate: FavouriteEntriesSectionViewModelDelegate? {
         delegate as? FavouriteEntriesSectionViewModelDelegate
     }
@@ -47,7 +49,9 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
     ) {
         persistenceManager = context.persistenceManager
         self.imageManager = imageManager
+
         super.init()
+
         persistenceManager.fetchedResultsController.delegate = self
         imageManager.delegate = self
         configureCellViewModels()
@@ -126,11 +130,46 @@ extension FavouriteEntriesSectionViewModel: MultipleSourcesImageManagerDelegate 
 
 extension FavouriteEntriesSectionViewModel: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        currentDelegate?.beginTableUpdates()
+        DispatchQueue.main.async { [weak self] in
+            self?.currentDelegate?.beginTableUpdates()
+        }
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        currentDelegate?.endTableUpdates()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else {
+                return
+            }
+            cellViewModels.remove(atOffsets: cellUpdateContainer.deletedCellsIndices)
+            dataManipulator?.cellsDeleted(
+                at: cellUpdateContainer.deletedCellsIndices,
+                on: self,
+                with: .fade,
+                completion: nil
+            )
+
+            cellUpdateContainer.updatedManagedObjects.forEach { (index, managedFeedEntry) in
+                guard let viewModel = FeedEntryCellViewModel(
+                    managedObject: managedFeedEntry,
+                    image: UIImage(),
+                    delegate: self,
+                    isAnimatedAtStart: false
+                ) else {
+                    return
+                }
+                self.cellViewModels[index] = viewModel
+            }
+
+            dataManipulator?.cellsUpdated(
+                at: cellUpdateContainer.updatedIndexSet,
+                on: self,
+                with: .fade,
+                completion: nil
+            )
+
+            currentDelegate?.endTableUpdates()
+            cellUpdateContainer.reset()
+        }
     }
 
     func controller(
@@ -142,10 +181,21 @@ extension FavouriteEntriesSectionViewModel: NSFetchedResultsControllerDelegate {
     ) {
         switch type {
         case .update:
-            fatalError("Not implemented.", file: #file, line: #line)
+            guard
+                let indexPath,
+                let managedFeedEntry = anObject as? ManagedFeedEntry
+            else {
+                assertionFailure("indexPath and ManagedFeedEntry must be provided as a parameters.")
+                return
+            }
+            cellUpdateContainer.updateCell(at: indexPath.row, with: managedFeedEntry)
 
         case .delete:
-            fatalError("Not implemented.", file: #file, line: #line)
+            guard let indexPath else {
+                assertionFailure("indexPath must be provided as a parameters.")
+                return
+            }
+            cellUpdateContainer.deleteCell(at: indexPath.row)
 
         case .insert:
             assertionFailure("New content must not be inserted.")

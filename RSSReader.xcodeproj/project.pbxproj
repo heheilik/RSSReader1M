@@ -34,6 +34,7 @@
 		5D93DB572AF29C4F0069672B /* FeedDetailsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */; };
 		5DA894D32B85C7AE00023CDC /* ALNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA894D22B85C7AE00023CDC /* ALNavigation */; };
 		5DA894D52B85D4BF00023CDC /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA894D42B85D4BF00023CDC /* Collection+Safe.swift */; };
+		5DA894D72B85E1B400023CDC /* FavouriteEntriesCellUpdateContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA894D62B85E1B400023CDC /* FavouriteEntriesCellUpdateContainer.swift */; };
 		5DAEF75E2AEA679D0091436C /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAEF75D2AEA679D0091436C /* FeedService.swift */; };
 		5DB1706A2B108FE5000689E9 /* MockFeedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB170692B108FE5000689E9 /* MockFeedFactory.swift */; };
 		5DB1706C2B10A29F000689E9 /* MockFeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */; };
@@ -108,6 +109,7 @@
 		5D93DB542AF29A300069672B /* FeedDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsViewModel.swift; sourceTree = "<group>"; };
 		5D93DB562AF29C4F0069672B /* FeedDetailsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsContext.swift; sourceTree = "<group>"; };
 		5DA894D42B85D4BF00023CDC /* Collection+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Safe.swift"; sourceTree = "<group>"; };
+		5DA894D62B85E1B400023CDC /* FavouriteEntriesCellUpdateContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteEntriesCellUpdateContainer.swift; sourceTree = "<group>"; };
 		5DAEF75D2AEA679D0091436C /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		5DB170692B108FE5000689E9 /* MockFeedFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactory.swift; sourceTree = "<group>"; };
 		5DB1706B2B10A29F000689E9 /* MockFeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFeedFactoryTests.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 		5D1A5CC72B833C1D00B7C248 /* FavouriteEntries */ = {
 			isa = PBXGroup;
 			children = (
+				5DA894D62B85E1B400023CDC /* FavouriteEntriesCellUpdateContainer.swift */,
 				5D1A5CCC2B833CD200B7C248 /* FavouriteEntriesContext.swift */,
 				5D1A5CC82B833C3800B7C248 /* FavouriteEntriesTableViewController.swift */,
 				5D1A5CCA2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift */,
@@ -605,6 +608,7 @@
 				5DFBB24D2B6BC3E700A2541F /* Factory+NSPersistentContainer.swift in Sources */,
 				5D1A5CCB2B833C4300B7C248 /* FavouriteEntriesTableViewModel.swift in Sources */,
 				5DB4326A2B6A203A008F30D3 /* FeedModel.xcdatamodeld in Sources */,
+				5DA894D72B85E1B400023CDC /* FavouriteEntriesCellUpdateContainer.swift in Sources */,
 				5DD6D1062B7C9B4A0022D0C8 /* FeedUpdateManager.swift in Sources */,
 				5DFD964E2AE8FC9C00DEBF9A /* FeedSourcesViewController.swift in Sources */,
 				5D93DB4E2AF28C470069672B /* FeedImageService.swift in Sources */,
