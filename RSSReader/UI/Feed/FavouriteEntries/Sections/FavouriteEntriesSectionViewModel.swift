@@ -66,7 +66,7 @@ class FavouriteEntriesSectionViewModel: FMSectionViewModel {
     }
 
     func removeFromFavourites(cellViewModel: FeedEntryCellViewModel) {
-        cellViewModel.isFavourite = !cellViewModel.isFavourite
+        cellViewModel.isFavourite = false
         Task {
             await saveFeedToCoreData()
         }
