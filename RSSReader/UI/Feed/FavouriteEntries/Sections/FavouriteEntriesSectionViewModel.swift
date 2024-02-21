@@ -169,7 +169,7 @@ extension FavouriteEntriesSectionViewModel: NSFetchedResultsControllerDelegate {
             dataManipulator?.cellsUpdated(
                 at: cellUpdateContainer.updatedIndexSet,
                 on: self,
-                with: .fade,
+                with: .none,
                 completion: nil
             )
 
