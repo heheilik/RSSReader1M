@@ -111,7 +111,7 @@ class FeedDetailsViewController: FMPageViewController {
         }
 
         titleLabel.text = currentViewModel.title
-        descriptionLabel.text = currentViewModel.description ?? ""
+        descriptionLabel.text = currentViewModel.entryDescription ?? ""
         dateLabel.text = currentViewModel.date ?? ""
         feedImage.image = currentViewModel.image
 

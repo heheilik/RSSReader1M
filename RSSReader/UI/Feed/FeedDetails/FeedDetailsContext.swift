@@ -12,10 +12,10 @@ import UIKit
 
 struct FeedDetailsContext: PageContext {
     let title: String
-    let description: String?
+    let entryDescription: String?
     let date: String?
     let image: UIImage?
 
-    let persistenceManager: FeedPersistenceManager
+    let persistenceManager: BasePersistenceManager<ManagedFeedEntry>
     let managedObject: ManagedFeedEntry
 }

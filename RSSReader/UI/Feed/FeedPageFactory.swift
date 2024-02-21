@@ -15,9 +15,10 @@ struct FeedPageFactory: PageFactoryProtocol {
     // MARK: Constants
 
     enum NavigationPath: String, CaseIterable {
-        case feedSources = "/feedSources"
-        case feedEntries = "/feedEntries"
+        case favouriteEntries = "/favouriteEntries"
         case feedDetails = "/feedDetails"
+        case feedEntries = "/feedEntries"
+        case feedSources = "/feedSources"
     }
 
     // MARK: Internal methods
@@ -27,11 +28,17 @@ struct FeedPageFactory: PageFactoryProtocol {
             throw PageFactoryErrorType.NavigationPathNotHandled
         }
         switch typedPath {
-        case .feedSources:
-            guard let context = context as? FeedSourcesContext else {
+        case .favouriteEntries:
+            guard let context = context as? FavouriteEntriesContext else {
+                fatalError("Context must be supplied for FavouriteEntriesTableViewController.")
+            }
+            return newFavouriteEntriesTableViewController(context: context)
+
+        case .feedDetails:
+            guard let context = context as? FeedDetailsContext else {
                 fatalError("Context must be supplied for FeedEntriesViewController.")
             }
-            return newFeedSourcesViewController(context: context)
+            return newFeedDetailsViewController(context: context)
 
         case .feedEntries:
             guard let context = context as? FeedEntriesContext else {
@@ -39,32 +46,40 @@ struct FeedPageFactory: PageFactoryProtocol {
             }
             return newFeedEntriesViewController(context: context)
 
-        case .feedDetails:
-            guard let context = context as? FeedDetailsContext else {
+        case .feedSources:
+            guard let context = context as? FeedSourcesContext else {
                 fatalError("Context must be supplied for FeedEntriesViewController.")
             }
-            return newFeedDetailsViewController(context: context)
+            return newFeedSourcesViewController(context: context)
         }
     }
 
     // MARK: Private methods
 
-    private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedSourcesViewController {
-        let viewController = FeedSourcesViewController()
-        viewController.delegate = FeedSourcesTableViewDelegate()
+    private func newFavouriteEntriesTableViewController(
+        context: FavouriteEntriesContext
+    ) -> FavouriteEntriesTableViewController {
+        let viewController = FavouriteEntriesTableViewController()
+        viewController.delegate = FMTableViewDelegate()
 
-        let dataSource = FMTableViewDataSource(
-            tableView: viewController.tableView
-        )
+        let dataSource = FMTableViewDataSource(tableView: viewController.tableView)
         viewController.dataSource = dataSource
 
-        let viewModel = FeedSourcesViewModel(
+        let viewModel = FavouriteEntriesTableViewModel(
             context: context,
-            dataSource: dataSource,
-            delegate: viewController
+            dataSource: dataSource
         )
         viewController.viewModel = viewModel
+        viewModel.delegate = viewController
 
+        return viewController
+    }
+
+    private func newFeedDetailsViewController(context: FeedDetailsContext) -> FeedDetailsViewController {
+        let viewController = FeedDetailsViewController()
+        let viewModel = FeedDetailsViewModel(context: context)
+
+        viewController.viewModel = viewModel
         return viewController
     }
 
@@ -88,11 +103,22 @@ struct FeedPageFactory: PageFactoryProtocol {
         return viewController
     }
 
-    private func newFeedDetailsViewController(context: FeedDetailsContext) -> FeedDetailsViewController {
-        let viewController = FeedDetailsViewController()
-        let viewModel = FeedDetailsViewModel(context: context)
+    private func newFeedSourcesViewController(context: FeedSourcesContext) -> FeedSourcesViewController {
+        let viewController = FeedSourcesViewController()
+        viewController.delegate = FeedSourcesTableViewDelegate()
 
+        let dataSource = FMTableViewDataSource(
+            tableView: viewController.tableView
+        )
+        viewController.dataSource = dataSource
+
+        let viewModel = FeedSourcesViewModel(
+            context: context,
+            dataSource: dataSource,
+            delegate: viewController
+        )
         viewController.viewModel = viewModel
+
         return viewController
     }
 }

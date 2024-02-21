@@ -1,5 +1,5 @@
 //
-//  FeedEntriesCell.swift
+//  FeedEntryTableViewCell.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 30.10.23.
@@ -11,7 +11,7 @@ import FMArchitecture
 import SkeletonView
 import UIKit
 
-class FeedEntriesCell: FMSwipeTableViewCell {
+class FeedEntryTableViewCell: FMSwipeTableViewCell {
 
     // MARK: Constants
 
@@ -77,8 +77,8 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
     private var readStatusObserver: AnyCancellable?
 
-    private weak var currentViewModel: FeedEntriesCellViewModel? {
-        return viewModel as? FeedEntriesCellViewModel
+    private weak var currentViewModel: FeedEntryCellViewModel? {
+        return viewModel as? FeedEntryCellViewModel
     }
 
     // MARK: Lifecycle
@@ -183,7 +183,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         stopAnimation()
 
         titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.description
+        descriptionLabel.text = viewModel.entryDescription
         dateLabel.text = viewModel.date
         feedImage.image = viewModel.image
 
@@ -261,7 +261,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
 // MARK: - FMAnimatable
 
-extension FeedEntriesCell: FMAnimatable {
+extension FeedEntryTableViewCell: FMAnimatable {
     func startAnimation() {
         layoutIfNeeded()
         showAnimatedGradientSkeleton(

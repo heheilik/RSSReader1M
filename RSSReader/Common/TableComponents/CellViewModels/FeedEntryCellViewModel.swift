@@ -1,5 +1,5 @@
 //
-//  FeedEntriesCellViewModel.swift
+//  FeedEntryCellViewModel.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 30.10.23.
@@ -13,12 +13,13 @@ import FMArchitecture
 import SwipeCellKit
 import UIKit
 
-protocol FeedEntriesCellViewModelDelegate: AnyObject {
+protocol FeedEntryCellViewModelDelegate: AnyObject {
     func readStatusChanged(isRead: Bool)
-    func didSelect(cellViewModel: FeedEntriesCellViewModel)
+    func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel)
+    func didSelect(cellViewModel: FeedEntryCellViewModel)
 }
 
-class FeedEntriesCellViewModel: FMCellViewModel {
+class FeedEntryCellViewModel: FMCellViewModel {
 
     // MARK: Constants
 
@@ -39,7 +40,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     // MARK: Internal properties
 
     let title: String
-    let description: String?
+    let entryDescription: String?
     let date: String?
 
     let managedObject: ManagedFeedEntry
@@ -76,6 +77,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             context.performAndWait {
                 managedObject.isFavourite = newValue
             }
+            (fillableCell as? FeedEntryTableViewCell)?.changeFavouriteStatus(isFavourite: self.isFavourite)
         }
     }
 
@@ -105,8 +107,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
             guard let self = self else {
                 return
             }
-            self.isFavourite = !self.isFavourite
-            (self.fillableCell as? FeedEntriesCell)?.changeFavouriteStatus(isFavourite: self.isFavourite)
+            currentDelegate?.cellViewModelActivatedFavouriteButton(self)
         }
         favouriteAction.configure(
             with: isFavourite ? Images.starCrossed : Images.star,
@@ -123,8 +124,8 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
     @Injected(\.entryDateFormatter) private static var dateFormatter
 
-    private weak var currentDelegate: FeedEntriesCellViewModelDelegate? {
-        delegate as? FeedEntriesCellViewModelDelegate
+    private weak var currentDelegate: FeedEntryCellViewModelDelegate? {
+        delegate as? FeedEntryCellViewModelDelegate
     }
 
     // MARK: Initialization
@@ -179,14 +180,14 @@ class FeedEntriesCellViewModel: FMCellViewModel {
         }
 
         self.title = title
-        self.description = description
+        self.entryDescription = description
         self.isRead = isRead
         self.date = date
 
         self.image = image
 
         super.init(
-            cellIdentifier: FeedEntriesCell.cellIdentifier,
+            cellIdentifier: FeedEntryTableViewCell.cellIdentifier,
             delegate: delegate
         )
         isAnimation = isAnimatedAtStart
@@ -197,7 +198,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
     // MARK: Internal methods
 
     override func isEqual(to viewModel: FMCellViewModel) -> Bool {
-        guard let viewModel = viewModel as? FeedEntriesCellViewModel else {
+        guard let viewModel = viewModel as? FeedEntryCellViewModel else {
             return false
         }
         return managedObject.objectID == viewModel.managedObject.objectID
@@ -225,7 +226,7 @@ class FeedEntriesCellViewModel: FMCellViewModel {
 
 // MARK: - FMSelectableCellModel
 
-extension FeedEntriesCellViewModel: FMSelectableCellModel {
+extension FeedEntryCellViewModel: FMSelectableCellModel {
     func didSelect() {
         guard !isAnimation else {
             return
@@ -239,7 +240,7 @@ extension FeedEntriesCellViewModel: FMSelectableCellModel {
 
 // MARK: - FMAnimatable
 
-extension FeedEntriesCellViewModel: FMAnimatable {
+extension FeedEntryCellViewModel: FMAnimatable {
     func startAnimation() {
         isAnimation = true
         fillableCell?.fill(viewModel: self)

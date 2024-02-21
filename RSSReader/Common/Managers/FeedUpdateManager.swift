@@ -25,13 +25,13 @@ class FeedUpdateManager {
 
     // MARK: Private properties
 
-    private let persistenceManager: FeedPersistenceManager
+    private let persistenceManager: SingleFeedPersistenceManager
     private let feedService: FeedService
 
     // MARK: Initialization
 
     init(
-        persistenceManager: FeedPersistenceManager,
+        persistenceManager: SingleFeedPersistenceManager,
         feedService: FeedService = FeedService()
     ) {
         self.persistenceManager = persistenceManager

@@ -11,8 +11,8 @@ import Foundation
 import FeedKit
 
 protocol FeedSourcesViewModelDelegate: AnyObject {
-    func updateStarted()
-    func updateCompleted(withError error: FeedUpdateManager.UpdateError?)
+    func fetchStarted()
+    func fetchFinished(_ result: Result<Void, Error>)
 }
 
 class FeedSourcesViewModel: FMTablePageViewModel {
@@ -37,6 +37,24 @@ class FeedSourcesViewModel: FMTablePageViewModel {
         updateSectionViewModels(with: context)
     }
 
+    // MARK: Internal methods
+
+    func showFavouriteEntries() {
+        delegate?.fetchStarted()
+        Task {
+            let persistenceManager = FavouriteEntriesPersistenceManager()
+            await persistenceManager.fetchControllerData()
+            await MainActor.run {
+                delegate?.fetchFinished(.success)
+                Router.shared.push(
+                    FeedPageFactory.NavigationPath.favouriteEntries.rawValue,
+                    animated: true,
+                    context: FavouriteEntriesContext(persistenceManager: persistenceManager)
+                )
+            }
+        }
+    }
+
     // MARK: Private methods
 
     private func updateSectionViewModels(with context: FeedSourcesContext) {
@@ -53,9 +71,9 @@ class FeedSourcesViewModel: FMTablePageViewModel {
 
 extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
     func didSelect(cellWithData feedSource: FeedSource) {
-        delegate?.updateStarted()
+        delegate?.fetchStarted()
         Task {
-            let persistenceManager = FeedPersistenceManager(url: feedSource.url)
+            let persistenceManager = SingleFeedPersistenceManager(url: feedSource.url)
             await persistenceManager.fetchControllerData()
             guard let unreadEntriesCount = await persistenceManager.fetchUnreadEntriesCount(for: feedSource.url) else {
                 assertionFailure("No problems must happen here.")
@@ -64,7 +82,7 @@ extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
 
             // TODO: add error handling
             await MainActor.run {
-                delegate?.updateCompleted(withError: nil)
+                delegate?.fetchFinished(.success)
                 Router.shared.push(
                     FeedPageFactory.NavigationPath.feedEntries.rawValue,
                     animated: true,

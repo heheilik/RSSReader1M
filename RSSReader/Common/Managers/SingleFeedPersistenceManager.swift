@@ -1,5 +1,5 @@
 //
-//  FeedPersistenceManager.swift
+//  SingleFeedPersistenceManager.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 31.01.24.
@@ -10,76 +10,35 @@ import Factory
 import FeedKit
 import Foundation
 
-class FeedPersistenceManager {
+class SingleFeedPersistenceManager: BasePersistenceManager<ManagedFeedEntry> {
 
     // MARK: Internal properties
 
-    let fetchedResultsController: NSFetchedResultsController<ManagedFeedEntry>
     let url: URL
-
-    // MARK: Private properties
-
-    private let controllerContext: NSManagedObjectContext
-
-    @Injected(\.feedModelPersistentContainer) private static var persistentContainer
 
     // MARK: Initialization
 
     init(url: URL) {
         self.url = url
-
-        let context = Self.persistentContainer.newBackgroundContext()
-        controllerContext = context
-        fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: Self.newControllerFetchRequest(for: url),
-            managedObjectContext: context,
-            sectionNameKeyPath: nil,
-            cacheName: nil
+        super.init(
+            persistentContainer: Container.shared.feedModelPersistentContainer(),
+            predicate: NSPredicate(
+                format: "%K == %@",
+                argumentArray: [
+                    #keyPath(ManagedFeedEntry.feed.url),
+                    url
+                ]
+            ),
+            sortDescriptors: [
+                NSSortDescriptor(
+                    keyPath: \ManagedFeedEntry.date,
+                    ascending: false
+                )
+            ]
         )
     }
 
     // MARK: Internal methods
-
-    /// Can be called from any thread.
-    @discardableResult
-    func fetchControllerData() async -> Bool {
-        var succeeded = false
-        controllerContext.performAndWait {
-            do {
-                try fetchedResultsController.performFetch()
-            } catch {
-                return
-            }
-            succeeded = true
-        }
-        return succeeded
-    }
-
-    /// Can be called from any thread.
-    @discardableResult
-    func saveControllerData() async -> Bool {
-        var succeeded = false
-        controllerContext.performAndWait {
-            do {
-                try controllerContext.save()
-            } catch {
-                succeeded = false
-            }
-        }
-        guard succeeded else {
-            return false
-        }
-
-        succeeded = await MainActor.run {
-            do {
-                try Self.persistentContainer.viewContext.save()
-            } catch {
-                return false
-            }
-            return true
-        }
-        return succeeded
-    }
 
     func insert(feed downloadedFeed: RSSFeed, downloadedAt url: URL) async {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
@@ -203,20 +162,5 @@ class FeedPersistenceManager {
             ]
         )
         return try? context.fetch(fetchRequest).first
-    }
-    
-    private static func newControllerFetchRequest(for url: URL) -> NSFetchRequest<ManagedFeedEntry> {
-        let fetchRequest = ManagedFeedEntry.fetchRequest()
-        fetchRequest.predicate = NSPredicate(
-            format: "%K == %@",
-            argumentArray: [
-                #keyPath(ManagedFeedEntry.feed.url),
-                url
-            ]
-        )
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(keyPath: \ManagedFeedEntry.date, ascending: false)
-        ]
-        return fetchRequest
     }
 }
