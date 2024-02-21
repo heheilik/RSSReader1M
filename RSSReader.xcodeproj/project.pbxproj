@@ -223,18 +223,18 @@
 				5DC03A7F2AF10A9300EA2965 /* Model */,
 				5DB432652B6A1F7D008F30D3 /* Persistence */,
 				5DAEF75C2AEA67940091436C /* Services */,
-				5D1A5CCF2B833DEC00B7C248 /* Table Components */,
+				5D1A5CCF2B833DEC00B7C248 /* TableComponents */,
 			);
 			path = Common;
 			sourceTree = "<group>";
 		};
-		5D1A5CCF2B833DEC00B7C248 /* Table Components */ = {
+		5D1A5CCF2B833DEC00B7C248 /* TableComponents */ = {
 			isa = PBXGroup;
 			children = (
-				5D1A5CD12B833DFB00B7C248 /* Cell View Models */,
+				5D1A5CD12B833DFB00B7C248 /* CellViewModels */,
 				5D1A5CD02B833DF400B7C248 /* Cells */,
 			);
-			path = "Table Components";
+			path = TableComponents;
 			sourceTree = "<group>";
 		};
 		5D1A5CD02B833DF400B7C248 /* Cells */ = {
@@ -245,12 +245,12 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		5D1A5CD12B833DFB00B7C248 /* Cell View Models */ = {
+		5D1A5CD12B833DFB00B7C248 /* CellViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				5DE6B41A2AEF9FDF00F22F84 /* FeedEntryCellViewModel.swift */,
 			);
-			path = "Cell View Models";
+			path = CellViewModels;
 			sourceTree = "<group>";
 		};
 		5D1A5CD22B8340F300B7C248 /* Sections */ = {
@@ -321,13 +321,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		5DC8203C2B679E280047AD51 /* Supporting Files */ = {
+		5DC8203C2B679E280047AD51 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
 				5DC8203D2B679E420047AD51 /* Lottie */,
 				5DFD96522AE8FC9D00DEBF9A /* Assets.xcassets */,
 			);
-			path = "Supporting Files";
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		5DC8203D2B679E420047AD51 /* Lottie */ = {
@@ -416,7 +416,7 @@
 				5D1A5CCE2B833DDC00B7C248 /* Common */,
 				5DFD96572AE8FC9D00DEBF9A /* Info.plist */,
 				5DFD96542AE8FC9D00DEBF9A /* LaunchScreen.storyboard */,
-				5DC8203C2B679E280047AD51 /* Supporting Files */,
+				5DC8203C2B679E280047AD51 /* SupportingFiles */,
 				5DFD966B2AE9041100DEBF9A /* UI */,
 			);
 			path = RSSReader;
