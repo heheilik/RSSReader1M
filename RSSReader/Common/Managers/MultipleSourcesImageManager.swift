@@ -12,7 +12,7 @@ protocol MultipleSourcesImageManagerDelegate: AnyObject {
     func imageLoaded(_ image: UIImage, for url: URL)
 }
 
-class MultipleSourcesImageManager {
+final class MultipleSourcesImageManager {
 
     // MARK: Constants
 

@@ -10,7 +10,7 @@ import FMArchitecture
 import Lottie
 import UIKit
 
-class FeedSourcesViewController: FMTablePageViewController {
+final class FeedSourcesViewController: FMTablePageViewController {
 
     // MARK: Constants
 

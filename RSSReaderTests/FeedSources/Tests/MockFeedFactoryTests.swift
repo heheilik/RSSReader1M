@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 @testable import RSSReader
 
-class MockFeedFactoryTests: XCTestCase {
+final class MockFeedFactoryTests: XCTestCase {
 
     func testNotExistingFeed() {
         let feed = MockFeedFactory.feedForConfig(FeedConfig())

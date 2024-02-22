@@ -9,7 +9,7 @@ import ALNavigation
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
+final class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
 
     // MARK: Internal Properties
 

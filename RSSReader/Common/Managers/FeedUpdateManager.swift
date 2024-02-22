@@ -8,7 +8,7 @@
 import FeedKit
 import Foundation
 
-class FeedUpdateManager {
+final class FeedUpdateManager {
 
     // MARK: Constants
 

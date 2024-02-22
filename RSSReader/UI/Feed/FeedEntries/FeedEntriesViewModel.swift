@@ -16,7 +16,7 @@ protocol FeedEntriesViewModelDelegate: AnyObject {
     func endRefresh()
 }
 
-class FeedEntriesViewModel: FMTablePageViewModel {
+final class FeedEntriesViewModel: FMTablePageViewModel {
 
     // MARK: Internal properties
 

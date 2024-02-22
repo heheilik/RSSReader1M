@@ -10,7 +10,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class FeedDetailsViewModel: FMPageViewModel {
+final class FeedDetailsViewModel: FMPageViewModel {
 
     // MARK: Internal properties
 

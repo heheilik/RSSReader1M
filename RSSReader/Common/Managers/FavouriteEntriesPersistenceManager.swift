@@ -9,7 +9,7 @@ import CoreData
 import Factory
 import Foundation
 
-class FavouriteEntriesPersistenceManager: BasePersistenceManager<ManagedFeedEntry> {
+final class FavouriteEntriesPersistenceManager: BasePersistenceManager<ManagedFeedEntry> {
 
     // MARK: Initialization
 
