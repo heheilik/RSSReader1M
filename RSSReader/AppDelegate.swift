@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         registerFactory()
+        configureTableViewAppearance()
 
         window = UIWindow()
         window?.rootViewController = newNavigationController()
@@ -55,5 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PageFactoryDependency {
         return viewController
     }
 
+    private func configureTableViewAppearance() {
+        if #available(iOS 15.0, *) {
+            UITableView.appearance().sectionHeaderTopPadding = 0
+        }
+    }
 }
 

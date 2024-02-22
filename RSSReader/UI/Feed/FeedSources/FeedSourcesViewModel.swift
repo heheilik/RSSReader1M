@@ -5,90 +5,94 @@
 //  Created by Heorhi Heilik on 25.10.23.
 //
 
+import ALNavigation
 import FMArchitecture
 import Foundation
 import FeedKit
 
+protocol FeedSourcesViewModelDelegate: AnyObject {
+    func fetchStarted()
+    func fetchFinished(_ result: Result<Void, Error>)
+}
+
 class FeedSourcesViewModel: FMTablePageViewModel {
-
-    // MARK: Internal properties
-
-    private(set) var lastClickedFeedName: String = ""
 
     // MARK: Private properties
 
-    private var sectionViewModels: [FMSectionViewModel] = []
-
     private var feedService: FeedService
-    private weak var downloadDelegate: FeedDownloadDelegate?
+
+    private weak var delegate: FeedSourcesViewModelDelegate?
 
     // MARK: Initialization
 
     init(
         context: FeedSourcesContext,
         dataSource: FMDataManager,
-        downloadDelegate: FeedDownloadDelegate,
+        delegate: FeedSourcesViewModelDelegate,
         feedService: FeedService = FeedService()
     ) {
-        self.downloadDelegate = downloadDelegate
+        self.delegate = delegate
         self.feedService = feedService
         super.init(dataSource: dataSource)
         updateSectionViewModels(with: context)
-        dataSource.update(with: sectionViewModels)
+    }
+
+    // MARK: Internal methods
+
+    func showFavouriteEntries() {
+        delegate?.fetchStarted()
+        Task {
+            let persistenceManager = FavouriteEntriesPersistenceManager()
+            await persistenceManager.fetchControllerData()
+            await MainActor.run {
+                delegate?.fetchFinished(.success)
+                Router.shared.push(
+                    FeedPageFactory.NavigationPath.favouriteEntries.rawValue,
+                    animated: true,
+                    context: FavouriteEntriesContext(persistenceManager: persistenceManager)
+                )
+            }
+        }
     }
 
     // MARK: Private methods
 
     private func updateSectionViewModels(with context: FeedSourcesContext) {
-        sectionViewModels = [
+        dataSource.update(with: [
             FeedSourcesSectionViewModel(
                 context: context,
                 delegate: self
             )
-        ]
+        ])
     }
-
 }
 
 // MARK: - FeedSourcesSectionViewModelDelegate
 
 extension FeedSourcesViewModel: FeedSourcesSectionViewModelDelegate {
-
     func didSelect(cellWithData feedSource: FeedSource) {
-        lastClickedFeedName = feedSource.name
-
-        downloadDelegate?.downloadStarted()
+        delegate?.fetchStarted()
         Task {
-            var result: Result<RSSFeed, DownloadError>?
-            defer {
-                guard let result else {
-                    fatalError("Result must be set before returning.")
-                }
-                DispatchQueue.main.async {
-                    self.downloadDelegate?.downloadCompleted(result)
-                }
-            }
-
-            let feed = await feedService.prepareFeed(at: feedSource.url)
-
-            guard let feed else {
-                result = .failure(.feedNotDownloaded)
+            let persistenceManager = SingleFeedPersistenceManager(url: feedSource.url)
+            await persistenceManager.fetchControllerData()
+            guard let unreadEntriesCount = await persistenceManager.fetchUnreadEntriesCount(for: feedSource.url) else {
+                assertionFailure("No problems must happen here.")
                 return
             }
 
-            switch feed {
-            case let .rss(feed):
-                result = .success(feed)
-                return
-
-            case .atom(_):
-                result = .failure(.atomFeedDownloaded)
-                return
-            case .json(_):
-                result = .failure(.jsonFeedDownloaded)
-                return
+            // TODO: add error handling
+            await MainActor.run {
+                delegate?.fetchFinished(.success)
+                Router.shared.push(
+                    FeedPageFactory.NavigationPath.feedEntries.rawValue,
+                    animated: true,
+                    context: FeedEntriesContext(
+                        feedName: feedSource.name,
+                        feedPersistenceManager: persistenceManager,
+                        unreadEntriesCount: unreadEntriesCount
+                    )
+                )
             }
         }
     }
-
 }

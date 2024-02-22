@@ -20,5 +20,4 @@ class FeedSourcesTableViewDelegate: FMTableViewDelegate {
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return cellsAreSelectable ? indexPath : nil
     }
-
 }

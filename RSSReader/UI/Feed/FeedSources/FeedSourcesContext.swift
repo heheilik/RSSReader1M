@@ -9,13 +9,10 @@ import ALNavigation
 import Foundation
 
 struct FeedSourcesContext: PageContext {
-
     let data: [FeedSource]
-
 }
 
 extension FeedSourcesContext {
-
     static let mock = FeedSourcesContext(data: [
         FeedSource(name: "Рамблер. В мире", url: URL(string: "https://news.rambler.ru/rss/world")!),
         FeedSource(name: "Swift", url: URL(string: "https://www.swift.org/atom.xml")!),
@@ -24,5 +21,4 @@ extension FeedSourcesContext {
         FeedSource(name: "WSJ World News", url: URL(string: "https://feeds.a.dj.com/rss/RSSWorldNews.xml")!),
         FeedSource(name: "Skynews", url: URL(string: "http://feeds.skynews.com/feeds/rss/home.xml")!),
     ])
-
 }

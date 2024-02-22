@@ -1,5 +1,5 @@
 //
-//  FeedEntriesCell.swift
+//  FeedEntryTableViewCell.swift
 //  RSSReader
 //
 //  Created by Heorhi Heilik on 30.10.23.
@@ -11,10 +11,14 @@ import FMArchitecture
 import SkeletonView
 import UIKit
 
-class FeedEntriesCell: FMSwipeTableViewCell {
+class FeedEntryTableViewCell: FMSwipeTableViewCell {
 
-    private weak var currentViewModel: FeedEntriesCellViewModel? {
-        return viewModel as? FeedEntriesCellViewModel
+    // MARK: Constants
+
+    private enum Image {
+        static let chevronUp = UIImage(systemName: "chevron.up")!
+        static let chevronDown = UIImage(systemName: "chevron.down")!
+        static let favouriteStatus = UIImage(named: "star.circle.fill")!
     }
 
     // MARK: UI
@@ -44,7 +48,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
     private let descriptionSizeToggleButton = {
         let button = UIButton(type: .custom)
-        button.setImage(chevronDownImage, for: .normal)
+        button.setImage(Image.chevronDown, for: .normal)
         return button
     }()
 
@@ -56,9 +60,6 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         return view
     }()
 
-    private static let chevronUpImage = UIImage(systemName: "chevron.up")!
-    private static let chevronDownImage = UIImage(systemName: "chevron.down")!
-
     private let feedImage = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
@@ -66,11 +67,21 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         return image
     }()
 
+    private let favouriteStatusView = {
+        let view = UIImageView(image: Image.favouriteStatus)
+        view.isHidden = true
+        return view
+    }()
+
     // MARK: Private properties
 
     private var readStatusObserver: AnyCancellable?
 
-    // MARK: Internal methods
+    private weak var currentViewModel: FeedEntryCellViewModel? {
+        return viewModel as? FeedEntryCellViewModel
+    }
+
+    // MARK: Lifecycle
 
     override func configureViews() {
         isSkeletonable = true
@@ -88,6 +99,7 @@ class FeedEntriesCell: FMSwipeTableViewCell {
 
     override func addSubviews() {
         contentView.addSubview(feedImage)
+        contentView.addSubview(favouriteStatusView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(readStatusView)
         contentView.addSubview(descriptionLabel)
@@ -121,6 +133,11 @@ class FeedEntriesCell: FMSwipeTableViewCell {
             $0.width.equalTo(64)
             $0.height.equalTo(feedImage.snp.width)
         }
+        favouriteStatusView.snp.makeConstraints {
+            $0.centerX.equalTo(feedImage.snp.trailing)
+            $0.centerY.equalTo(feedImage.snp.top)
+        }
+
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalTo(feedImage.snp.trailing).offset(16)
@@ -166,11 +183,12 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         stopAnimation()
 
         titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.description
+        descriptionLabel.text = viewModel.entryDescription
         dateLabel.text = viewModel.date
         feedImage.image = viewModel.image
 
         changeReadStatus(isRead: viewModel.isRead)
+        changeFavouriteStatus(isFavourite: viewModel.isFavourite)
 
         readStatusObserver = currentViewModel?.$isRead.receive(on: RunLoop.main).sink { [weak self] isRead in
             guard let self = self else {
@@ -180,6 +198,12 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         }
 
         resizeDescriptionIfNeeded()
+    }
+
+    // MARK: Internal methods
+
+    func changeFavouriteStatus(isFavourite: Bool) {
+        favouriteStatusView.isHidden = !isFavourite
     }
 
     // MARK: Private methods
@@ -214,15 +238,11 @@ class FeedEntriesCell: FMSwipeTableViewCell {
     }
 
     private func arrowImageFor(numberOfLines: Int) -> UIImage {
-        if numberOfLines == 1 {
-            return FeedEntriesCell.chevronDownImage
-        } else {
-            return FeedEntriesCell.chevronUpImage
-        }
+        numberOfLines == 1 ? Image.chevronDown : Image.chevronUp
     }
 
     private func changeReadStatus(isRead: Bool) {
-        readStatusView.backgroundColor = isRead ? .white : .systemBlue
+        readStatusView.isHidden = isRead
     }
 
     private func configureAnimatedView() {
@@ -230,22 +250,22 @@ class FeedEntriesCell: FMSwipeTableViewCell {
         descriptionLabel.text = " "
         dateLabel.text = " "
         readStatusView.isHidden = true
+        favouriteStatusView.isHidden = true
         descriptionSizeToggleButton.isHidden = true
     }
 
     private func configureNotAnimatedView() {
-        readStatusView.isHidden = false
         descriptionSizeToggleButton.isHidden = false
     }
 }
 
 // MARK: - FMAnimatable
 
-extension FeedEntriesCell: FMAnimatable {
+extension FeedEntryTableViewCell: FMAnimatable {
     func startAnimation() {
         layoutIfNeeded()
         showAnimatedGradientSkeleton(
-            usingGradient: SkeletonGradient(colors: [.systemCyan, .systemGreen]),
+            usingGradient: SkeletonGradient(colors: [.systemBlue, .systemGreen]),
             animation: SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight),
             transition: .none
         )

@@ -8,8 +8,6 @@
 import Foundation
 
 struct FeedSource {
-    
     let name: String
     let url: URL
-
 }

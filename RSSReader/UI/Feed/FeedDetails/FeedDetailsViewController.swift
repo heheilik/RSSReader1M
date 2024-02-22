@@ -11,8 +11,16 @@ import UIKit
 
 class FeedDetailsViewController: FMPageViewController {
 
-    private var currentViewModel: FeedDetailsViewModel? {
-        viewModel as? FeedDetailsViewModel
+    // MARK: Constants
+
+    private enum UIString {
+        static let navigationBarTitle = "Подробности"
+    }
+
+    private enum Image {
+        static let star = UIImage(systemName: "star")!.withTintColor(.black).withRenderingMode(.alwaysOriginal)
+        static let starFill = UIImage(systemName: "star.fill")!.withTintColor(.orange).withRenderingMode(.alwaysOriginal)
+        static let share = UIImage(systemName: "square.and.arrow.up")!
     }
 
     // MARK: UI
@@ -44,14 +52,37 @@ class FeedDetailsViewController: FMPageViewController {
         return label
     }()
 
-    // MARK: Lifecycle
+    private lazy var shareBarButton = UIBarButtonItem(
+        image: Image.share,
+        style: .plain,
+        target: self,
+        action: #selector(shareButtonTouchUpInside)
+    )
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.title = "Подробности"
+    private lazy var favouriteBarButton = UIBarButtonItem(
+        image: Image.star,
+        style: .plain,
+        target: self,
+        action: #selector(favouriteButtonTouchUpInside)
+    )
+
+    // MARK: Private properties
+
+    private var currentViewModel: FeedDetailsViewModel? {
+        viewModel as? FeedDetailsViewModel
     }
 
-    // MARK: Internal methods
+    // MARK: Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        currentViewModel?.saveToDatabase()
+    }
 
     override func addSubviews() {
         view.addSubview(feedImage)
@@ -82,16 +113,46 @@ class FeedDetailsViewController: FMPageViewController {
     }
 
     override func bind() {
-        guard let viewModel = currentViewModel else {
-            fatalError("Wrong viewModel provided.")
+        guard let currentViewModel else {
+            assertionFailure("Wrong viewModel provided.")
+            return
         }
-        feedImage.image = viewModel.context.image
-        titleLabel.text = viewModel.context.title ?? ""
-        descriptionLabel.text = viewModel.context.description ?? ""
-        dateLabel.text = viewModel.context.date ?? ""
+
+        titleLabel.text = currentViewModel.title
+        descriptionLabel.text = currentViewModel.entryDescription ?? ""
+        dateLabel.text = currentViewModel.date ?? ""
+        feedImage.image = currentViewModel.image
+
+        favouriteBarButton.image = currentViewModel.isFavourite ? Image.starFill : Image.star
 
         view.layoutIfNeeded()
-
     }
 
+    // MARK: Private methods
+
+    private func configureNavigationBar() {
+        navigationItem.title = UIString.navigationBarTitle
+        navigationItem.rightBarButtonItems = [favouriteBarButton, shareBarButton]
+    }
+
+    @objc
+    private func shareButtonTouchUpInside() {
+        guard let currentViewModel else {
+            return
+        }
+        let activityController = UIActivityViewController(
+            activityItems: [currentViewModel.textToShare],
+            applicationActivities: nil
+        )
+        present(activityController, animated: true)
+    }
+
+    @objc
+    private func favouriteButtonTouchUpInside() {
+        guard let currentViewModel else {
+            return
+        }
+        currentViewModel.isFavourite = !currentViewModel.isFavourite
+        favouriteBarButton.image = currentViewModel.isFavourite ? Image.starFill : Image.star
+    }
 }

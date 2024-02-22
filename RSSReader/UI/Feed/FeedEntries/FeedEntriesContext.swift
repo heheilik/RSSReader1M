@@ -10,8 +10,7 @@ import Foundation
 import FeedKit
 
 struct FeedEntriesContext: PageContext {
-
     let feedName: String
-    let rssFeed: RSSFeed
-
+    let feedPersistenceManager: SingleFeedPersistenceManager
+    let unreadEntriesCount: Int
 }
