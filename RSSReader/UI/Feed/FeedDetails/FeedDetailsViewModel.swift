@@ -25,6 +25,17 @@ class FeedDetailsViewModel: FMPageViewModel {
         }
     }
 
+    var textToShare: String {
+        guard let entryDescription else {
+            return title
+        }
+        return """
+        \(title)
+
+        \(entryDescription)
+        """
+    }
+
     // MARK: Private properties
 
     private let managedObject: ManagedFeedEntry

@@ -20,6 +20,7 @@ class FeedDetailsViewController: FMPageViewController {
     private enum Image {
         static let star = UIImage(systemName: "star")!.withTintColor(.black).withRenderingMode(.alwaysOriginal)
         static let starFill = UIImage(systemName: "star.fill")!.withTintColor(.orange).withRenderingMode(.alwaysOriginal)
+        static let share = UIImage(systemName: "square.and.arrow.up")!
     }
 
     // MARK: UI
@@ -50,6 +51,13 @@ class FeedDetailsViewController: FMPageViewController {
         label.font = UIFont.italicSystemFont(ofSize: 14)
         return label
     }()
+
+    private lazy var shareBarButton = UIBarButtonItem(
+        image: Image.share,
+        style: .plain,
+        target: self,
+        action: #selector(shareButtonTouchUpInside)
+    )
 
     private lazy var favouriteBarButton = UIBarButtonItem(
         image: Image.star,
@@ -124,7 +132,21 @@ class FeedDetailsViewController: FMPageViewController {
 
     private func configureNavigationBar() {
         navigationItem.title = UIString.navigationBarTitle
-        navigationItem.rightBarButtonItem = favouriteBarButton
+        navigationItem.rightBarButtonItems = [favouriteBarButton, shareBarButton]
+    }
+
+    @objc
+    private func shareButtonTouchUpInside() {
+        guard let currentViewModel else {
+            return
+        }
+        present(
+            UIActivityViewController(
+                activityItems: [currentViewModel.textToShare],
+                applicationActivities: nil
+            ),
+            animated: true
+        )
     }
 
     @objc
