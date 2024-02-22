@@ -140,13 +140,11 @@ class FeedDetailsViewController: FMPageViewController {
         guard let currentViewModel else {
             return
         }
-        present(
-            UIActivityViewController(
-                activityItems: [currentViewModel.textToShare],
-                applicationActivities: nil
-            ),
-            animated: true
+        let activityController = UIActivityViewController(
+            activityItems: [currentViewModel.textToShare],
+            applicationActivities: nil
         )
+        present(activityController, animated: true)
     }
 
     @objc
