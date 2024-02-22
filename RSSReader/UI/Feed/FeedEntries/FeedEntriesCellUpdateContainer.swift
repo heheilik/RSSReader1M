@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FeedEntriesCellUpdateContainer {
+final class FeedEntriesCellUpdateContainer {
 
     // MARK: Internal properties
 

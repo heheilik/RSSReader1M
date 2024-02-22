@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class FeedSourceCell: FMTableViewCell {
+final class FeedSourceCell: FMTableViewCell {
 
     // MARK: UI
 

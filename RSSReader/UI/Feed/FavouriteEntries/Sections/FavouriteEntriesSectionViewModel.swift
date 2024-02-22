@@ -17,7 +17,7 @@ protocol FavouriteEntriesSectionViewModelDelegate: AnyObject {
     func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel)
 }
 
-class FavouriteEntriesSectionViewModel: FMSectionViewModel {
+final class FavouriteEntriesSectionViewModel: FMSectionViewModel {
 
     // MARK: Constants
 

@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class PersistentContainerBuilder {
+final class PersistentContainerBuilder {
 
     // MARK: Constants
 

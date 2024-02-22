@@ -15,7 +15,7 @@ protocol FeedSourcesViewModelDelegate: AnyObject {
     func fetchFinished(_ result: Result<Void, Error>)
 }
 
-class FeedSourcesViewModel: FMTablePageViewModel {
+final class FeedSourcesViewModel: FMTablePageViewModel {
 
     // MARK: Private properties
 

@@ -12,7 +12,7 @@ protocol FeedSourcesSectionViewModelDelegate: AnyObject {
     func didSelect(cellWithData feedSource: FeedSource)
 }
 
-class FeedSourcesSectionViewModel: FMSectionViewModel {
+final class FeedSourcesSectionViewModel: FMSectionViewModel {
 
     // MARK: Internal properties
 

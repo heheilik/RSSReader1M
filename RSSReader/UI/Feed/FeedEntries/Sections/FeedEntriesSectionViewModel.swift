@@ -16,7 +16,7 @@ protocol FeedEntriesSectionViewModelDelegate: AnyObject {
     func endTableUpdates()
 }
 
-class FeedEntriesSectionViewModel: FMSectionViewModel {
+final class FeedEntriesSectionViewModel: FMSectionViewModel {
 
     // MARK: Constants
 

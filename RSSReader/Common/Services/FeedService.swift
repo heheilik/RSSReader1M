@@ -8,7 +8,7 @@
 import FeedKit
 import Foundation
 
-class FeedService {
+final class FeedService {
 
     // MARK: Internal Methods
 
