@@ -10,7 +10,7 @@ import Factory
 import FeedKit
 import Foundation
 
-class SingleFeedPersistenceManager: BasePersistenceManager<ManagedFeedEntry> {
+final class SingleFeedPersistenceManager: BasePersistenceManager<ManagedFeedEntry> {
 
     // MARK: Internal properties
 

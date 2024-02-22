@@ -14,7 +14,7 @@ protocol FavouriteEntriesTableViewModelDelegate: AnyObject {
     func cellViewModelActivatedFavouriteButton(_ cellViewModel: FeedEntryCellViewModel)
 }
 
-class FavouriteEntriesTableViewModel: FMTablePageViewModel {
+final class FavouriteEntriesTableViewModel: FMTablePageViewModel {
 
     // MARK: Internal properties
 

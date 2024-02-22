@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class FavouriteEntriesTableViewController: FMTablePageViewController {
+final class FavouriteEntriesTableViewController: FMTablePageViewController {
 
     // MARK: Constants
 

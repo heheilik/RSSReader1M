@@ -19,7 +19,7 @@ protocol FeedEntryCellViewModelDelegate: AnyObject {
     func didSelect(cellViewModel: FeedEntryCellViewModel)
 }
 
-class FeedEntryCellViewModel: FMCellViewModel {
+final class FeedEntryCellViewModel: FMCellViewModel {
 
     // MARK: Constants
 

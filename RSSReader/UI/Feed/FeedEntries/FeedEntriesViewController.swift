@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class FeedEntriesViewController: FMTablePageViewController {
+final class FeedEntriesViewController: FMTablePageViewController {
 
     // MARK: UI
 

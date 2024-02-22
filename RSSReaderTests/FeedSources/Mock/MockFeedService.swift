@@ -9,7 +9,7 @@ import FeedKit
 import Foundation
 @testable import RSSReader
 
-class MockFeedService: FeedService {
+final class MockFeedService: FeedService {
 
     var prepareFeedCalled = false
 

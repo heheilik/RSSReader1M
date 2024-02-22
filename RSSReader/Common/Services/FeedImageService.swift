@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class FeedImageService {
+final class FeedImageService {
 
     // MARK: Private properties
 

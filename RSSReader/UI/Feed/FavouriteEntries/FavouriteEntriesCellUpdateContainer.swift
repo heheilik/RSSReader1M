@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FavouriteEntriesCellUpdateContainer {
+final class FavouriteEntriesCellUpdateContainer {
 
     // MARK: Internal properties
 

@@ -8,7 +8,7 @@
 import FMArchitecture
 import Foundation
 
-class UnreadEntriesAmountHeaderViewModel: FMHeaderFooterViewModel {
+final class UnreadEntriesAmountHeaderViewModel: FMHeaderFooterViewModel {
 
     // MARK: Internal properties
 

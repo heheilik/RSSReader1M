@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class FeedDetailsViewController: FMPageViewController {
+final class FeedDetailsViewController: FMPageViewController {
 
     // MARK: Constants
 

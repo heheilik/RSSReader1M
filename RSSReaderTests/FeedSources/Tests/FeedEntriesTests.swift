@@ -9,7 +9,7 @@ import FMArchitecture
 import XCTest
 @testable import RSSReader
 
-class FeedEntriesTests: XCTestCase {
+final class FeedEntriesTests: XCTestCase {
 
     private var imageService = MockFeedImageService()
 

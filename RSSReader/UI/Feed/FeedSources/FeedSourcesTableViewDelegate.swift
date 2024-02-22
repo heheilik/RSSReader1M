@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class FeedSourcesTableViewDelegate: FMTableViewDelegate {
+final class FeedSourcesTableViewDelegate: FMTableViewDelegate {
 
     // MARK: Internal Properties
 

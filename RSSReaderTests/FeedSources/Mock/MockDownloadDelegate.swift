@@ -8,7 +8,7 @@
 import Foundation
 @testable import RSSReader
 
-class MockDownloadDelegate: FeedDownloadDelegate {
+final class MockDownloadDelegate: FeedDownloadDelegate {
 
     var didDownloadStart = false
 

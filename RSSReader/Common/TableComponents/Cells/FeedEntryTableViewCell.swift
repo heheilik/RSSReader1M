@@ -11,7 +11,7 @@ import FMArchitecture
 import SkeletonView
 import UIKit
 
-class FeedEntryTableViewCell: FMSwipeTableViewCell {
+final class FeedEntryTableViewCell: FMSwipeTableViewCell {
 
     // MARK: Constants
 

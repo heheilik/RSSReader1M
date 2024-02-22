@@ -9,7 +9,7 @@ import FMArchitecture
 import Foundation
 import UIKit
 
-class UnreadEntriesAmountTableViewHeader: FMHeaderFooterView {
+final class UnreadEntriesAmountTableViewHeader: FMHeaderFooterView {
 
     // MARK: Constants
 

@@ -9,7 +9,7 @@ import FMArchitecture
 import UIKit
 @testable import RSSReader
 
-class MockFeedImageService: FeedImageService {
+final class MockFeedImageService: FeedImageService {
 
     enum Constants {
         static let imageLinkString = "image.img"
